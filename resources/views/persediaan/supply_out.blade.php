@@ -61,10 +61,16 @@
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="goods">
-                    <i class="fas fa-fw fa-archive"></i>
-                    <span>Barang</span>
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages" aria-expanded="true" aria-controls="collapsePages">
+                    <i class="fas fa-fw fa-folder"></i>
+                    <span>Master Data</span>
                 </a>
+                <div id="collapsePages" class="collapse show" aria-labelledby="headingPages" data-parent="#accordionSidebar" style="">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <a class="collapse-item" href="category">Kategori</a>
+                        <a class="collapse-item" href="goods">Barang</a>
+                    </div>
+                </div>
             </li>
             <li class="nav-item active">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages" aria-expanded="true" aria-controls="collapsePages">

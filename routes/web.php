@@ -1,6 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\CategoryController;
+use Illuminate\Http\Request;
 
 /*
 |--------------------------------------------------------------------------
@@ -27,6 +29,12 @@ Route::get('/users/add_users', function () {
 });
 Route::get('/users/edit_users', function () {
     return view('users/edit_users');
+});
+
+
+//category
+Route::get('/category', function () {
+    return view('kategori/index');
 });
 
 
@@ -99,3 +107,6 @@ Auth::routes();
 //Route::post('actionlogin', [LoginController::class, 'actionlogin'])->name('actionlogin');
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home')->middleware('auth');
 Route::get('actionlogout', [LoginController::class, 'actionlogout'])->name('actionlogout')->middleware('auth');
+
+Route::resource('category', CategoryController::class);
+Route::get('/category', [CategoryController::class, 'index'])->name('category');
