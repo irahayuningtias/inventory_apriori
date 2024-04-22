@@ -15,6 +15,11 @@ class Category extends Model
     public $incrementing = false; //Agar Eloquent tidak menganggap kolom ID ini auto-increment
     protected $fillable = [
         'id_category',
-        'category',
+        'category_name',
     ];
+
+    public function product()
+    {
+        return $this->hasMany(Product::class);
+    }
 }

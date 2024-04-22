@@ -19,6 +19,7 @@ class CategoryController extends Controller
     {
         //fungsi eloquent menampilkan data menggunakan pagination
         $categories = Category::orderBy('id_category', 'asc')->paginate(10);
+        $categories->onEachSide(2);
         return view('kategori.index', compact('categories'));
     }
 
@@ -43,7 +44,7 @@ class CategoryController extends Controller
         //melakukan validasi data
         $request->validate([
             'id_category' => 'required',
-            'category' => 'required'
+            'category_name' => 'required'
         ]);
 
         //fungsi eloquent untuk menambah data
@@ -90,7 +91,7 @@ class CategoryController extends Controller
         //melakukan validasi data
         $request->validate([
             'id_category' => 'required',
-            'category' => 'required',
+            'category_name' => 'required',
         ]);
 
         //fungsi eloquent untuk mengupdate data inputan
@@ -113,5 +114,12 @@ class CategoryController extends Controller
         Category::find($id_category)->delete();
         return redirect()->route('category')
             ->with('success', 'Kategori Berhasil Dihapus');
+    }
+
+    public function search(Request $request)
+    {
+        $keyword = $request->search;
+        $categories = Category::where('category_name', 'like', "%" . $keyword . "%")->paginate(10);
+        return view('category', compact('categories'));
     }
 }
