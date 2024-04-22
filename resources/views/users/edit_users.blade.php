@@ -61,23 +61,24 @@
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages" aria-expanded="true" aria-controls="collapsePages">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseMasterData" aria-expanded="true" aria-controls="collapseMasterData">
                     <i class="fas fa-fw fa-folder"></i>
                     <span>Master Data</span>
                 </a>
-                <div id="collapsePages" class="collapse show" aria-labelledby="headingPages" data-parent="#accordionSidebar" style="">
+                <div id="collapseMasterData" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar" style="">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <a class="collapse-item" href="category">Kategori</a>
-                        <a class="collapse-item" href="goods">Barang</a>
+                        <a class="collapse-item" href="product">Barang</a>
                     </div>
                 </div>
             </li>
+
             <li class="nav-item">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages" aria-expanded="true" aria-controls="collapsePages">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePersediaan" aria-expanded="true" aria-controls="collapsePersediaan">
                     <i class="fas fa-fw fa-folder"></i>
                     <span>Persediaan</span>
                 </a>
-                <div id="collapsePages" class="collapse show" aria-labelledby="headingPages" data-parent="#accordionSidebar" style="">
+                <div id="collapsePersediaan" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar" style="">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Arus Persediaan</h6>
                         <a class="collapse-item" href="supply_in">Barang Masuk</a>
@@ -92,26 +93,33 @@
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages"
-                    aria-expanded="true" aria-controls="collapsePages">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseApriori"
+                    aria-expanded="true" aria-controls="collapseApriori">
                     <i class="fas fa-fw fa-sync"></i>
                     <span>Apriori</span>
                 </a>
-                <div id="collapsePages" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
+                <div id="collapseApriori" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
-                        <h6 class="collapse-header">Proses:</h6>
                         <a class="collapse-item" href="apriori/apriori_process">Proses Apriori</a>
-                        <div class="collapse-divider"></div>
-                        <h6 class="collapse-header">Hasil:</h6>
                         <a class="collapse-item" href="apriori/apriori_result">Hasil Apriori</a>
                     </div>
                 </div>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="index">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseLaporan"
+                    aria-expanded="true" aria-controls="collapseLaporan">
                     <i class="fas fa-fw fa-file-alt"></i>
                     <span>Laporan</span>
                 </a>
+                <div id="collapseLaporan" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <h6 class="collapse-header">Gudang</h6>
+                        <a class="collapse-item" href="#">Laporan Harian</a>
+                        <a class="collapse-item" href="#">Laporan Bulanan</a>
+                        <h6 class="collapse-header">Apriori</h6>
+                        <a class="collapse-item" href="#">Laporan Analisis Apriori</a>
+                    </div>
+                </div>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="index">
