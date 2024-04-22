@@ -54,7 +54,7 @@
                     <span>Dashboard</span>
                 </a>
             </li>
-            <li class="nav-item active">
+            <li class="nav-item">
                 <a class="nav-link" href="users">
                     <i class="fas fa-fw fa-users"></i>
                     <span>Karyawan</span>
@@ -121,7 +121,7 @@
                     </div>
                 </div>
             </li>
-            <li class="nav-item">
+            <li class="nav-item active">
                 <a class="nav-link" href="account">
                     <i class="fas fa-fw fa-user"></i>
                     <span>Akun</span>
