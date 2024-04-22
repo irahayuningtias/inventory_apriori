@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\ProductController;
 use Illuminate\Http\Request;
 
 /*
@@ -33,21 +34,15 @@ Route::get('/users/edit_users', function () {
 
 
 //category
-Route::get('/category', function () {
-    return view('kategori/index');
-});
+Route::resource('category', CategoryController::class);
+Route::get('/category', [CategoryController::class, 'index'])->name('category');
+Route::get('/category/search', [CategoryController::class, 'search'])->name('category.search');
 
 
-//goods
-Route::get('/goods', function () {
-    return view('barang/goods');
-});
-Route::get('/goods/add_goods', function () {
-    return view('barang/add_goods');
-});
-Route::get('/goods/edit_goods', function () {
-    return view('barang/edit_goods');
-});
+//product
+Route::resource('product', ProductController::class);
+Route::get('/product', [ProductController::class, 'index'])->name('product');
+Route::get('/search_product', [ProductController::class, 'search'])->name('search');
 
 
 //supply
@@ -108,5 +103,3 @@ Auth::routes();
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home')->middleware('auth');
 Route::get('actionlogout', [LoginController::class, 'actionlogout'])->name('actionlogout')->middleware('auth');
 
-Route::resource('category', CategoryController::class);
-Route::get('/category', [CategoryController::class, 'index'])->name('category');
