@@ -181,7 +181,7 @@
                 <div class="container-fluid">
 
                     <!-- Page Heading -->
-                    <h7 class="m-0 font-weight-normal ">Karyawan / <a href="edit_users">Edit Karyawan</a></h7><br><br>
+                    <h7 class="m-0 font-weight-normal ">Karyawan / <a href="{{ route('users.edit', ['user' => $User->id]) }}">Edit Karyawan</a></h7><br><br>
 
                     <!-- DataTales Example -->
                     <div class="card shadow mb-4">
@@ -189,31 +189,65 @@
                             <h5 class="m-0 font-weight-bold text-primary">Form Edit Karyawan</h5>
                         </div>
                         <div class="card-body">
-                            <form method="POST" action="">
+                            @if ($errors->any())
+                            <div class="alert alert-danger">
+                                <strong>Whoops!</strong> There were some problems with your input. <br><br>
+                                <ul>
+                                    @foreach ($errors->all() as $error)
+                                        <li>{{ $error }}</li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                            @endif
+                            <form method="POST" action="{{ route('users.update', ['user' => $User->id]) }}">
                                 @csrf
+                                @method('PUT')
                                 <div class="row">
                                     <div class="col-sm-12 col-md-6">
                                         <div class="mb-3">
                                             <label for="name" class="form-label font-weight-bold">Nama</label>
-                                            <input type="name" class="form-control" id="name" placeholder="Masukkan nama Anda">
+                                            <input type="name" class="form-control" name="name" value="{{ $User->name }}">
                                         </div>
                                     </div>
                                     <div class="col-sm-12 col-md-6">
                                         <div class="mb-3">
                                             <label for="nik" class="form-label font-weight-bold">NIK</label>
-                                            <input type="nik" class="form-control" id="nik" placeholder="Masukkan NIK Anda">
+                                            <input type="nik" class="form-control" name="nik" value="{{ $User->nik }}">
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-12 col-md-6">
+                                        <div class="mb-3">
+                                            <label for="gender" class="form-label font-weight-bold">Jenis Kelamin</label>
+                                            <select class="form-control" name="gender">
+                                                <option disabled value>Pilih Jenis Kelamin</option>
+                                                <option value="{{ $User->gender }}">{{ $User->gender }}</option>
+                                                <option value="Laki-laki">Laki-laki</option>
+                                                <option value="Perempuan">Perempuan</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-12 col-md-6">
+                                        <div class="mb-3">
+                                            <label for="address" class="form-label font-weight-bold">Alamat</label>
+                                            <input type="address" class="form-control" name="address" value="{{ $User->address }}">
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-12 col-md-6">
+                                        <div class="mb-3">
+                                            <label for="phone" class="form-label font-weight-bold">No. Telepon</label>
+                                            <input type="phone" class="form-control" name="phone" value="{{ $User->phone }}">
                                         </div>
                                     </div>
                                     <div class="col-sm-12 col-md-6">
                                          <div class="mb-3">
                                             <label for="email" class="form-label font-weight-bold">Email</label>
-                                            <input type="email" class="form-control" id="email" placeholder="example@mail.com">
+                                            <input type="email" class="form-control" name="email" value="{{ $User->email }}">
                                         </div>
                                     </div>
                                     <div class="col-sm-12 col-md-6">
                                         <div class="mb-3">
                                             <label for="password" class="form-label font-weight-bold">Password</label>
-                                            <input type="password" class="form-control" id="nik" placeholder="Masukkan password Anda">
+                                            <input type="password" class="form-control" name="password" value="{{ $User->password }}">
                                         </div>
                                     </div>
                                 </div>
@@ -277,21 +311,27 @@
     </div>
 
     <!-- Bootstrap core JavaScript-->
-    <script src="vendor/jquery/jquery.min.js"></script>
-    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="{{ asset('assets/vendor/jquery/jquery.min.js') }}"></script>
+    <script src="{{ asset('assets/vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
 
     <!-- Core plugin JavaScript-->
-    <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+    <script src="{{ asset('assets/vendor/jquery-easing/jquery.easing.min.js') }}"></script>
 
     <!-- Custom scripts for all pages-->
-    <script src="js/sb-admin-2.min.js"></script>
+    <script src="{{ asset('assets/js/sb-admin-2.min.js') }}"></script>
 
     <!-- Page level plugins -->
-    <script src="vendor/chart.js/Chart.min.js"></script>
+    <script src="{{ asset('assets/vendor/chart.js/Chart.min.js') }}"></script>
     <script src="{{ asset('assets/js/dataTables.bootstrap4.min.js') }}"></script>
 
     <!-- Page level custom scripts -->
-    <script src="js/demo/chart-area-demo.js"></script>
+    <script src="{{ asset('assets/js/demo/chart-area-demo.js') }}"></script>
+    <script src="{{ asset('assets/js/demo/chart-pie-demo.js') }}"></script>
+
+    <!-- perlu penambahan cdn -->
+    <!--<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-Fy6S3B9q64WdZWQUiU+q4/2Lc9npb8tCaSX9FK7E8HnRr0Jz8D6OP9dO5Vg3Q9ct" crossorigin="anonymous"></script>
+    end of perlu penambahan cdn -->
 
 </body>
 

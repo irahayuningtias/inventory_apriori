@@ -157,14 +157,6 @@
                                     <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
                                     Profile
                                 </a>
-                                <a class="dropdown-item" href="#">
-                                    <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
-                                    Settings
-                                </a>
-                                <a class="dropdown-item" href="#">
-                                    <i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
-                                    Activity Log
-                                </a>
                                 <div class="dropdown-divider"></div>
                                 <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
                                     <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
@@ -191,7 +183,7 @@
                         <div class="card-header py-3 col">
                             <div class="d-flex justify-content-between align-item-center">
                                 <h5 class="m-0 font-weight-bold text-primary text-center">Data Karyawan</h5>
-                                <a href="users/add_users" class="btn btn-primary btn-icon-split ">
+                                <a href="{{ route('users.create') }}" class="btn btn-primary btn-icon-split ">
                                     <span class="icon text-white-50">
                                         <i class="fas fa-add"></i>
                                     </span>
@@ -215,87 +207,67 @@
                                             </label>
                                         </div>
                                     </div>
-                                    <div class="col-sm-12 col-md-6">
-                                        <div id="dataTable_filter" class="dataTables_filter">
-                                            <label>Search:
-                                                <input type="search" class="form-control form-control-sm" placeholder="" aria-controls="dataTable">
-                                            </label>    
+                                    <form action="{{ route('users.search') }}" method="GET">
+                                        <div class="col-sm-12 col-md-6">
+                                            <div id="dataTable_filter" class="dataTables_filter">
+                                                <label>Search:
+                                                    <input type="search" name="search" class="form-control form-control-sm" aria-controls="dataTable" value="{{ old('search') }}">
+                                                </label>    
+                                            </div>
                                         </div>
-                                    </div>
+                                    </form>
                                 </div>
+
+                                @if ($message = Session::get('success'))
+                                    <div class="alert alert-success">
+                                        <p>{{ $message}}</p>
+                                    </div>
+                                @endif
+
                                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                                     <thead>
                                         <tr>
                                             <th>Nama</th>
                                             <th>NIK</th>
+                                            <th>Jenis Kelamin</th>
+                                            <th>Alamat</th>
+                                            <th>No. Tlp</th>
                                             <th>Email</th>
-                                            <th>Password</th>
-                                            <th>Role</th>
                                             <th>Aksi</th>
                                         </tr>
                                     </thead>
-                                    <tfoot>
-                                        <tr>
-                                            <th>Nama</th>
-                                            <th>NIK</th>
-                                            <th>Email</th>
-                                            <th>Password</th>
-                                            <th>Role</th>
-                                            <th>Aksi</th>
-                                        </tr>
-                                    </tfoot>
                                     <tbody>
+                                        @foreach ($users as $User)
                                         <tr>
-                                            <td>Indah Rahayuningtias</td>
-                                            <td>2141764085</td>
-                                            <td>irahayuningtias@gmail.com</td>
-                                            <td>indhhrhy</td>
-                                            <td>Administrator</td>
+                                            <td>{{ $User->name }}</td>
+                                            <td>{{ $User->nik }}</td>
+                                            <td>{{ $User->gender }}</td>
+                                            <td>{{ $User->address }}</td>
+                                            <td>{{ $User->phone }}</td>
+                                            <td>{{ $User->email }}</td>
                                             <td>
-                                                <a href="users/detail_users" class="btn btn-info btn-circle btn-sm">
+                                            <form action="{{ route('users.destroy', $User->id) }}" method="POST">
+                                                <a href="{{ route('users.show', $User->id) }}" class="btn btn-info btn-circle btn-sm">
                                                     <i class="fas fa-info-circle"></i>
                                                 </a>
-                                                <a href="users/edit_users" class="btn btn-warning btn-circle btn-sm">
+                                                <a href="{{ route('users.edit', $User->id) }}" class="btn btn-warning btn-circle btn-sm">
                                                     <i class="fas fa-edit"></i>
                                                 </a>
-                                                <a href="users/delete_users" class="btn btn-danger btn-circle btn-sm">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button class="btn btn-danger btn-circle btn-sm" onclick="return confirmDelete()">
                                                     <i class="fas fa-trash"></i>
-                                                </a>
+                                                </button>
+                                            </form>
                                         </tr>
+                                        @endforeach
                                     </tbody>
                                 </table>
-                                <div class="row">
-                                    <div class="col-sm-12 col-md-5">
-                                        <div class="dataTables_info" id="dataTable_info" role="status" aria-live="polite">Showing 1 to 10 of 57 entries</div>
+                                <div class="row justify-content-between">
+                                    <div class="mt-2">Showing {{($users->currentpage()-1)*$users->perpage()+1}} to {{$users->currentpage()*$users->perpage()}}
+                                        of  {{$users->total()}} entries
                                     </div>
-                                    <div class="col-sm-12 col-md-7">
-                                        <div class="dataTables_paginate paging_simple_numbers" id="dataTable_paginate"><ul class="pagination">
-                                            <li class="paginate_button page-item previous disabled" id="dataTable_previous">
-                                                <a href="#" aria-controls="dataTable" data-dt-idx="0" tabindex="0" class="page-link">Previous</a>
-                                            </li>
-                                            <li class="paginate_button page-item active">
-                                                <a href="#" aria-controls="dataTable" data-dt-idx="1" tabindex="0" class="page-link">1</a>
-                                            </li>
-                                            <li class="paginate_button page-item ">
-                                                <a href="#" aria-controls="dataTable" data-dt-idx="2" tabindex="0" class="page-link">2</a>
-                                            </li>
-                                            <li class="paginate_button page-item ">
-                                                <a href="#" aria-controls="dataTable" data-dt-idx="3" tabindex="0" class="page-link">3</a>
-                                            </li>
-                                            <li class="paginate_button page-item ">
-                                                <a href="#" aria-controls="dataTable" data-dt-idx="4" tabindex="0" class="page-link">4</a>
-                                            </li>
-                                            <li class="paginate_button page-item ">
-                                                <a href="#" aria-controls="dataTable" data-dt-idx="5" tabindex="0" class="page-link">5</a>
-                                            </li>
-                                            <li class="paginate_button page-item ">
-                                                <a href="#" aria-controls="dataTable" data-dt-idx="6" tabindex="0" class="page-link">6</a>
-                                            </li>
-                                            <li class="paginate_button page-item next" id="dataTable_next">
-                                                <a href="#" aria-controls="dataTable" data-dt-idx="7" tabindex="0" class="page-link">Next</a>
-                                            </li>
-                                        </ul>
-                                    </div>
+                                    <div>{{ $users->onEachSide(1)->links() }}</div>
                                 </div>
                             </div>
                         </div>
@@ -349,22 +321,35 @@
     </div>
 
     <!-- Bootstrap core JavaScript-->
-    <script src="vendor/jquery/jquery.min.js"></script>
-    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="{{ asset('assets/vendor/jquery/jquery.min.js') }}"></script>
+    <script src="{{ asset('assets/vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
 
     <!-- Core plugin JavaScript-->
-    <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+    <script src="{{ asset('assets/vendor/jquery-easing/jquery.easing.min.js') }}"></script>
 
     <!-- Custom scripts for all pages-->
-    <script src="js/sb-admin-2.min.js"></script>
+    <script src="{{ asset('assets/js/sb-admin-2.min.js') }}"></script>
 
     <!-- Page level plugins -->
-    <script src="vendor/chart.js/Chart.min.js"></script>
+    <script src="{{ asset('assets/vendor/chart.js/Chart.min.js') }}"></script>
     <script src="{{ asset('assets/js/dataTables.bootstrap4.min.js') }}"></script>
 
     <!-- Page level custom scripts -->
-    <script src="js/demo/chart-area-demo.js"></script>
+    <script src="{{ asset('assets/js/demo/chart-area-demo.js') }}"></script>
+    <script src="{{ asset('assets/js/demo/chart-pie-demo.js') }}"></script>
 
+    <!-- perlu penambahan cdn -->
+    <!--<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-Fy6S3B9q64WdZWQUiU+q4/2Lc9npb8tCaSX9FK7E8HnRr0Jz8D6OP9dO5Vg3Q9ct" crossorigin="anonymous"></script>
+    end of perlu penambahan cdn -->
+
+    <!-- Confirm Delete -->
+    <script>
+        function confirmDelete() {
+            return confirm('Are you sure you want to delete this item?');
+        }
+    </script>
+    
 </body>
 
 </html>

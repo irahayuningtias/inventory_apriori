@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ProductController;
 use Illuminate\Http\Request;
@@ -22,15 +23,9 @@ Route::get('/dashboard', function () {
 
 
 //users
-Route::get('/users', function () {
-    return view('users/users');
-});
-Route::get('/users/add_users', function () {
-    return view('users/add_users');
-});
-Route::get('/users/edit_users', function () {
-    return view('users/edit_users');
-});
+Route::resource('users', UserController::class);
+Route::get('/users', [UserController::class, 'index'])->name('users');
+Route::get('/users/search', [UserController::class, 'search'])->name('users.search');
 
 
 //category

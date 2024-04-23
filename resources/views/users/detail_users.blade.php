@@ -9,7 +9,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
     <link rel="icon" href="{{asset ('assets/image/logo-hari-hari.png') }}">
-    <title>IMS - Tambah Karyawan</title>
+    <title>IMS - Detail Karyawan</title>
 
     <!-- Custom fonts for this template-->
     <link href="{{!! asset('assets/vendor/fontawesome-free/css/all.min.css') !!}}" rel="stylesheet" type="text/css">
@@ -54,13 +54,13 @@
                     <span>Dashboard</span>
                 </a>
             </li>
-            <li class="nav-item active">
+            <li class="nav-item">
                 <a class="nav-link" href="users">
                     <i class="fas fa-fw fa-users"></i>
                     <span>Karyawan</span>
                 </a>
             </li>
-            <li class="nav-item">
+            <li class="nav-item active">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseMasterData" aria-expanded="true" aria-controls="collapseMasterData">
                     <i class="fas fa-fw fa-folder"></i>
                     <span>Master Data</span>
@@ -157,6 +157,14 @@
                                     <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
                                     Profile
                                 </a>
+                                <a class="dropdown-item" href="#">
+                                    <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
+                                    Settings
+                                </a>
+                                <a class="dropdown-item" href="#">
+                                    <i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
+                                    Activity Log
+                                </a>
                                 <div class="dropdown-divider"></div>
                                 <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
                                     <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
@@ -173,85 +181,45 @@
                 <div class="container-fluid">
 
                     <!-- Page Heading -->
-                    <h7 class="m-0 font-weight-normal ">Karyawan / <a href="{{ route('users.create') }}">Tambah Karyawan</a></h7><br><br>
+                    <h7 class="m-0 font-weight-normal ">Karyawan / <a href="{{ route('users.show', ['user' => $User->id]) }}">Detail Karyawan</a></h7><br><br>
 
                     <!-- DataTales Example -->
                     <div class="card shadow mb-4">
                         <div class="card-header py-3 col">
-                            <h5 class="m-0 font-weight-bold text-primary">Form Tambah Karyawan</h5>
+                            <h5 class="m-0 font-weight-bold text-primary">Detail Karyawan</h5>
                         </div>
                         <div class="card-body">
-                            @if ($errors->any())
-                            <div class="alert alert-danger">
-                                <strong>Whoops!</strong> There were some problems with your input.<br><br>
-                                <ul>
-                                    @foreach ($errors->all() as $error)
-                                        <li>{{ $error }}</li>
-                                    @endforeach
-                                </ul>
-                            </div>
-                            @endif
-                            <form method="POST" action="{{ route('users.store') }}">
-                                @csrf
-                                <div class="row">
-                                    <div class="col-sm-12 col-md-6">
-                                        <div class="mb-3">
-                                            <label for="name" class="form-label font-weight-bold">Nama</label>
-                                            <input type="name" class="form-control" name="name" placeholder="Masukkan nama Anda">
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-12 col-md-6">
-                                        <div class="mb-3">
-                                            <label for="nik" class="form-label font-weight-bold">NIK</label>
-                                            <input type="nik" class="form-control" name="nik" placeholder="Masukkan NIK Anda">
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-12 col-md-6">
-                                        <div class="mb-3">
-                                            <label for="gender" class="form-label font-weight-bold">Jenis Kelamin</label>
-                                            <select class="form-control" name="gender">
-                                                <option disabled value>Pilih Jenis Kelamin</option>
-                                                <option value="Laki-laki">Laki-laki</option>
-                                                <option value="Perempuan">Perempuan</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-12 col-md-6">
-                                        <div class="mb-3">
-                                            <label for="address" class="form-label font-weight-bold">Alamat</label>
-                                            <input type="address" class="form-control" name="address" placeholder="Masukkan Alamat Anda">
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-12 col-md-6">
-                                        <div class="mb-3">
-                                            <label for="phone" class="form-label font-weight-bold">No. Telepon</label>
-                                            <input type="phone" class="form-control" name="phone" placeholder="Masukkan No. Telepon Anda">
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-12 col-md-6">
-                                         <div class="mb-3">
-                                            <label for="email" class="form-label font-weight-bold">Email</label>
-                                            <input type="email" class="form-control" name="email" placeholder="example@mail.com">
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-12 col-md-6">
-                                        <div class="mb-3">
-                                            <label for="password" class="form-label font-weight-bold">Password</label>
-                                            <input type="password" class="form-control" name="password" placeholder="Masukkan password Anda">
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-sm-12">
-                                        <div class="d-grid gap-2 d-md-block">
-                                            <input type="submit" class="btn btn-primary"></input>
-                                            <a class="btn btn-danger" href="javascript:window.history.go(-1);" role="button">Batal</a>
-                                        </div>
-                                    </div>    
-                                </div>
-                            </form>
-
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item"><b>Nama: </b>{{ $User->name }}</li>
+                                <li class="list-group-item"><b>NIK: </b>{{ $User->nik }}</li>
+                                <li class="list-group-item"><b>Jenis Kelamin: </b>{{ $User->gender }}</li>
+                                <li class="list-group-item"><b>Alamat: </b>{{ $User->address }}</li>
+                                <li class="list-group-item"><b>No. Telepon: </b>{{ $User->phone }}</li>
+                                <li class="list-group-item"><b>Email: </b>{{ $User->email }}</li>
+                                <li class="list-group-item"><b>Password: </b><span id="password">*******   </span>
+                                    <button onclick="togglePassword()" style="border: none; background: none; color: grey">
+                                        <i id="icon" class="fa fa-eye"></i>
+                                    </button>
+                                </li>
+                                    <script>
+                                    function togglePassword() {
+                                    var passwordField = document.getElementById("password");
+                                    var button = document.querySelector("button");
+                                    var icon = document.getElementById("icon");
+                                    if (passwordField.innerHTML === "*******") {
+                                        passwordField.innerHTML = "{{ $User->password }}";
+                                        icon.classList.remove("fa-eye");
+                                        icon.classList.add("fa-eye-slash");
+                                    } else {
+                                        passwordField.innerHTML = "*******";
+                                        icon.classList.remove("fa-eye-slash");
+                                        icon.classList.add("fa-eye");
+                                    }
+                                    }
+                                    </script>
+                            </ul>
                         </div>
+                        <a class="btn btn-primary mt-12" href="{{ route('users') }}">Kembali</a>
                     </div>
                 </div>
                 <!-- /.container-fluid -->
