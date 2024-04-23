@@ -19,7 +19,6 @@ class CategoryController extends Controller
     {
         //fungsi eloquent menampilkan data menggunakan pagination
         $categories = Category::orderBy('id_category', 'asc')->paginate(10);
-        $categories->onEachSide(2);
         return view('kategori.index', compact('categories'));
     }
 
