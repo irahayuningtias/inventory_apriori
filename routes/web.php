@@ -1,9 +1,11 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\TransactionController;
 use Illuminate\Http\Request;
 
 /*
@@ -17,10 +19,7 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::get('/dashboard', function () {
-    return view('index');
-});
-
+Route::get('/dashboard', [DashboardController::class, 'index'])->name('index');
 
 //users
 Route::resource('users', UserController::class);
@@ -37,7 +36,7 @@ Route::get('/category/search', [CategoryController::class, 'search'])->name('cat
 //product
 Route::resource('product', ProductController::class);
 Route::get('/product', [ProductController::class, 'index'])->name('product');
-Route::get('/search_product', [ProductController::class, 'search'])->name('search');
+Route::get('/product/search', [ProductController::class, 'search'])->name('product.search');
 
 
 //supply
@@ -62,15 +61,10 @@ Route::get('/supply_out/edit_supply_out', function () {
 
 
 //transaction
-Route::get('/transaction', function () {
-    return view('transaksi/transaction');
-});
-Route::get('/transaction/add_transaction', function () {
-    return view('transaksi/add_transaction');
-});
-Route::get('/transaction/edit_transaction', function () {
-    return view('transaksi/edit_transaction');
-});
+Route::resource('transaction', TransactionController::class);
+Route::get('transaction/{id_transaction}', 'TransactionController@show')->name('transaction.show');
+Route::get('/transaction', [TransactionController::class, 'index'])->name('transaction');
+Route::get('/search_transaction', [TransactionController::class, 'search'])->name('search');
 
 
 //apriori
