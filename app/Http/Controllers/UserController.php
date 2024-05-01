@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 
 
 class UserController extends Controller
@@ -50,8 +51,19 @@ class UserController extends Controller
             'password' => 'required',
         ]);
 
+        // Enkripsi password sebelum menyimpan ke database
+        $password = Hash::make($request->password);
+
         //fungsi eloquent untuk menambah data
-        User::create($request->all());
+        User::create([
+            'name' => $request->name,
+            'nik' => $request->nik,
+            'gender' => $request->gender,
+            'phone' => $request->phone,
+            'address' => $request->address,
+            'email' => $request->email,
+            'password' => $password,
+        ]);
 
         //jika data berhasil ditambahkan, akan kembali ke halaman utama
         return redirect()->route('users')
@@ -129,5 +141,11 @@ class UserController extends Controller
         $keyword = $request->search;
         $users = User::where('name', 'like', "%" . $keyword . "%")->paginate(10);
         return view('users', compact('users'));
+    }
+
+    public function profile()
+    {
+        $users = Auth::user();
+        return view('users.profile', compact('users'));
     }
 }

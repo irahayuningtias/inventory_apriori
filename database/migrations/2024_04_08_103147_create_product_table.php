@@ -15,10 +15,11 @@ class CreateProductTable extends Migration
     {
         Schema::create('product', function (Blueprint $table) {
             $table->string('id_product')->primary();
-            $table->string('category');
+            $table->string('id_category');
             $table->string('product_name');
             $table->integer('quantity');
-            $table->foreign('category')->references('id_category')->on('category')->onDelete('cascade');
+            $table->decimal('price', 10,2);
+            $table->foreign('id_category')->references('id_category')->on('category')->onDelete('cascade');
         });
     }
 

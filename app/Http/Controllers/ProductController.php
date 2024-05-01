@@ -45,7 +45,8 @@ class ProductController extends Controller
             'id_product' => 'required',
             'id_category' => 'required',
             'product_name' => 'required',
-            'quantity' => 'required'
+            'quantity' => 'required',
+            'price' => 'required'
         ]);
 
         //fungsi eloquent untuk menambah data
@@ -96,6 +97,7 @@ class ProductController extends Controller
             'id_category' => 'required',
             'product_name' => 'required',
             'quantity' => 'required',
+            'price' => 'required'
         ]);
 
         //fungsi eloquent untuk mengupdate data inputan
@@ -122,8 +124,25 @@ class ProductController extends Controller
 
     public function search(Request $request)
     {
-        $keyword = $request->search;
-        $products = Product::where('product_name', 'like', "%" . $keyword . "%")->paginate(10);
-        return view('product', compact('products'));
+        if($request->ajax())
+        {
+            $output = '';
+            $products = Product::where('product_name', 'like', '%'.$request->query.'%')->get();
+            if($products)
+            {
+                foreach ($products as $product) {
+                    $output .= '<li data-id="'.$product->id_product.'">'.$product->product_name.'</li>';
+                }
+                return $output;
+            }
+        }
+    }
+
+    public function select2(Request $request)
+    {
+        $search = $request->get('q');
+        $products = Product::where('product_name', 'like', "%$search%")->get();
+        
+        return response()->json($products);
     }
 }

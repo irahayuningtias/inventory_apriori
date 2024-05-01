@@ -121,12 +121,6 @@
                     </div>
                 </div>
             </li>
-            <li class="nav-item active">
-                <a class="nav-link" href="account">
-                    <i class="fas fa-fw fa-user"></i>
-                    <span>Akun</span>
-                </a>
-            </li>
         </ul>
         <!-- End of Sidebar -->
 
@@ -146,24 +140,14 @@
                         <li class="nav-item dropdown no-arrow">
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">Douglas McGee</span>
-                                <img class="img-profile rounded-circle"
-                                    src="img/undraw_profile.svg">
+                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">{{{ Auth::user()->name }}}</span>
                             </a>
                             <!-- Dropdown - User Information -->
                             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
                                 aria-labelledby="userDropdown">
-                                <a class="dropdown-item" href="#">
+                                <a class="dropdown-item" href="account">
                                     <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
                                     Profile
-                                </a>
-                                <a class="dropdown-item" href="#">
-                                    <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
-                                    Settings
-                                </a>
-                                <a class="dropdown-item" href="#">
-                                    <i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
-                                    Activity Log
                                 </a>
                                 <div class="dropdown-divider"></div>
                                 <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
@@ -181,32 +165,71 @@
                 <div class="container-fluid">
 
                     <!-- Page Heading -->
-                    <h7 class="m-0 font-weight-normal "><a href="account">Akun</a></h7><br><br>
-                    <h1 class="h3 mb-2 text-gray-800">Ganti Password</h1>
-                        <p class="mb-3">Pada fitur ini Anda dapat mengganti password Anda</p><br>
+                    <h7 class="m-0 font-weight-normal "><a href="account">Profile</a></h7><br><br>
+                    <h1 class="h3 mb-2 text-gray-800">Profil Anda</h1>
+                        <p class="mb-3">Pada fitur ini Anda dapat mengganti profil Anda</p><br>
 
                     <!-- DataTales Example -->
                     <div class="card shadow mb-4">
                         <div class="card-body">
-                            <form method="POST" action="">
+                            @if ($errors->any())
+                            <div class="alert alert-danger">
+                                <strong>Whoops!</strong> There were some problems with your input.<br><br>
+                                <ul>
+                                    @foreach ($errors->all() as $error)
+                                        <li>{{ $error }}</li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                            @endif
+                            <form method="POST" action="{{ route('profile.update') }}">
                                 @csrf
+                                @method('PUT')
                                 <div class="row">
-                                    <div class="col-sm-12 col-md-12">
+                                    <div class="col-sm-12 col-md-6">
                                         <div class="mb-3">
-                                            <label for="oldpassword" class="form-label font-weight-bold">Password Lama</label>
-                                            <input type="oldpassword" class="form-control" id="oldpassword" placeholder="Masukkan password lama Anda">
+                                            <label for="name" class="form-label font-weight-bold">{{ __('Name') }}</label>
+                                            <input type="name" class="form-control" name="name" placeholder="Masukkan nama Anda" value="{{ Auth::user()->name }}">
                                         </div>
                                     </div>
-                                    <div class="col-sm-12 col-md-12">
+                                    <div class="col-sm-12 col-md-6">
                                         <div class="mb-3">
-                                            <label for="newpassword" class="form-label font-weight-bold">Password Baru</label>
-                                            <input type="newpassword" class="form-control" id="newpassword" placeholder="Masukkan password baru Anda">
+                                            <label for="nik" class="form-label font-weight-bold">NIK</label>
+                                            <input type="nik" class="form-control" name="nik" placeholder="Masukkan NIK Anda">
                                         </div>
                                     </div>
-                                    <div class="col-sm-12 col-md-12">
+                                    <div class="col-sm-12 col-md-6">
                                         <div class="mb-3">
-                                            <label for="newpassword" class="form-label font-weight-bold">Ulangi Password Baru</label>
-                                            <input type="newpassword" class="form-control" id="newpassword" placeholder="Ulangi password baru Anda">
+                                            <label for="gender" class="form-label font-weight-bold">Jenis Kelamin</label>
+                                            <select class="form-control" name="gender">
+                                                <option disabled value>Pilih Jenis Kelamin</option>
+                                                <option value="Laki-laki">Laki-laki</option>
+                                                <option value="Perempuan">Perempuan</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-12 col-md-6">
+                                        <div class="mb-3">
+                                            <label for="address" class="form-label font-weight-bold">Alamat</label>
+                                            <input type="address" class="form-control" name="address" placeholder="Masukkan Alamat Anda">
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-12 col-md-6">
+                                        <div class="mb-3">
+                                            <label for="phone" class="form-label font-weight-bold">No. Telepon</label>
+                                            <input type="phone" class="form-control" name="phone" placeholder="Masukkan No. Telepon Anda">
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-12 col-md-6">
+                                         <div class="mb-3">
+                                            <label for="email" class="form-label font-weight-bold">Email</label>
+                                            <input type="email" class="form-control" name="email" placeholder="example@mail.com">
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-12 col-md-6">
+                                        <div class="mb-3">
+                                            <label for="password" class="form-label font-weight-bold">Password</label>
+                                            <input type="password" class="form-control" name="password" placeholder="Masukkan password Anda">
                                         </div>
                                     </div>
                                 </div>
@@ -263,7 +286,10 @@
                 <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
                 <div class="modal-footer">
                     <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                    <a class="btn btn-primary" href="login.html">Logout</a>
+                    <form id="logout-form" method="POST" action="{{ route('logout') }}">
+                        @csrf
+                        <a class="btn btn-primary" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a>
+                    </form>
                 </div>
             </div>
         </div>

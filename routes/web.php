@@ -19,12 +19,15 @@ use Illuminate\Http\Request;
 |
 */
 
+
 Route::get('/dashboard', [DashboardController::class, 'index'])->name('index');
 
-//users
+
+// users/karyawan & profile
 Route::resource('users', UserController::class);
 Route::get('/users', [UserController::class, 'index'])->name('users');
 Route::get('/users/search', [UserController::class, 'search'])->name('users.search');
+Route::get('/profile', [UserController::class, 'profile'])->name('profile');
 
 
 //category
@@ -37,6 +40,7 @@ Route::get('/category/search', [CategoryController::class, 'search'])->name('cat
 Route::resource('product', ProductController::class);
 Route::get('/product', [ProductController::class, 'index'])->name('product');
 Route::get('/product/search', [ProductController::class, 'search'])->name('product.search');
+Route::get('product/select2', [ProductController::class, 'select2'])->name('product.select2');
 
 
 //supply
@@ -89,6 +93,6 @@ Auth::routes();
 
 //Route::get('/login', [LoginController::class, 'login'])->name('login');
 //Route::post('actionlogin', [LoginController::class, 'actionlogin'])->name('actionlogin');
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home')->middleware('auth');
-Route::get('actionlogout', [LoginController::class, 'actionlogout'])->name('actionlogout')->middleware('auth');
+//Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home')->middleware('auth');
+//Route::get('actionlogout', [LoginController::class, 'actionlogout'])->name('actionlogout')->middleware('auth');
 

@@ -121,12 +121,6 @@
                     </div>
                 </div>
             </li>
-            <li class="nav-item">
-                <a class="nav-link" href="account">
-                    <i class="fas fa-fw fa-user"></i>
-                    <span>Akun</span>
-                </a>
-            </li>
         </ul>
         <!-- End of Sidebar -->
 
@@ -145,24 +139,14 @@
                         <li class="nav-item dropdown no-arrow">
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">Douglas McGee</span>
-                                <img class="img-profile rounded-circle"
-                                    src="img/undraw_profile.svg">
+                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">{{ Auth::user()->name }}</span>
                             </a>
                             <!-- Dropdown - User Information -->
                             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
                                 aria-labelledby="userDropdown">
-                                <a class="dropdown-item" href="#">
+                                <a class="dropdown-item" href="account">
                                     <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
                                     Profile
-                                </a>
-                                <a class="dropdown-item" href="#">
-                                    <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
-                                    Settings
-                                </a>
-                                <a class="dropdown-item" href="#">
-                                    <i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
-                                    Activity Log
                                 </a>
                                 <div class="dropdown-divider"></div>
                                 <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
@@ -179,7 +163,7 @@
 
                 <div class="container-fluid">
 
-                    <h7 class="m-0 font-weight-normal "><a href="goods">Barang</a></h7><br><br>
+                    <h7 class="m-0 font-weight-normal "><a href="product">Barang</a></h7><br><br>
 
                     <!-- Page Heading -->
                     <h1 class="h3 mb-2 text-gray-800">Barang</h1>
@@ -215,7 +199,7 @@
                                             </label>
                                         </div>
                                     </div>
-                                    <form action="{{ route('search') }}"></form>
+                                    <form action="{{ route('search') }}">
                                     <div class="col-sm-12 col-md-6">
                                         <div id="dataTable_filter" class="dataTables_filter">
                                             <label>Search:
@@ -238,7 +222,8 @@
                                             <th>Kategori</th>
                                             <th>Kode Barang</th>
                                             <th>Nama Barang</th>
-                                            <th>Kuantitas</th>
+                                            <th>Qty</th>
+                                            <th>Harga</th>
                                             <th>Aksi</th>
                                         </tr>
                                     </thead>
@@ -249,6 +234,7 @@
                                             <td>{{ $Product->id_product }}</td>
                                             <td>{{ $Product->product_name }}</td>
                                             <td>{{ $Product->quantity }}</td>
+                                            <td>Rp {{ number_format($Product->price, 2, ',', '.') }}</td>
                                             <td>
                                             <form action="{{ route('product.destroy', $Product->id_product) }}" method="POST">
                                                 <a href="{{ route('product.show', $Product->id_product) }}" class="btn btn-info btn-circle btn-sm">
@@ -271,7 +257,7 @@
                                     <div class="mt-2">Showing {{($products->currentpage()-1)*$products->perpage()+1}} to {{$products->currentpage()*$products->perpage()}}
                                         of  {{$products->total()}} entries
                                     </div>
-                                    <div>{{ $products->onEachSide(2)->links() }}</div>
+                                    <div>{{ $products->onEachSide(1)->links() }}</div>
                                 </div>
                             </div>
                         </div>
@@ -318,7 +304,10 @@
                 <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
                 <div class="modal-footer">
                     <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                    <a class="btn btn-primary" href="login.html">Logout</a>
+                    <form id="logout-form" method="POST" action="{{ route('logout') }}">
+                        @csrf
+                        <a class="btn btn-primary" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a>
+                    </form>
                 </div>
             </div>
         </div>
