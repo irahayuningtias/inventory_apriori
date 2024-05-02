@@ -114,8 +114,19 @@ class UserController extends Controller
             'password' => 'required',
         ]);
 
+        // Enkripsi password sebelum menyimpan ke database
+        $password = Hash::make($request->password);
+
         //fungsi eloquent untuk mengupdate data inputan
-        User::find($id)->update($request->all());
+        User::find($id)->update([
+            'name' => $request->name,
+            'nik' => $request->nik,
+            'gender' => $request->gender,
+            'phone' => $request->phone,
+            'address' => $request->address,
+            'email' => $request->email,
+            'password' => $password,
+        ]);
 
         //jika data berhasil diupdate, akan kembali ke halaman utama
         return redirect()->route('users')
@@ -147,5 +158,17 @@ class UserController extends Controller
     {
         $users = Auth::user();
         return view('users.profile', compact('users'));
+    }
+
+    public function setPassword(Request $request)
+    {
+        $request->validate([
+            'password' => 'required|string|min:6',
+        ]);
+
+        // Simpan password ke dalam session
+        session(['sidebar_password' => $request->password]);
+
+        return redirect()->route('dashboard');
     }
 }
