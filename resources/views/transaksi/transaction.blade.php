@@ -39,7 +39,7 @@
             <!-- Sidebar - Brand -->
             <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
                 <div class="sidebar-brand-icon">
-                    <img class="brand-icon" src="{{ asset('assets/image/logo-hari-hari.png') }}" alt="Hari Hari Store" style="height= 50px; width= 50px;">
+                    <img class="brand-icon" src="{{ asset('assets/image/logo-hari-hari.png') }}" alt="Hari Hari Store" style="height: 50px; width: 50px;">
                 </div>
                 <div class="sidebar-brand-text mx-3">Hari Hari Store</div>
             </a>
@@ -145,9 +145,7 @@
                         <li class="nav-item dropdown no-arrow">
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">Douglas McGee</span>
-                                <img class="img-profile rounded-circle"
-                                    src="img/undraw_profile.svg">
+                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">{{ Auth::user()->name }}</span>
                             </a>
                             <!-- Dropdown - User Information -->
                             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
@@ -155,14 +153,6 @@
                                 <a class="dropdown-item" href="#">
                                     <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
                                     Profile
-                                </a>
-                                <a class="dropdown-item" href="#">
-                                    <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
-                                    Settings
-                                </a>
-                                <a class="dropdown-item" href="#">
-                                    <i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
-                                    Activity Log
                                 </a>
                                 <div class="dropdown-divider"></div>
                                 <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
@@ -190,7 +180,7 @@
                         <div class="card-header py-3 col">
                             <div class="d-flex justify-content-between align-item-center">
                                 <h5 class="m-0 font-weight-bold text-primary text-center">Data Transaksi</h5>
-                                <a href="transaction/add_transaction" class="btn btn-primary btn-icon-split ">
+                                <a href="{{ route('transaction.create') }}" class="btn btn-primary btn-icon-split ">
                                     <span class="icon text-white-50">
                                         <i class="fas fa-add"></i>
                                     </span>
@@ -203,6 +193,7 @@
                             <div id="dataTable_wrapper" class="dataTables_wrapper dt-bootstrap4">
                                 <div class="row">
                                     <div class="col-sm-12 col-md-6">
+                                        <form action="{{ route('transaction') }}" method="GET"></form>
                                         <div class="dataTables_length" id="dataTable_length">
                                             <label>Show 
                                                 <select name="dataTable_length" aria-controls="dataTable" class="custom-select custom-select-sm form-control form-control-sm">
@@ -214,6 +205,7 @@
                                             </label>
                                         </div>
                                     </div>
+                                    <form action="{{ route('search') }}">
                                     <div class="col-sm-12 col-md-6">
                                         <div id="dataTable_filter" class="dataTables_filter">
                                             <label>Search:
@@ -221,81 +213,64 @@
                                             </label>    
                                         </div>
                                     </div>
+                                    </form>
                                 </div>
+
+                                @if ($message = Session::get('success'))
+                                    <div class="alert alert-success">
+                                        <p>{{ $message}}</p>
+                                    </div>
+                                @endif
+
                                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                                     <thead>
                                         <tr>
                                             <th>ID Transaksi</th>
-                                            <th>Waktu</th>
+                                            <th>Tanggal</th>
                                             <th>Nama Barang</th>
-                                            <th>Jumlah</th>
                                             <th>Total Bayar</th>
                                             <th>Aksi</th>
                                         </tr>
                                     </thead>
-                                    <tfoot>
-                                        <tr>
-                                            <th>ID Transaksi</th>
-                                            <th>Waktu</th>
-                                            <th>Nama Barang</th>
-                                            <th>Jumlah</th>
-                                            <th>Total Bayar</th>
-                                            <th>Aksi</th>
-                                        </tr>
-                                    </tfoot>
                                     <tbody>
+                                        @foreach($transactions as $tx)
+                                        
                                         <tr>
-                                            <td>TR001</td>
-                                            <td>24/03/2024 19:00:00</td>
-                                            <td>Skintific AHA BHA PHA Exfoliating Toner</td>
-                                            <td>1 pcs</td>
-                                            <td>Rp 113.000</td>
+                                            <td>{{ $tx->transaction_code }}</td>
+                                            <td>{{ $tx->transaction_date }}</td>
                                             <td>
-                                                <a href="transaction/detail_transaction" class="btn btn-info btn-circle btn-sm">
-                                                    <i class="fas fa-info-circle"></i>
-                                                </a>
-                                                <a href="transaction/edit_transaction" class="btn btn-warning btn-circle btn-sm">
-                                                    <i class="fas fa-edit"></i>
-                                                </a>
-                                                <a href="#" class="btn btn-danger btn-circle btn-sm">
-                                                    <i class="fas fa-trash"></i>
-                                                </a>
-                                        </tr>
+                                                @foreach($tx->details as $details)
+                                                   
+                                                    - {{ $details->product->product_name }} ({{ $details->quantity }}) <br>
+                                                @endforeach
+                                            </td>
+                                            <td>Rp{{ number_format($tx->total_amount, 2, ',', '.') }}</td>
+                                            <td>
+                                                <form action="{{ route('transaction.destroy', $tx->id) }}" method="POST">
+                                                    <a href="{{ route('transaction.show', $tx->id) }}" class="btn btn-info btn-circle btn-sm">
+                                                        <i class="fas fa-info-circle"></i>
+                                                    </a>
+                                                    <a href="{{ route('transaction.edit', $tx->id) }}" class="btn btn-warning btn-circle btn-sm">
+                                                        <i class="fas fa-edit"></i>
+                                                    </a>
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button class="btn btn-danger btn-circle btn-sm" onclick="return confirmDelete()">
+                                                        <i class="fas fa-trash"></i>
+                                                    </button>
+                                                </form>
+
+                                                <!-- Code Edit -->
+                                                <!-- <a href="{{ route('transaction.edit', $tx->id) }}" class="btn btn-primary btn-icon-split">
+                                                    <span class="icon text-white-50">
+                                                        <i class="fas fa-edit"></i>
+                                                    </span>
+                                                    <span class="text">Edit</span>
+                                                </a> -->
+                                            </td>
+                                        @endforeach
                                     </tbody>
                                 </table>
-                                <div class="row">
-                                    <div class="col-sm-12 col-md-5">
-                                        <div class="dataTables_info" id="dataTable_info" role="status" aria-live="polite">Showing 1 to 10 of 57 entries</div>
-                                    </div>
-                                    <div class="col-sm-12 col-md-7">
-                                        <div class="dataTables_paginate paging_simple_numbers" id="dataTable_paginate"><ul class="pagination">
-                                            <li class="paginate_button page-item previous disabled" id="dataTable_previous">
-                                                <a href="#" aria-controls="dataTable" data-dt-idx="0" tabindex="0" class="page-link">Previous</a>
-                                            </li>
-                                            <li class="paginate_button page-item active">
-                                                <a href="#" aria-controls="dataTable" data-dt-idx="1" tabindex="0" class="page-link">1</a>
-                                            </li>
-                                            <li class="paginate_button page-item ">
-                                                <a href="#" aria-controls="dataTable" data-dt-idx="2" tabindex="0" class="page-link">2</a>
-                                            </li>
-                                            <li class="paginate_button page-item ">
-                                                <a href="#" aria-controls="dataTable" data-dt-idx="3" tabindex="0" class="page-link">3</a>
-                                            </li>
-                                            <li class="paginate_button page-item ">
-                                                <a href="#" aria-controls="dataTable" data-dt-idx="4" tabindex="0" class="page-link">4</a>
-                                            </li>
-                                            <li class="paginate_button page-item ">
-                                                <a href="#" aria-controls="dataTable" data-dt-idx="5" tabindex="0" class="page-link">5</a>
-                                            </li>
-                                            <li class="paginate_button page-item ">
-                                                <a href="#" aria-controls="dataTable" data-dt-idx="6" tabindex="0" class="page-link">6</a>
-                                            </li>
-                                            <li class="paginate_button page-item next" id="dataTable_next">
-                                                <a href="#" aria-controls="dataTable" data-dt-idx="7" tabindex="0" class="page-link">Next</a>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </div>
                             </div>
                         </div>
                     </div>
@@ -341,11 +316,15 @@
                 <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
                 <div class="modal-footer">
                     <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                    <a class="btn btn-primary" href="login.html">Logout</a>
+                    <form id="logout-form" method="POST" action="{{ route('logout') }}">
+                        @csrf
+                        <a class="btn btn-primary" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a>
+                    </form>
                 </div>
             </div>
         </div>
     </div>
+
 
     <!-- Bootstrap core JavaScript-->
     <script src="{{ asset('assets/vendor/jquery/jquery.min.js') }}"></script>
@@ -369,6 +348,13 @@
     <!--<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-Fy6S3B9q64WdZWQUiU+q4/2Lc9npb8tCaSX9FK7E8HnRr0Jz8D6OP9dO5Vg3Q9ct" crossorigin="anonymous"></script>
     end of perlu penambahan cdn -->
+
+    <!-- Confirm Delete -->
+    <script>
+        function confirmDelete() {
+            return confirm('Are you sure you want to delete this item?');
+        }
+    </script>
 
 </body>
 

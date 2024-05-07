@@ -22,6 +22,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"/>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet">
 
     <!-- Custom styles for this page-->
     <link href="{!! asset('assets/css/dataTables.css') !!}" rel="stylesheet">
@@ -157,14 +158,6 @@
                                     <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
                                     Profile
                                 </a>
-                                <a class="dropdown-item" href="#">
-                                    <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
-                                    Settings
-                                </a>
-                                <a class="dropdown-item" href="#">
-                                    <i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
-                                    Activity Log
-                                </a>
                                 <div class="dropdown-divider"></div>
                                 <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
                                     <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
@@ -189,49 +182,167 @@
                             <h5 class="m-0 font-weight-bold text-primary">Form Tambah Transaksi</h5>
                         </div>
                         <div class="card-body">
-                            <form method="POST" action="">
+                            <form method="POST" action="{{ route('transaction.store') }}">
                                 @csrf
                                 <div class="row">
                                     <div class="col-sm-12 col-md-6">
                                         <div class="mb-3">
-                                            <label for="id_transaksi" class="form-label font-weight-bold">ID Transaksi</label>
-                                            <input type="id_transaksi" class="form-control" id="id_transaksi" placeholder="Masukkan ID Transaksi">
+                                            <label for="transaction_code" class="form-label font-weight-bold">Kode Transaksi</label>
+                                            <input type="text" id="transaction_code" class="form-control" name="transaction_code">
+                                            @error('transaction_code')
+                                                <div class="text-danger">{{ $message }}</div>
+                                            @enderror
                                         </div>
                                     </div>
                                     <div class="col-sm-12 col-md-6">
                                         <div class="mb-3">
-                                            <label for="waktu" class="form-label font-weight-bold">Waktu</label>
-                                            <input type="waktu" class="form-control" id="waktu" placeholder="Pilih waktu">
+                                            <label for="transaction_date" class="form-label font-weight-bold">Tanggal Transaksi</label>
+                                            <input type="date" id="transaction_date" class="form-control" name="transaction_date">
+                                            @error('transaction_date')
+                                                <div class="text-danger">{{ $message }}</div>
+                                            @enderror
                                         </div>
                                     </div>
-                                    <div class="col-sm-12 col-md-6">
-                                         <div class="mb-3">
-                                            <label for="nama_barang" class="form-label font-weight-bold">Nama Barang</label>
-                                            <input type="nama_barang" class="form-control" id="nama_barang" placeholder="Masukkan nama barang">
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-12 col-md-6">
-                                        <div class="mb-3">
-                                            <label for="jumlah" class="form-label font-weight-bold">Jumlah</label>
-                                            <input type="jumlah" class="form-control" id="jumlah" placeholder="Masukkan jumlah barang">
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-12 col-md-6">
-                                        <div class="mb-3">
-                                            <label for="total_bayar" class="form-label font-weight-bold">Total Bayar</label>
-                                            <input type="total_bayar" class="form-control" id="total_bayar" placeholder="Masukkan total pembayaran">
-                                        </div>
-                                    </div>
+
+                                    <h5 class="py-3 col font-weight-bold text-primary">Detail Transaksi</h5>
+                                    <table id="product_table">
+                                        <thead>
+                                            <tr>
+                                                <th>Nama Barang</th>
+                                                <th>Jumlah</th>
+                                                <th>Harga Satuan</th>
+                                                <th>Subtotal</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr class="item">
+                                                <td>
+                                                    <select name="details[0][id_product]" class="form-control js-example-basic-single id_product" required>
+                                                        <option value="">Select Product</option>
+                                                        @foreach($products as $Product)
+                                                            <option value="{{ $Product->id_product }}" data-price="{{ $Product->price }}">{{ $Product->product_name }}</option>
+                                                        @endforeach
+                                                    </select>
+                                                </td>
+                                                <td>
+                                                    <input type="number" name="details[0][quantity]" min="1" class="form-control quantity">
+                                                </td>
+                                                <td>
+                                                    <input type="number" name="details[0][price]" min="0" class="form-control price" readonly>
+                                                </td>
+                                                <td>
+                                                    <input type="text" name="details[0][subtotal]" readonly class="form-control subtotal">
+                                                </td>
+                                                <td>
+                                                    <button class="btn btn-danger" type="button" id="remove_item">Hapus</button>
+                                                </td>
+                                            </tr> 
+                                        </tbody>
+                                    </table>
+                                    
+                                    @error('details.*.product_name')
+                                        <div class="text-danger">{{ $message }}</div>
+                                    @enderror
+                                    @error('details.*.quantity')
+                                        <div class="text-danger">{{ $message }}</div>
+                                    @enderror
+                                    @error('details.*.price')
+                                        <div class="text-danger">{{ $message }}</div>
+                                    @enderror
+
                                 </div>
-                                <div class="row">
+                                <div class="mt-2 row">
                                     <div class="col-sm-12">
                                         <div class="d-grid gap-2 d-md-block">
+                                            <button class="btn btn-warning" type="button" id="add_item">Tambah Barang</button>
                                             <input type="submit" class="btn btn-primary"></input>
                                             <a class="btn btn-danger" href="javascript:window.history.go(-1);" role="button">Batal</a>
                                         </div>
-                                    </div>    
+                                    </div>
                                 </div>
                             </form>
+                            
+                            <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+                            <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+                            <script>
+                            $(document).ready(function() {
+                                // Fungsi untuk menambahkan produk
+                                $('#add_item').click(function() {
+                                    var index = $('#product_table tbody tr').length;
+                                    var row = `
+                                        <tr class="item">
+                                            <td>
+                                                <select name="details[${index}][id_product]" class="form-control js-example-basic-single id_product" required>
+                                                    <option value="">Select Product</option>
+                                                    @foreach($products as $Product)
+                                                        <option value="{{ $Product->id_product }}" data-price="{{ $Product->price }}">{{ $Product->product_name }}</option>
+                                                    @endforeach
+                                                </select>
+                                            </td>
+                                            <td>
+                                                <input type="number" name="details[${index}][quantity]" min="1" class="form-control quantity">
+                                            </td>
+                                            <td>
+                                                <input type="number" name="details[${index}][price]" min="0" class="form-control price" readonly>
+                                            </td>
+                                            <td>
+                                                <input type="text" name="details[${index}][subtotal]" readonly class="form-control subtotal">
+                                            </td>
+                                            <td>
+                                                <button class="btn btn-danger remove_item" type="button">Hapus</button>
+                                            </td>
+                                        </tr>
+                                    `;
+                                    $('#product_table tbody').append(row);
+                                    $('.js-example-basic-single').select2({
+                                        ajax: {
+                                            url: '{{ route("product.select2") }}',
+                                            dataType: 'json',
+                                            delay: 250,
+                                            processResults: function (data) {
+                                                return {
+                                                    results: $.map(data, function (item) {
+                                                        return {
+                                                            id: item.id_product,
+                                                            text: item.product_name
+                                                        }
+                                                    })
+                                                };
+                                            },
+                                            cache: true
+                                        },
+                                        placeholder: 'Select Product',
+                                        minimumInputLength: 1
+                                    });
+                                });
+
+                                // Fungsi untuk menghapus produk
+                                $(document).on('click', '.remove_item', function() {
+                                    $(this).closest('tr').remove();
+                                });
+
+                                // Fungsi untuk menghitung subtotal berdasarkan kuantitas dan harga satuan
+                                $(document).on('change', '.id_product', function() {
+                                    var price = parseFloat($(this).find(':selected').data('price'));
+                                    var row = $(this).closest('tr');
+                                    row.find('.price').val(price);
+                                    calculateSubtotal(row);
+                                });
+
+                                $(document).on('keyup', '.quantity', function() {
+                                    var row = $(this).closest('tr');
+                                    calculateSubtotal(row);
+                                });
+
+                                function calculateSubtotal(row) {
+                                    var price = parseFloat(row.find('.price').val());
+                                    var quantity = parseInt(row.find('.quantity').val());
+                                    var subtotal = price * quantity;
+                                    row.find('.subtotal').val(subtotal.toFixed(2));
+                                }
+                            });
+                        </script>
+
                         </div>
                     </div>
                 </div>
@@ -298,6 +409,10 @@
     <!-- Page level custom scripts -->
     <script src="{{ asset('assets/js/demo/chart-area-demo.js') }}"></script>
     <script src="{{ asset('assets/js/demo/chart-pie-demo.js') }}"></script>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 
     <!-- perlu penambahan cdn -->
     <!--<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
