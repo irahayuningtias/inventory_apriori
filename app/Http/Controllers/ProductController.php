@@ -17,7 +17,7 @@ class ProductController extends Controller
     public function index()
     {
         //fungsi eloquent menampilkan data menggunakan pagination
-        $products = Product::with('category')->orderBy('id_category', 'asc')->paginate(10);
+        $products = Product::with('category')->orderBy('id_category', 'asc')->get();
         return view('barang.index', compact('products'));
     }
 
@@ -122,26 +122,10 @@ class ProductController extends Controller
             ->with('success', 'Barang Berhasil Dihapus');
     }
 
-    public function search(Request $request)
-    {
-        if($request->ajax())
-        {
-            $output = '';
-            $products = Product::where('product_name', 'like', '%'.$request->query.'%')->get();
-            if($products)
-            {
-                foreach ($products as $product) {
-                    $output .= '<li data-id="'.$product->id_product.'">'.$product->product_name.'</li>';
-                }
-                return $output;
-            }
-        }
-    }
-
     public function select2(Request $request)
     {
-        $search = $request->get('q');
-        $products = Product::where('product_name', 'like', "%$search%")->get();
+        //$search = $request->get('product_name');
+        $products = Product::where('product_name', 'like', '%'.$request->product_name.'%')->get();
         
         return response()->json($products);
     }

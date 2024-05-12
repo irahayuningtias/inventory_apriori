@@ -8,23 +8,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
     <meta name="author" content="">
-    <link rel="icon" href="{{asset ('assets/image/logo-hari-hari.png') }}">
+    <link rel="icon" href="{{ asset ('assets/image/logo-hari-hari.png') }}">
     <title>IMS - Karyawan</title>
 
     <!-- Custom fonts for this template-->
-    <link href="{{!! asset('assets/vendor/fontawesome-free/css/all.min.css') !!}}" rel="stylesheet" type="text/css">
+    <link href="{{ asset('assets/vendor/fontawesome-free/css/all.min.css') }}" rel="stylesheet" type="text/css">
     <link
         href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
         rel="stylesheet">
     <!-- Custom styles for this template-->
-    <link href="{!! asset('assets/css/app.css') !!}" rel="stylesheet" type="text/css">
+    <link href="{{ asset('assets/css/app.css') }}" rel="stylesheet" type="text/css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"/>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
     <!-- Custom styles for this page-->
-    <link href="{!! asset('assets/css/dataTables.css') !!}" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.datatables.net/2.0.7/css/dataTables.bootstrap4.css"/>
 
 </head>
 
@@ -37,9 +37,9 @@
         <ul class="navbar-nav sidebar sidebar-dark accordion" id="accordionSidebar">
 
             <!-- Sidebar - Brand -->
-            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
+            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="dashboard">
                 <div class="sidebar-brand-icon">
-                    <img class="brand-icon" src="{{ asset('assets/image/logo-hari-hari.png') }}" alt="Hari Hari Store" style="height= 50px; width= 50px;">
+                    <img class="brand-icon" src="{{ asset('assets/image/logo-hari-hari.png') }}" alt="Hari Hari Store" style="height: 50px; width:50px;">
                 </div>
                 <div class="sidebar-brand-text mx-3">Hari Hari Store</div>
             </a>
@@ -185,42 +185,16 @@
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">
-                            <div id="dataTable_wrapper" class="dataTables_wrapper dt-bootstrap4">
-                                <div class="row">
-                                    <div class="col-sm-12 col-md-6">
-                                        <div class="dataTables_length" id="dataTable_length">
-                                            <label>Show 
-                                                <select name="dataTable_length" aria-controls="dataTable" class="custom-select custom-select-sm form-control form-control-sm">
-                                                    <option value="10">10</option>
-                                                    <option value="25">25</option>
-                                                    <option value="50">50</option>
-                                                    <option value="100">100</option>
-                                                </select> entries
-                                            </label>
-                                        </div>
-                                    </div>
-                                    <form action="{{ route('users.search') }}" method="GET">
-                                        <div class="col-sm-12 col-md-6">
-                                            <div id="dataTable_filter" class="dataTables_filter">
-                                                <label>Search:
-                                                    <input type="search" name="search" class="form-control form-control-sm" aria-controls="dataTable" value="{{ old('search') }}">
-                                                </label>    
-                                            </div>
-                                        </div>
-                                    </form>
-                                </div>
 
                                 @if ($message = Session::get('success'))
                                     <div class="alert alert-success">
                                         <p>{{ $message}}</p>
                                     </div>
                                 @endif
-
-                                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                <table class="table table-striped table-bordered mt-3 mb-3" id="dataTable" style="width:100%">
                                     <thead>
                                         <tr>
                                             <th>Nama</th>
-                                            <th>NIK</th>
                                             <th>Jenis Kelamin</th>
                                             <th>Alamat</th>
                                             <th>No. Tlp</th>
@@ -232,7 +206,6 @@
                                         @foreach ($users as $User)
                                         <tr>
                                             <td>{{ $User->name }}</td>
-                                            <td>{{ $User->nik }}</td>
                                             <td>{{ $User->gender }}</td>
                                             <td>{{ $User->address }}</td>
                                             <td>{{ $User->phone }}</td>
@@ -255,12 +228,6 @@
                                         @endforeach
                                     </tbody>
                                 </table>
-                                <div class="row justify-content-between">
-                                    <div class="mt-2">Showing {{($users->currentpage()-1)*$users->perpage()+1}} to {{$users->currentpage()*$users->perpage()}}
-                                        of  {{$users->total()}} entries
-                                    </div>
-                                    <div>{{ $users->onEachSide(1)->links() }}</div>
-                                </div>
                             </div>
                         </div>
                     </div>
@@ -333,6 +300,10 @@
     <script src="{{ asset('assets/js/demo/chart-area-demo.js') }}"></script>
     <script src="{{ asset('assets/js/demo/chart-pie-demo.js') }}"></script>
 
+    <!-- Data Tables -->
+    <script src="https://cdn.datatables.net/2.0.7/js/dataTables.js"></script>
+    <script src="https://cdn.datatables.net/2.0.7/js/dataTables.bootstrap4.js"></script>
+
     <!-- perlu penambahan cdn -->
     <!--<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-Fy6S3B9q64WdZWQUiU+q4/2Lc9npb8tCaSX9FK7E8HnRr0Jz8D6OP9dO5Vg3Q9ct" crossorigin="anonymous"></script>
@@ -343,6 +314,12 @@
         function confirmDelete() {
             return confirm('Are you sure you want to delete this item?');
         }
+    </script>
+
+    <script>
+        $(document).ready(function () {
+           $("#dataTable").DataTable();
+        });
     </script>
     
 </body>

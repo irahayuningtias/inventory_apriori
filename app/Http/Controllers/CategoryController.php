@@ -18,7 +18,7 @@ class CategoryController extends Controller
     public function index()
     {
         //fungsi eloquent menampilkan data menggunakan pagination
-        $categories = Category::orderBy('id_category', 'asc')->paginate(10);
+        $categories = Category::orderBy('id_category', 'asc')->get();
         return view('kategori.index', compact('categories'));
     }
 
@@ -113,12 +113,5 @@ class CategoryController extends Controller
         Category::find($id_category)->delete();
         return redirect()->route('category')
             ->with('success', 'Kategori Berhasil Dihapus');
-    }
-
-    public function search(Request $request)
-    {
-        $keyword = $request->search;
-        $categories = Category::where('category_name', 'like', "%" . $keyword . "%")->paginate(10);
-        return view('category', compact('categories'));
     }
 }
