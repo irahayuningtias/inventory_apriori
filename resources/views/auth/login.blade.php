@@ -27,10 +27,9 @@
             <div class="card shadow-2-strong" style="border-radius: 1rem;">
             <div class="card-body p-5 text-center">
                 <div class="company-logo">
-                    <img src="{{ asset('assets/image/logo-hari-hari.png') }}" >
+                    <img src="{{ asset('assets/image/logo-hari-hari.png') }}" style="height: 100pt;" >
                 </div>
-                <br>
-                <h3 class="mb-5 font-weight-bold text-center" > INVENTORY MANAGEMENT SYSTEM </h3>
+                <h5 class="mb-3 mt-3 font-weight-bold text-center" > INVENTORY MANAGEMENT SYSTEM </h5>
 
                 <form method="POST" action="{{ route('login') }}">
                     @csrf
