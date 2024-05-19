@@ -39,7 +39,7 @@
             <!-- Sidebar - Brand -->
             <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
                 <div class="sidebar-brand-icon">
-                    <img class="brand-icon" src="{{ asset('assets/image/logo-hari-hari.png') }}" alt="Hari Hari Store" style="height= 50px; width= 50px;">
+                    <img class="brand-icon" src="{{ asset('assets/image/logo-hari-hari.png') }}" alt="Hari Hari Store" style="height: 50px; width: 50px;">
                 </div>
                 <div class="sidebar-brand-text mx-3">Hari Hari Store</div>
             </a>
@@ -165,7 +165,7 @@
                 <div class="container-fluid">
 
                     <!-- Page Heading -->
-                    <h7 class="m-0 font-weight-normal "><a href="account">Profile</a></h7><br><br>
+                    <h7 class="m-0 font-weight-normal "><a href="{{ route('users.profile') }}">Profile</a></h7><br><br>
                     <h1 class="h3 mb-2 text-gray-800">Profil Anda</h1>
                         <p class="mb-3">Pada fitur ini Anda dapat mengganti profil Anda</p><br>
 
@@ -182,20 +182,27 @@
                                 </ul>
                             </div>
                             @endif
-                            <form method="POST" action="{{ route('profile.update') }}">
+
+                            @if ($message = Session::get('success'))
+                                <div class="alert alert-success">
+                                    <p>{{ $message }}</p>
+                                </div>
+                            @endif
+                            
+                            <form method="POST" action="{{ route('users.update', ['user' => $users->id]) }}">
                                 @csrf
                                 @method('PUT')
                                 <div class="row">
                                     <div class="col-sm-12 col-md-6">
                                         <div class="mb-3">
-                                            <label for="name" class="form-label font-weight-bold">{{ __('Name') }}</label>
-                                            <input type="name" class="form-control" name="name" placeholder="Masukkan nama Anda" value="{{ Auth::user()->name }}">
+                                            <label for="name" class="form-label font-weight-bold">{{ __('Nama') }}</label>
+                                            <input type="text" class="form-control" name="name" value="{{ Auth::user()->name }}">
                                         </div>
                                     </div>
                                     <div class="col-sm-12 col-md-6">
                                         <div class="mb-3">
                                             <label for="nik" class="form-label font-weight-bold">NIK</label>
-                                            <input type="nik" class="form-control" name="nik" placeholder="Masukkan NIK Anda">
+                                            <input type="text" class="form-control" name="nik" value="{{ $users->nik }}" >
                                         </div>
                                     </div>
                                     <div class="col-sm-12 col-md-6">
@@ -203,6 +210,7 @@
                                             <label for="gender" class="form-label font-weight-bold">Jenis Kelamin</label>
                                             <select class="form-control" name="gender">
                                                 <option disabled value>Pilih Jenis Kelamin</option>
+                                                <option value="{{ $users->gender }}">Current: {{ $users->gender }}</option>
                                                 <option value="Laki-laki">Laki-laki</option>
                                                 <option value="Perempuan">Perempuan</option>
                                             </select>
@@ -211,25 +219,25 @@
                                     <div class="col-sm-12 col-md-6">
                                         <div class="mb-3">
                                             <label for="address" class="form-label font-weight-bold">Alamat</label>
-                                            <input type="address" class="form-control" name="address" placeholder="Masukkan Alamat Anda">
+                                            <input type="text" class="form-control" name="address" value="{{ $users->address }}">
                                         </div>
                                     </div>
                                     <div class="col-sm-12 col-md-6">
                                         <div class="mb-3">
                                             <label for="phone" class="form-label font-weight-bold">No. Telepon</label>
-                                            <input type="phone" class="form-control" name="phone" placeholder="Masukkan No. Telepon Anda">
+                                            <input type="text" class="form-control" name="phone" value="{{ $users->phone }}">
                                         </div>
                                     </div>
                                     <div class="col-sm-12 col-md-6">
                                          <div class="mb-3">
                                             <label for="email" class="form-label font-weight-bold">Email</label>
-                                            <input type="email" class="form-control" name="email" placeholder="example@mail.com">
+                                            <input type="text" class="form-control" name="email" value="{{ $users->email }}">
                                         </div>
                                     </div>
                                     <div class="col-sm-12 col-md-6">
                                         <div class="mb-3">
                                             <label for="password" class="form-label font-weight-bold">Password</label>
-                                            <input type="password" class="form-control" name="password" placeholder="Masukkan password Anda">
+                                            <input type="text" class="form-control" name="password" value="{{ $users->password }}">
                                         </div>
                                     </div>
                                 </div>

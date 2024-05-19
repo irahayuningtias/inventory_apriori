@@ -197,7 +197,7 @@
                                             <th>Nama</th>
                                             <th>Jenis Kelamin</th>
                                             <th>Alamat</th>
-                                            <th>No. Tlp</th>
+                                            <th>No. Telepon</th>
                                             <th>Email</th>
                                             <th>Aksi</th>
                                         </tr>
@@ -215,9 +215,9 @@
                                                 <a href="{{ route('users.show', $User->id) }}" class="btn btn-info btn-circle btn-sm">
                                                     <i class="fas fa-info-circle"></i>
                                                 </a>
-                                                <a href="{{ route('users.edit', $User->id) }}" class="btn btn-warning btn-circle btn-sm">
+                                                <!--<a href="{{ route('users.edit', $User->id) }}" class="btn btn-warning btn-circle btn-sm">
                                                     <i class="fas fa-edit"></i>
-                                                </a>
+                                                </a>-->
                                                 @csrf
                                                 @method('DELETE')
                                                 <button class="btn btn-danger btn-circle btn-sm" onclick="return confirmDelete()">

@@ -19,15 +19,13 @@ use Illuminate\Http\Request;
 |
 */
 
-
 Route::get('/dashboard', [DashboardController::class, 'index'])->name('index');
 
 
 // users/karyawan & profile
 Route::resource('users', UserController::class);
 Route::get('/users', [UserController::class, 'index'])->name('users');
-Route::get('/users/search', [UserController::class, 'search'])->name('users.search');
-Route::get('/profile', [UserController::class, 'profile'])->name('profile');
+Route::get('/profile', [UserController::class, 'profile'])->name('users.profile');
 
 
 //category
@@ -66,7 +64,6 @@ Route::get('/supply_out/edit_supply_out', function () {
 
 //transaction
 Route::resource('transaction', TransactionController::class);
-Route::get('transaction/{id_transaction}', 'TransactionController@show')->name('transaction.show');
 Route::get('/transaction', [TransactionController::class, 'index'])->name('transaction');
 Route::get('/search_transaction', [TransactionController::class, 'search'])->name('search');
 
@@ -86,7 +83,6 @@ Route::get('/report', function () {
 Route::get('/account', function () {
     return view('users/account');
 });
-
 
 
 Auth::routes();

@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Auth;
 
 
 class UserController extends Controller
@@ -18,7 +19,7 @@ class UserController extends Controller
     public function index()
     {
         //fungsi eloquent menampilkan data menggunakan pagination
-        $users = User::orderBy('id', 'asc')->paginate(10);
+        $users = User::orderBy('id', 'asc')->get();
         return view('users.users', compact('users'));
     }
 
@@ -129,8 +130,8 @@ class UserController extends Controller
         ]);
 
         //jika data berhasil diupdate, akan kembali ke halaman utama
-        return redirect()->route('users')
-            -> with('success', 'Karyawan Berhasil Diupdate');
+        return redirect()->route('users.profile')
+            -> with('success', 'Profil Berhasil Diupdate');
     }
 
     /**
@@ -147,28 +148,9 @@ class UserController extends Controller
             ->with('success', 'Karyawan Berhasil Dihapus');
     }
 
-    public function search(Request $request)
-    {
-        $keyword = $request->search;
-        $users = User::where('name', 'like', "%" . $keyword . "%")->paginate(10);
-        return view('users', compact('users'));
-    }
-
     public function profile()
     {
         $users = Auth::user();
-        return view('users.profile', compact('users'));
-    }
-
-    public function setPassword(Request $request)
-    {
-        $request->validate([
-            'password' => 'required|string|min:6',
-        ]);
-
-        // Simpan password ke dalam session
-        session(['sidebar_password' => $request->password]);
-
-        return redirect()->route('dashboard');
+        return view('users.account', compact('users'));
     }
 }
