@@ -1,12 +1,14 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\TransactionController;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 /*
 |--------------------------------------------------------------------------
@@ -19,7 +21,20 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::get('/dashboard', [DashboardController::class, 'index'])->name('index');
+Auth::routes();
+
+Route::middleware(['auth'])->group(function() {
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('index');
+
+    Route::resource('users', UserController::class);
+    Route::get('/users', [UserController::class, 'index'])->name('users');
+    Route::get('/profile', [UserController::class, 'profile'])->name('users.profile');
+
+    
+});
+
+
+//Route::get('/dashboard', [DashboardController::class, 'index'])->name('index');
 
 
 // users/karyawan & profile
@@ -83,9 +98,6 @@ Route::get('/report', function () {
 Route::get('/account', function () {
     return view('users/account');
 });
-
-
-Auth::routes();
 
 //Route::get('/login', [LoginController::class, 'login'])->name('login');
 //Route::post('actionlogin', [LoginController::class, 'actionlogin'])->name('actionlogin');
