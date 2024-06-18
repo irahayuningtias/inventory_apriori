@@ -122,11 +122,10 @@ class ProductController extends Controller
             ->with('success', 'Barang Berhasil Dihapus');
     }
 
-    public function select2(Request $request)
+    public function search(Request $request)
     {
-        //$search = $request->get('product_name');
-        $products = Product::where('product_name', 'like', '%'.$request->product_name.'%')->get();
-        
+        $search = $request->input('q');
+        $products = Product::where('product_name', 'LIKE', "%$search%")->get();
         return response()->json($products);
     }
 }

@@ -8,23 +8,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
     <meta name="author" content="">
-    <link rel="icon" href="{{asset ('assets/image/logo-hari-hari.png') }}">
+    <link rel="icon" href="{{ asset('assets/image/logo-hari-hari.png') }}">
     <title>IMS - Transaksi</title>
 
     <!-- Custom fonts for this template-->
-    <link href="{{!! asset('assets/vendor/fontawesome-free/css/all.min.css') !!}}" rel="stylesheet" type="text/css">
+    <link href="{{ asset('assets/vendor/fontawesome-free/css/all.min.css') }}" rel="stylesheet" type="text/css">
     <link
         href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
         rel="stylesheet">
     <!-- Custom styles for this template-->
-    <link href="{!! asset('assets/css/app.css') !!}" rel="stylesheet" type="text/css">
+    <link href="{{ asset('assets/css/app.css') }}" rel="stylesheet" type="text/css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"/>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
     <!-- Custom styles for this page-->
-    <link href="{!! asset('assets/css/dataTables.css') !!}" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.datatables.net/2.0.7/css/dataTables.bootstrap4.css"/>
 
 </head>
 
@@ -37,7 +37,7 @@
         <ul class="navbar-nav sidebar sidebar-dark accordion" id="accordionSidebar">
 
             <!-- Sidebar - Brand -->
-            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
+            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="dashboard">
                 <div class="sidebar-brand-icon">
                     <img class="brand-icon" src="{{ asset('assets/image/logo-hari-hari.png') }}" alt="Hari Hari Store" style="height: 50px; width: 50px;">
                 </div>
@@ -62,7 +62,7 @@
             </li>
             <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseMasterData" aria-expanded="true" aria-controls="collapseMasterData">
-                    <i class="fas fa-fw fa-folder"></i>
+                    <i class="fas fa-fw fa-archive"></i>
                     <span>Master Data</span>
                 </a>
                 <div id="collapseMasterData" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar" style="">
@@ -75,7 +75,7 @@
 
             <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePersediaan" aria-expanded="true" aria-controls="collapsePersediaan">
-                    <i class="fas fa-fw fa-folder"></i>
+                    <i class="fas fa-fw fa-archive"></i>
                     <span>Persediaan</span>
                 </a>
                 <div id="collapsePersediaan" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar" style="">
@@ -190,31 +190,6 @@
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">
-                            <div id="dataTable_wrapper" class="dataTables_wrapper dt-bootstrap4">
-                                <div class="row">
-                                    <div class="col-sm-12 col-md-6">
-                                        <form action="{{ route('transaction') }}" method="GET"></form>
-                                        <div class="dataTables_length" id="dataTable_length">
-                                            <label>Show 
-                                                <select name="dataTable_length" aria-controls="dataTable" class="custom-select custom-select-sm form-control form-control-sm">
-                                                    <option value="10">10</option>
-                                                    <option value="25">25</option>
-                                                    <option value="50">50</option>
-                                                    <option value="100">100</option>
-                                                </select> entries
-                                            </label>
-                                        </div>
-                                    </div>
-                                    <form action="{{ route('search') }}">
-                                    <div class="col-sm-12 col-md-6">
-                                        <div id="dataTable_filter" class="dataTables_filter">
-                                            <label>Search:
-                                                <input type="search" class="form-control form-control-sm" placeholder="" aria-controls="dataTable">
-                                            </label>    
-                                        </div>
-                                    </div>
-                                    </form>
-                                </div>
 
                                 @if ($message = Session::get('success'))
                                     <div class="alert alert-success">
@@ -222,13 +197,15 @@
                                     </div>
                                 @endif
 
-                                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                <table class="table table-striped table-bordered mt-3 mb-3" id="dataTable" style="width:100%">
                                     <thead>
                                         <tr>
                                             <th>ID Transaksi</th>
                                             <th>Tanggal</th>
                                             <th>Nama Barang</th>
-                                            <th>Total Bayar</th>
+                                            <th>Total Bayar
+                                                (Rp)
+                                            </th>
                                             <th>Aksi</th>
                                         </tr>
                                     </thead>
@@ -241,10 +218,10 @@
                                             <td>
                                                 @foreach($tx->details as $details)
                                                    
-                                                    - {{ $details->product->product_name }} ({{ $details->quantity }}) <br>
+                                                    - {{ $details->product->product_name }} ({{ $details->quantity }}x) <br>
                                                 @endforeach
                                             </td>
-                                            <td>Rp{{ number_format($tx->total_amount, 2, ',', '.') }}</td>
+                                            <td>{{ number_format($tx->total_amount, 2, ',', '.') }}</td>
                                             <td>
                                                 <form action="{{ route('transaction.destroy', $tx->id) }}" method="POST">
                                                     <a href="{{ route('transaction.show', $tx->id) }}" class="btn btn-info btn-circle btn-sm">
@@ -255,9 +232,9 @@
                                                     </a>
                                                     @csrf
                                                     @method('DELETE')
-                                                    <button class="btn btn-danger btn-circle btn-sm" onclick="return confirmDelete()">
-                                                        <i class="fas fa-trash"></i>
-                                                    </button>
+                                                    <a class="btn btn-danger btn-circle btn-sm" data-toggle="modal" data-target="#deleteModal">
+                                                            <i class="fas fa-trash"></i>
+                                                    </a>
                                                 </form>
 
                                                 <!-- Code Edit -->
@@ -325,6 +302,31 @@
         </div>
     </div>
 
+    <!-- Delete Modal-->
+    <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Hapus Data</h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    Are you sure you want to delete this item?
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                    <form id="delete-form" method="POST" action="{{ route('category.destroy', $Category->id_category) }}">
+                        @csrf
+                        @method('DELETE')
+                        <a class="btn btn-danger" onclick="event.preventDefault(); document.getElementById('delete-form').submit();">Hapus</a>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
 
     <!-- Bootstrap core JavaScript-->
     <script src="{{ asset('assets/vendor/jquery/jquery.min.js') }}"></script>
@@ -344,6 +346,10 @@
     <script src="{{ asset('assets/js/demo/chart-area-demo.js') }}"></script>
     <script src="{{ asset('assets/js/demo/chart-pie-demo.js') }}"></script>
 
+    <!-- Data Tables -->
+    <script src="https://cdn.datatables.net/2.0.7/js/dataTables.js"></script>
+    <script src="https://cdn.datatables.net/2.0.7/js/dataTables.bootstrap4.js"></script>
+
     <!-- perlu penambahan cdn -->
     <!--<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-Fy6S3B9q64WdZWQUiU+q4/2Lc9npb8tCaSX9FK7E8HnRr0Jz8D6OP9dO5Vg3Q9ct" crossorigin="anonymous"></script>
@@ -354,6 +360,12 @@
         function confirmDelete() {
             return confirm('Are you sure you want to delete this item?');
         }
+    </script>
+
+    <script>
+        $(document).ready(function () {
+           $("#dataTable").DataTable();
+        });
     </script>
 
 </body>

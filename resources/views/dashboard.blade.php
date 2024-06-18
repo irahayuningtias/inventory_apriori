@@ -37,7 +37,7 @@
         <ul class="navbar-nav sidebar sidebar-dark accordion" id="accordionSidebar">
 
             <!-- Sidebar - Brand -->
-            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
+            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="dashboard">
                 <div class="sidebar-brand-icon">
                     <img class="brand-icon" src="{{ asset('assets/image/logo-hari-hari.png') }}" alt="Hari Hari Store" style="height:50px; width: 50px;">
                 </div>
@@ -62,7 +62,7 @@
             </li>
             <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseMasterData" aria-expanded="true" aria-controls="collapseMasterData">
-                    <i class="fas fa-fw fa-folder"></i>
+                    <i class="fas fa-fw fa-archive"></i>
                     <span>Master Data</span>
                 </a>
                 <div id="collapseMasterData" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar" style="">
@@ -75,7 +75,7 @@
 
             <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePersediaan" aria-expanded="true" aria-controls="collapsePersediaan">
-                    <i class="fas fa-fw fa-folder"></i>
+                    <i class="fas fa-fw fa-archive"></i>
                     <span>Persediaan</span>
                 </a>
                 <div id="collapsePersediaan" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar" style="">
@@ -121,6 +121,11 @@
                     </div>
                 </div>
             </li>
+
+            <!-- Hide Sidebar -->
+            <div id="content">
+                <button id="sidebarCollapse" class="btn btn-primary toggle-btn"></button>
+            </div>
         </ul>
         <!-- End of Sidebar -->
 
@@ -132,7 +137,9 @@
 
                 <!-- Topbar -->
                 <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
-
+                    <button id="sidebarCollapse" class="btn btn-link d-md-none rounded-circle mr-3">
+                        <i class="fa fa-bars"></i>
+                    </button>
 
                     <!-- Topbar Navbar -->
                     <ul class="navbar-nav ml-auto">
@@ -161,7 +168,7 @@
                         </li>
 
                     </ul>
-
+                    
                 </nav>
                 <!-- End of Topbar -->
 

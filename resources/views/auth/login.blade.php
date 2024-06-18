@@ -29,14 +29,13 @@
                 <div class="company-logo">
                     <img src="{{ asset('assets/image/logo-hari-hari.png') }}" style="height: 100pt;" >
                 </div>
-                <h5 class="mb-3 mt-3 font-weight-bold text-center" > INVENTORY MANAGEMENT SYSTEM </h5>
+                <h5 class="mb-4 mt-3 font-weight-bold text-center" > INVENTORY MANAGEMENT SYSTEM </h5>
 
                 <form method="POST" action="{{ route('login') }}">
                     @csrf
                     <div class="row mb-3">
-                        <label for="email" class="col-md-4 col-form-label text-md-end">{{ __('Email') }}</label>
-                        <div class="col-md-7">
-                            <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email" autofocus>
+                        <div class="col-md-12">
+                            <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email" autofocus placeholder="Email" >
                                 @error('email')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
@@ -46,9 +45,8 @@
                     </div>
 
                     <div class="row mb-3">
-                        <label for="password" class="col-md-4 col-form-label text-md-end">{{ __('Password') }}</label>
-                        <div class="col-md-7">
-                            <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" required autocomplete="current-password">
+                        <div class="col-md-12">
+                            <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" required autocomplete="current-password" placeholder="Password">
                                 @error('password')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
@@ -57,6 +55,7 @@
                         </div>
                     </div>
 
+                    <!-- 
                     <div class="row mb-3">
                         <div class="col-md-5 offset-md-4">
                             <div class="form-check">
@@ -67,9 +66,10 @@
                             </div>
                         </div>
                     </div>
+                    -->
 
-                    <div class="row mb-2 d-flex justify-content-center">
-                        <button type="submit" class="btn btn-primary" style="width:85%">
+                    <div class="row mb-1 d-flex justify-content-center">
+                        <button type="submit" class="btn btn-primary" style="width:93%">
                             {{ __('Login') }}
                         </button>
                     </div>

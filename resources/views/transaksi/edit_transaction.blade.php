@@ -39,7 +39,7 @@
             <!-- Sidebar - Brand -->
             <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
                 <div class="sidebar-brand-icon">
-                    <img class="brand-icon" src="{{ asset('assets/image/logo-hari-hari.png') }}" alt="Hari Hari Store" style="height= 50px; width= 50px;">
+                    <img class="brand-icon" src="{{ asset('assets/image/logo-hari-hari.png') }}" alt="Hari Hari Store" style="height:50px; width:max-content 50px;">
                 </div>
                 <div class="sidebar-brand-text mx-3">Hari Hari Store</div>
             </a>
@@ -62,20 +62,21 @@
             </li>
             <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseMasterData" aria-expanded="true" aria-controls="collapseMasterData">
-                    <i class="fas fa-fw fa-folder"></i>
+                    <i class="fas fa-fw fa-archive"></i>
                     <span>Master Data</span>
                 </a>
                 <div id="collapseMasterData" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar" style="">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <a class="collapse-item" href="category">Kategori</a>
                         <a class="collapse-item" href="product">Barang</a>
+                        <a class="collapse-item" href="code">Kode</a>
                     </div>
                 </div>
             </li>
 
             <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePersediaan" aria-expanded="true" aria-controls="collapsePersediaan">
-                    <i class="fas fa-fw fa-folder"></i>
+                    <i class="fas fa-fw fa-archive"></i>
                     <span>Persediaan</span>
                 </a>
                 <div id="collapsePersediaan" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar" style="">
@@ -146,9 +147,7 @@
                         <li class="nav-item dropdown no-arrow">
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">Douglas McGee</span>
-                                <img class="img-profile rounded-circle"
-                                    src="img/undraw_profile.svg">
+                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">{{ Auth::user()->name }}</span>
                             </a>
                             <!-- Dropdown - User Information -->
                             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
@@ -156,14 +155,6 @@
                                 <a class="dropdown-item" href="#">
                                     <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
                                     Profile
-                                </a>
-                                <a class="dropdown-item" href="#">
-                                    <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
-                                    Settings
-                                </a>
-                                <a class="dropdown-item" href="#">
-                                    <i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
-                                    Activity Log
                                 </a>
                                 <div class="dropdown-divider"></div>
                                 <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
@@ -181,7 +172,7 @@
                 <div class="container-fluid">
 
                     <!-- Page Heading -->
-                    <h7 class="m-0 font-weight-normal">Transaksi / <a href="edit_transaction">Edit Transaksi</a></h7><br><br>
+                    <h7 class="m-0 font-weight-normal">Transaksi / <a href="{{ route('transaction.edit', $transaction->id) }}">Edit Transaksi</a></h7><br><br>
 
                     <!-- DataTales Example -->
                     <div class="card shadow mb-4">
@@ -189,49 +180,179 @@
                             <h5 class="m-0 font-weight-bold text-primary">Form Tambah Transaksi</h5>
                         </div>
                         <div class="card-body">
-                            <form method="POST" action="">
+                            <form method="POST" action="{{ route('transaction.update', ['transaction' => $transaction->id]) }}">
                                 @csrf
+                                @method('PUT')
                                 <div class="row">
                                     <div class="col-sm-12 col-md-6">
                                         <div class="mb-3">
-                                            <label for="id_transaksi" class="form-label font-weight-bold">ID Transaksi</label>
-                                            <input type="id_transaksi" class="form-control" id="id_transaksi" placeholder="Masukkan ID Transaksi">
+                                            <label for="transaction_code" class="form-label font-weight-bold">Kode Transaksi</label>
+                                            <input type="text" id="transaction_code" class="form-control" name="transaction_code" value="{{ $transaction->transaction_code }}">
+                                            @error('transaction_code')
+                                                <div class="text-danger">{{ $message }}</div>
+                                            @enderror
                                         </div>
                                     </div>
                                     <div class="col-sm-12 col-md-6">
                                         <div class="mb-3">
-                                            <label for="waktu" class="form-label font-weight-bold">Waktu</label>
-                                            <input type="waktu" class="form-control" id="waktu" placeholder="Pilih waktu">
+                                            <label for="transaction_date" class="form-label font-weight-bold">Tanggal Transaksi</label>
+                                            <input type="date" id="transaction_date" class="form-control" name="transaction_date" value="{{ $transaction->transaction_date }}">
+                                            @error('transaction_date')
+                                                <div class="text-danger">{{ $message }}</div>
+                                            @enderror
                                         </div>
                                     </div>
-                                    <div class="col-sm-12 col-md-6">
-                                         <div class="mb-3">
-                                            <label for="nama_barang" class="form-label font-weight-bold">Nama Barang</label>
-                                            <input type="nama_barang" class="form-control" id="nama_barang" placeholder="Masukkan nama barang">
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-12 col-md-6">
-                                        <div class="mb-3">
-                                            <label for="jumlah" class="form-label font-weight-bold">Jumlah</label>
-                                            <input type="jumlah" class="form-control" id="jumlah" placeholder="Masukkan jumlah barang">
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-12 col-md-6">
-                                        <div class="mb-3">
-                                            <label for="total_bayar" class="form-label font-weight-bold">Total Bayar</label>
-                                            <input type="total_bayar" class="form-control" id="total_bayar" placeholder="Masukkan total pembayaran">
-                                        </div>
-                                    </div>
+
+                                    <h5 class="py-3 col font-weight-bold text-primary">Detail Transaksi</h5>
+                                    <table id="product_table">
+                                        <thead>
+                                            <tr>
+                                                <th>Nama Barang</th>
+                                                <th>Jumlah</th>
+                                                <th>Harga Satuan</th>
+                                                <th>Subtotal</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            
+                                            
+                                            @foreach($transaction->details as $index => $detail)
+                                            <tr class="item">
+                                                <td>
+                                                    <input type="hidden" name="details[{{ $index }}][id]" value="{{$detail->id}}">
+
+                                                    <select name="details[{{ $index }}][id_product]" class="form-control js-example-basic-single id_product" required>
+                                                        <option value disabled>Select Product</option>
+                                                        <!-- disini ada foreach product -->
+
+                                                        <!-- disini start foreach -->
+                                                        <!-- <option value=""></option> -->
+                                                        <!-- disini end foreach -->
+
+                                                        <option value="{{$detail->product->id_product}}">{{ $detail->product->product_name }}</option>
+                                                        
+                                                    </select>
+                                                </td>
+                                                <td>
+                                                    <input type="number" name="details[{{ $index }}][quantity]" min="1" class="form-control quantity" value="{{ $detail->quantity }}">
+                                                </td>
+                                                <td>
+                                                    <input type="number" name="details[{{ $index }}][price]" min="0" class="form-control price" value="{{ $detail->product->price }}" readonly>
+                                                </td>
+                                                <td>
+                                                    <input type="text" name="details[{{ $index }}][subtotal]" class="form-control subtotal" value="{{ $detail->subtotal }}" readonly>
+                                                </td>
+                                                <td>
+                                                    <button class="btn btn-danger" type="button" id="remove_item">Hapus</button>
+                                                </td>
+                                            </tr> 
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                    
+                                    @error('details.*.product_name')
+                                        <div class="text-danger">{{ $message }}</div>
+                                    @enderror
+                                    @error('details.*.quantity')
+                                        <div class="text-danger">{{ $message }}</div>
+                                    @enderror
+                                    @error('details.*.price')
+                                        <div class="text-danger">{{ $message }}</div>
+                                    @enderror
+
                                 </div>
-                                <div class="row">
+                                <div class="mt-2 row">
                                     <div class="col-sm-12">
                                         <div class="d-grid gap-2 d-md-block">
-                                            <input type="submit" class="btn btn-primary"></input>
+                                            <button class="btn btn-warning" type="button" id="add_item">Tambah Barang</button>
+                                            <input type="submit" class="btn btn-primary" value="Simpan"></input>
                                             <a class="btn btn-danger" href="javascript:window.history.go(-1);" role="button">Batal</a>
                                         </div>
-                                    </div>    
+                                    </div>
                                 </div>
                             </form>
+
+                            <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+                            <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+                            <script>
+                                $(document).ready(function() {
+                                    // Fungsi untuk menambahkan produk
+                                    $('#add_item').click(function() {
+                                        var index = $('#product_table tbody tr').length;
+                                        var row = `
+                                            <tr class="item">
+                                                <td>
+                                                    <select name="details[${index}][id_product]" class="form-control js-example-basic-single id_product" required>
+                                                        <option value="">Select Product</option>
+                                                        @foreach($products as $Product)
+                                                            <option value="{{ $Product->id_product }}" data-price="{{ $Product->price }}">{{ $Product->product_name }}</option>
+                                                        @endforeach
+                                                    </select>
+                                                </td>
+                                                <td>
+                                                    <input type="number" name="details[${index}][quantity]" min="1" class="form-control quantity">
+                                                </td>
+                                                <td>
+                                                    <input type="number" name="details[${index}][price]" min="0" class="form-control price" readonly>
+                                                </td>
+                                                <td>
+                                                    <input type="text" name="details[${index}][subtotal]" readonly class="form-control subtotal">
+                                                </td>
+                                                <td>
+                                                    <button class="btn btn-danger remove_item" type="button">Hapus</button>
+                                                </td>
+                                            </tr>
+                                        `;
+                                        $('#product_table tbody').append(row);
+                                        $('.js-example-basic-single').select2({
+                                            ajax: {
+                                                url: '{{ route("product.select2") }}',
+                                                dataType: 'json',
+                                                delay: 250,
+                                                processResults: function (data) {
+                                                    return {
+                                                        results: $.map(data, function (item) {
+                                                            return {
+                                                                id: item.id_product,
+                                                                text: item.product_name
+                                                            }
+                                                        })
+                                                    };
+                                                },
+                                                cache: true
+                                            },
+                                            placeholder: 'Select Product',
+                                            minimumInputLength: 1
+                                        });
+                                    });
+
+                                    // Fungsi untuk menghapus produk
+                                    $(document).on('click', '.remove_item', function() {
+                                        $(this).closest('tr').remove();
+                                    });
+
+                                    // Fungsi untuk menghitung subtotal berdasarkan kuantitas dan harga satuan
+                                    $(document).on('change', '.id_product', function() {
+                                        var price = parseFloat($(this).find(':selected').data('price'));
+                                        var row = $(this).closest('tr');
+                                        row.find('.price').val(price);
+                                        calculateSubtotal(row);
+                                    });
+
+                                    $(document).on('keyup', '.quantity', function() {
+                                        var row = $(this).closest('tr');
+                                        calculateSubtotal(row);
+                                    });
+
+                                    function calculateSubtotal(row) {
+                                        var price = parseFloat(row.find('.price').val());
+                                        var quantity = parseInt(row.find('.quantity').val());
+                                        var subtotal = price * quantity;
+                                        row.find('.subtotal').val(subtotal.toFixed(2));
+                                    }
+                                });
+                            </script>
+
                         </div>
                     </div>
                 </div>

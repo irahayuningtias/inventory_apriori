@@ -121,11 +121,12 @@ class TransactionController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(Transaction $transactions)
+    public function edit(Transaction $transaction)
     {
         $products = Product::all();
+        $details = $transaction->details;
         //$Transaction = Transaction::with('product')->find($id_transaction);
-        return view('transaction.edit_transaction', compact('transactions', 'products'));
+        return view('transaksi.edit_transaction', compact('transaction', 'products', 'details'));
     }
 
     /**
@@ -135,46 +136,74 @@ class TransactionController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Transaction $transactions)
+   public function update(Request $request, Transaction $transaction)
     {
-        //melakukan validasi data
-        $request->validate([
-            'transaction_code' => 'required',
-            'transaction_date' => 'required',
-            'details.*.id_transaction' => 'required',
-            'details.*.id_product' => 'required',
-            'details.*.quantity' => 'required|numeric|min:1',
+        DB::beginTransaction();
+
+        $details = new TransactionDetail;
+
+        // Validate data
+        $data = $request->validate([
+            'transaction_code' => 'required|unique:transaction,transaction_code,' . $transaction->id,
+            'transaction_date' => 'required|date',
+            'details.*.id_product' => 'required|exists:product,id_product',
+            'details.*.quantity' => 'required|integer|min:1',
             'details.*.price' => 'required|numeric|min:0',
+            'details.*.id' => 'nullable|numeric',
         ]);
 
-        $transactions->update([
-            'transaction_code' => $request->transaction_code,
-            'transaction_date' => $request->transaction_date,
-        ]);
-
-        $transactions->details()->delete();
-
-        $total_amount = 0;
-
-        foreach ($request->details as $Detail) {
-            $subtotal = $Detail['quantity'] * $Detail['price'];
-            $total_amount += $subtotal;
-
-            $transactions->details()->create([
-                'id_transaction' => $Detail['id_transaction'],
-                'id_product' => $Detail['id_product'],
-                'quantity' => $Detail['quantity'],
-                'price' => $Detail['price'],
-                'subtotal' => $subtotal,
+        try {
+            // Update transaction
+            $transaction->update([
+                'transaction_code' => $request->input('transaction_code'),
+                'transaction_date' => $request->input('transaction_date'),
+                'total_amount' => 0,
             ]);
+
+            $total_amount = 0;
+            $detailTransctions = [];
+
+            foreach ($request->input('details') as $detail) {
+                $products = Product::find($detail['id_product']);
+                $subtotal = $detail['quantity'] * $products['price'];
+                $total_amount += $subtotal;
+
+                if (isset($detail['id']) && !empty($detail['id'])) {
+                    $txDetailModel = TransactionDetail::find($detail['id']);
+                    if ($txDetailModel) {
+                        $txDetailModel->update([
+                            'id_transaction' => $transaction->id,
+                            'id_product' => $detail['id_product'],
+                            'quantity' => $detail['quantity'],
+                            'price' => $products['price'],
+                            'subtotal' => $subtotal,
+                        ]);
+                    }
+                } else {
+                    $createdTxDetail = TransactionDetail::create([
+                        'id_product' => $detail['id_product'],
+                        'quantity' => $detail['quantity'],
+                        'price' => $products['price'],
+                        'subtotal' => $subtotal,
+                        'id_transaction' => $transaction->id,
+                    ]);
+                }
+            }
+
+            // Update total amount
+            $transaction->update(['total_amount' => $total_amount]);
+
+            DB::commit();
+
+            // If data is successfully updated, return to the main page
+            return redirect()->route('transaction')
+                ->with('success', 'Transaksi Berhasil Diupdate');
+        } catch (\Exception $e) {
+            DB::rollback();
+            return redirect()->back()->with('error', 'Transaksi Gagal Diupdate: ' . $e->getMessage());
         }
-
-        $transactions->update(['total' => $total_amount]);
-
-        //jika data berhasil diupdate, akan kembali ke halaman utama
-        return redirect()->route('transaction')
-            -> with('success', 'Transaksi Berhasil Diupdate');
     }
+
 
     /**
      * Remove the specified resource from storage.
@@ -188,12 +217,5 @@ class TransactionController extends Controller
         Transaction::find($id)->delete();
         return redirect()->route('transaction')
             ->with('success', 'Transaksi Berhasil Dihapus');
-    }
-
-    public function search(Request $request)
-    {
-        $keyword = $request->search;
-        $transactions = Transaction::where('id_transaction', 'like', "%" . $keyword . "%")->paginate(10);
-        return view('transaction', compact('transactions'));
     }
 }

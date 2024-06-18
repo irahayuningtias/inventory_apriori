@@ -98,7 +98,7 @@
                         aria-expanded="true"
                         aria-controls="collapseMasterData"
                     >
-                        <i class="fas fa-fw fa-folder"></i>
+                        <i class="fas fa-fw fa-archive"></i>
                         <span>Master Data</span>
                     </a>
                     <div
@@ -126,7 +126,7 @@
                         aria-expanded="true"
                         aria-controls="collapsePersediaan"
                     >
-                        <i class="fas fa-fw fa-folder"></i>
+                        <i class="fas fa-fw fa-archive"></i>
                         <span>Persediaan</span>
                     </a>
                     <div
@@ -286,7 +286,7 @@
                         <h7 class="m-0 font-weight-normal"
                             >Transaksi /
                             <a
-                                href="{{ route('transaction.show', ['id' => $transaction->id]) }}"
+                                href="{{ route('transaction.show', ['transaction' => $transaction->id]) }}"
                                 >Detail Transaksi</a
                             ></h7
                         ><br /><br />
@@ -309,16 +309,20 @@
                                         >{{ $transaction->transaction_date }}
                                     </li>
                                     <li class="list-group-item">
-                                        <b>Nama Barang: </b> <br>
-                                            @foreach($transaction->details as $details)
-                                                    - {{ $details->product->product_name }} ({{ $details->quantity }}x) @Rp{{ number_format($details->price, 2, ',', '.') }}<br>
-                                            @endforeach
+                                        <b>Nama Barang: </b> <br />
+                                        @foreach($transaction->details as
+                                        $details) -
+                                        {{ $details->product->product_name }}
+                                        ({{ $details->quantity }}x) @Rp{{ number_format($details->price, 2, ',', '.')
+                                        }}<br />
+                                        @endforeach
                                     </li>
                                     <li class="list-group-item">
-                                        <b>Subtotal: </b><br>
-                                        @foreach($transaction->details as $details)
-                                                    - Rp{{ number_format($details->subtotal, 2, ',', '.') }}<br>
-                                                @endforeach
+                                        <b>Subtotal: </b><br />
+                                        @foreach($transaction->details as
+                                        $details) - Rp{{ number_format($details->subtotal, 2, ',', '.')
+                                        }}<br />
+                                        @endforeach
                                     </li>
                                     <li class="list-group-item">
                                         <b>Total Harga: </b

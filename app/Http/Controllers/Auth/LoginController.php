@@ -44,6 +44,12 @@ class LoginController extends Controller
         $this->middleware('guest')->except('logout');
     }
 
+    public function showLoginForm() 
+    {
+        return view('auth.login');
+    }
+    
+    
     public function login(Request $request)
     {
         $this->validate($request, [
@@ -58,7 +64,8 @@ class LoginController extends Controller
 
         if (Auth::attempt($credentials)) {
             Log::info('Login successful', ['email' => $credentials['email']]);
-            return redirect()->route('index');
+            Log::info('User authenticated', ['user' => Auth::user()]);
+            return redirect()->route('dashboard');
         } else {
             Log::warning('Login failed', ['email' => $credentials['email']]);
             return redirect()->back()->with('error', 'These credentials do not match our records.');

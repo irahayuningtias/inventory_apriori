@@ -62,7 +62,7 @@
             </li>
             <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseMasterData" aria-expanded="true" aria-controls="collapseMasterData">
-                    <i class="fas fa-fw fa-folder"></i>
+                    <i class="fas fa-fw fa-archive"></i>
                     <span>Master Data</span>
                 </a>
                 <div id="collapseMasterData" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar" style="">
@@ -75,7 +75,7 @@
 
             <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePersediaan" aria-expanded="true" aria-controls="collapsePersediaan">
-                    <i class="fas fa-fw fa-folder"></i>
+                    <i class="fas fa-fw fa-archive"></i>
                     <span>Persediaan</span>
                 </a>
                 <div id="collapsePersediaan" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar" style="">
@@ -202,7 +202,7 @@
                                         <div class="mb-3">
                                             <label for="gender" class="form-label font-weight-bold">Jenis Kelamin</label>
                                             <select class="form-control" name="gender">
-                                                <option disabled value>Pilih Jenis Kelamin</option>
+                                                <option default>Pilih Jenis Kelamin</option>
                                                 <option value="Laki-laki">Laki-laki</option>
                                                 <option value="Perempuan">Perempuan</option>
                                             </select>
@@ -236,7 +236,7 @@
                                 <div class="row">
                                     <div class="col-sm-12">
                                         <div class="d-grid gap-2 d-md-block">
-                                            <input type="submit" class="btn btn-primary"></input>
+                                            <input type="submit" class="btn btn-primary" value="Simpan"></input>
                                             <a class="btn btn-danger" href="javascript:window.history.go(-1);" role="button">Batal</a>
                                         </div>
                                     </div>    

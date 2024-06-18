@@ -40,7 +40,7 @@
             <!-- Sidebar - Brand -->
             <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
                 <div class="sidebar-brand-icon">
-                    <img class="brand-icon" src="{{ asset('assets/image/logo-hari-hari.png') }}" alt="Hari Hari Store" style="height= 50px; width= 50px;">
+                    <img class="brand-icon" src="{{ asset('assets/image/logo-hari-hari.png') }}" alt="Hari Hari Store" style="height: 50px; width: 50px;">
                 </div>
                 <div class="sidebar-brand-text mx-3">Hari Hari Store</div>
             </a>
@@ -63,7 +63,7 @@
             </li>
             <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseMasterData" aria-expanded="true" aria-controls="collapseMasterData">
-                    <i class="fas fa-fw fa-folder"></i>
+                    <i class="fas fa-fw fa-archive"></i>
                     <span>Master Data</span>
                 </a>
                 <div id="collapseMasterData" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar" style="">
@@ -76,7 +76,7 @@
 
             <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePersediaan" aria-expanded="true" aria-controls="collapsePersediaan">
-                    <i class="fas fa-fw fa-folder"></i>
+                    <i class="fas fa-fw fa-archive"></i>
                     <span>Persediaan</span>
                 </a>
                 <div id="collapsePersediaan" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar" style="">
@@ -255,7 +255,7 @@
                                     <div class="col-sm-12">
                                         <div class="d-grid gap-2 d-md-block">
                                             <button class="btn btn-warning" type="button" id="add_item">Tambah Barang</button>
-                                            <input type="submit" class="btn btn-primary"></input>
+                                            <input type="submit" class="btn btn-primary" value="Simpan"></input>
                                             <a class="btn btn-danger" href="javascript:window.history.go(-1);" role="button">Batal</a>
                                         </div>
                                     </div>
@@ -294,26 +294,46 @@
                                         </tr>
                                     `;
                                     $('#product_table tbody').append(row);
+
                                     $('.js-example-basic-single').select2({
                                         ajax: {
-                                            url: '{{ route("product.select2") }}',
+                                            url: '{{ route("product.search") }}',
                                             dataType: 'json',
                                             delay: 250,
                                             processResults: function (data) {
                                                 return {
                                                     results: $.map(data, function (item) {
                                                         return {
+                                                            text: item.product_name,
                                                             id: item.id_product,
-                                                            text: item.product_name
+                                                            price: item.price
                                                         }
                                                     })
                                                 };
                                             },
                                             cache: true
                                         },
-                                        placeholder: 'Select Product',
-                                        minimumInputLength: 1
+                                        minimumInputLength: 3,
+                                        templateResult: formatProduct,
+                                        templateSelection: formatProductSelection
                                     });
+
+                                    function formatProduct(product) {
+                                        if (product.loading) {
+                                            return product.text;
+                                        }
+                                        var $container = $(
+                                            "<div class='select2-result-product clearfix'>" +
+                                                "<div class='select2-result-product__title'></div>" +
+                                            "</div>"
+                                        );
+                                        $container.find(".select2-result-product__title").text(product.text);
+                                        return $container;
+                                    }
+
+                                    function formatProductSelection(product) {
+                                        return product.text || product.id;
+                                    }
                                 });
 
                                 // Fungsi untuk menghapus produk
