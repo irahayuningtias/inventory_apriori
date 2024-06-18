@@ -196,7 +196,7 @@
                                         <div class="mb-3">
                                             <label for="id_category" class="form-label font-weight-bold">Kategori</label>
                                             <select class="form-control" name="id_category">
-                                                <option disabled value>Pilih Kategori</option>
+                                                <option default>Pilih Kategori</option>
                                                 @foreach ($categories as $Category)
                                                     <option value="{{ $Category->id_category }}">{{ $Category->category_name }}</option>
                                                 @endforeach
