@@ -92,7 +92,7 @@ class TransactionController extends Controller
         DB::commit();
 
         //jika data berhasil ditambahkan, akan kembali ke halaman utama
-        return redirect()->route('transaction.create')
+        return redirect()->route('transaction')
             ->with('success', 'Transaksi Berhasil Ditambahkan');
     }
 
