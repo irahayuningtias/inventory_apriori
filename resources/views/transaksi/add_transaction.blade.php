@@ -188,7 +188,7 @@
                                     <div class="col-sm-12 col-md-6">
                                         <div class="mb-3">
                                             <label for="transaction_code" class="form-label font-weight-bold">Kode Transaksi</label>
-                                            <input type="text" id="transaction_code" class="form-control" name="transaction_code">
+                                            <input type="text" id="transaction_code" class="form-control" name="transaction_code" placeholder="Masukkan kode transaksi">
                                             @error('transaction_code')
                                                 <div class="text-danger">{{ $message }}</div>
                                             @enderror
@@ -218,7 +218,7 @@
                                             <tr class="item">
                                                 <td>
                                                     <select name="details[0][id_product]" class="form-control js-example-basic-single id_product" required>
-                                                        <option value="">Select Product</option>
+                                                        <option default>Pilih Barang</option>
                                                         @foreach($products as $Product)
                                                             <option value="{{ $Product->id_product }}" data-price="{{ $Product->price }}">{{ $Product->product_name }}</option>
                                                         @endforeach

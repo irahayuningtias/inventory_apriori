@@ -317,7 +317,7 @@
                 </div>
                 <div class="modal-footer">
                     <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                    <form id="delete-form" method="POST" action="{{ route('category.destroy', $Category->id_category) }}">
+                    <form id="delete-form" method="POST" action="{{ route('transaction.destroy', $tx->id) }}">
                         @csrf
                         @method('DELETE')
                         <a class="btn btn-danger" onclick="event.preventDefault(); document.getElementById('delete-form').submit();">Hapus</a>

@@ -17,7 +17,7 @@ class CreateTransactionTable extends Migration
             $table->id();
             $table->string('transaction_code');
             $table->date('transaction_date');
-            $table->integer('total_amount');
+            $table->decimal('total_amount', 10, 2);
         });
     }
 

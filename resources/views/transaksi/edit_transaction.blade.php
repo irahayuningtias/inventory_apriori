@@ -222,15 +222,10 @@
                                                     <input type="hidden" name="details[{{ $index }}][id]" value="{{$detail->id}}">
 
                                                     <select name="details[{{ $index }}][id_product]" class="form-control js-example-basic-single id_product" required>
-                                                        <option value disabled>Select Product</option>
-                                                        <!-- disini ada foreach product -->
-
-                                                        <!-- disini start foreach -->
-                                                        <!-- <option value=""></option> -->
-                                                        <!-- disini end foreach -->
-
-                                                        <option value="{{$detail->product->id_product}}">{{ $detail->product->product_name }}</option>
-                                                        
+                                                        <option value disabled >Select Product</option>
+                                                        @foreach($products as $product)
+                                                            <option value="{{ $product->id_product }}" {{ $detail->product->id_product == $product->id_product  ? 'selected' : ''}}>{{ $product->product_name}}</option>
+                                                        @endforeach
                                                     </select>
                                                 </td>
                                                 <td>
@@ -243,7 +238,7 @@
                                                     <input type="text" name="details[{{ $index }}][subtotal]" class="form-control subtotal" value="{{ $detail->subtotal }}" readonly>
                                                 </td>
                                                 <td>
-                                                    <button class="btn btn-danger" type="button" id="remove_item">Hapus</button>
+                                                    <button class="btn btn-danger remove_item" type="button">Hapus</button>
                                                 </td>
                                             </tr> 
                                             @endforeach
@@ -306,7 +301,7 @@
                                         $('#product_table tbody').append(row);
                                         $('.js-example-basic-single').select2({
                                             ajax: {
-                                                url: '{{ route("product.select2") }}',
+                                                url: '{{ route("product.search") }}',
                                                 dataType: 'json',
                                                 delay: 250,
                                                 processResults: function (data) {
