@@ -37,7 +37,7 @@
         <ul class="navbar-nav sidebar sidebar-dark accordion" id="accordionSidebar">
 
             <!-- Sidebar - Brand -->
-            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
+            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="dashboard">
                 <div class="sidebar-brand-icon">
                     <img class="brand-icon" src="{{ asset('assets/image/logo-hari-hari.png') }}" alt="Hari Hari Store" style="height: 50px; width: 50px;">
                 </div>
@@ -80,9 +80,8 @@
                 </a>
                 <div id="collapsePersediaan" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar" style="">
                     <div class="bg-white py-2 collapse-inner rounded">
-                        <h6 class="collapse-header">Arus Persediaan</h6>
-                        <a class="collapse-item" href="supply_in">Barang Masuk</a>
-                        <a class="collapse-item" href="supply_out">Barang Keluar</a>
+                        <a class="collapse-item" href="incoming_product">Barang Masuk</a>
+                        <a class="collapse-item" href="outcoming_product">Barang Keluar</a>
                     </div>
                 </div>
             </li>
@@ -114,8 +113,8 @@
                 <div id="collapseLaporan" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Gudang</h6>
-                        <a class="collapse-item" href="#">Laporan Harian</a>
-                        <a class="collapse-item" href="#">Laporan Bulanan</a>
+                        <a class="collapse-item" href="#">Barang Masuk</a>
+                        <a class="collapse-item" href="#">Barang Keluar</a>
                         <h6 class="collapse-header">Apriori</h6>
                         <a class="collapse-item" href="#">Laporan Analisis Apriori</a>
                     </div>
@@ -145,12 +144,12 @@
                             <!-- Dropdown - User Information -->
                             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
                                 aria-labelledby="userDropdown">
-                                <a class="dropdown-item" href="account">
+                                <a class="dropdown-item" href="profile">
                                     <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
                                     Profile
                                 </a>
                                 <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
+                                <a class="dropdown-item" href="{{ route('logout') }}" data-toggle="modal" data-target="#logoutModal">
                                     <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
                                     Logout
                                 </a>

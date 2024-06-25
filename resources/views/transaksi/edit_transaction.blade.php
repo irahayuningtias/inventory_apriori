@@ -37,7 +37,7 @@
         <ul class="navbar-nav sidebar sidebar-dark accordion" id="accordionSidebar">
 
             <!-- Sidebar - Brand -->
-            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
+            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="dashboard">
                 <div class="sidebar-brand-icon">
                     <img class="brand-icon" src="{{ asset('assets/image/logo-hari-hari.png') }}" alt="Hari Hari Store" style="height:50px; width:max-content 50px;">
                 </div>
@@ -69,7 +69,6 @@
                     <div class="bg-white py-2 collapse-inner rounded">
                         <a class="collapse-item" href="category">Kategori</a>
                         <a class="collapse-item" href="product">Barang</a>
-                        <a class="collapse-item" href="code">Kode</a>
                     </div>
                 </div>
             </li>
@@ -81,9 +80,8 @@
                 </a>
                 <div id="collapsePersediaan" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar" style="">
                     <div class="bg-white py-2 collapse-inner rounded">
-                        <h6 class="collapse-header">Arus Persediaan</h6>
-                        <a class="collapse-item" href="supply_in">Barang Masuk</a>
-                        <a class="collapse-item" href="supply_out">Barang Keluar</a>
+                        <a class="collapse-item" href="incoming_product">Barang Masuk</a>
+                        <a class="collapse-item" href="outcoming_product">Barang Keluar</a>
                     </div>
                 </div>
             </li>
@@ -115,18 +113,12 @@
                 <div id="collapseLaporan" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Gudang</h6>
-                        <a class="collapse-item" href="#">Laporan Harian</a>
-                        <a class="collapse-item" href="#">Laporan Bulanan</a>
+                        <a class="collapse-item" href="#">Barang Masuk</a>
+                        <a class="collapse-item" href="#">Barang Keluar</a>
                         <h6 class="collapse-header">Apriori</h6>
                         <a class="collapse-item" href="#">Laporan Analisis Apriori</a>
                     </div>
                 </div>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="index">
-                    <i class="fas fa-fw fa-user"></i>
-                    <span>Akun</span>
-                </a>
             </li>
         </ul>
         <!-- End of Sidebar -->
@@ -152,7 +144,7 @@
                             <!-- Dropdown - User Information -->
                             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
                                 aria-labelledby="userDropdown">
-                                <a class="dropdown-item" href="#">
+                                <a class="dropdown-item" href="profile">
                                     <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
                                     Profile
                                 </a>
@@ -177,7 +169,7 @@
                     <!-- DataTales Example -->
                     <div class="card shadow mb-4">
                         <div class="card-header py-3 col">
-                            <h5 class="m-0 font-weight-bold text-primary">Form Tambah Transaksi</h5>
+                            <h5 class="m-0 font-weight-bold text-primary">Form Edit Transaksi</h5>
                         </div>
                         <div class="card-body">
                             <form method="POST" action="{{ route('transaction.update', ['transaction' => $transaction->id]) }}">
@@ -214,8 +206,6 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            
-                                            
                                             @foreach($transaction->details as $index => $detail)
                                             <tr class="item">
                                                 <td>
@@ -278,7 +268,7 @@
                                             <tr class="item">
                                                 <td>
                                                     <select name="details[${index}][id_product]" class="form-control js-example-basic-single id_product" required>
-                                                        <option value="">Select Product</option>
+                                                        <option value="">Pilih Barang</option>
                                                         @foreach($products as $Product)
                                                             <option value="{{ $Product->id_product }}" data-price="{{ $Product->price }}">{{ $Product->product_name }}</option>
                                                         @endforeach
@@ -391,7 +381,10 @@
                 <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
                 <div class="modal-footer">
                     <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                    <a class="btn btn-primary" href="login.html">Logout</a>
+                    <form id="logout-form" method="POST" action="{{ route('logout') }}">
+                        @csrf
+                        <a class="btn btn-primary" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a>
+                    </form>
                 </div>
             </div>
         </div>
@@ -414,11 +407,6 @@
     <!-- Page level custom scripts -->
     <script src="{{ asset('assets/js/demo/chart-area-demo.js') }}"></script>
     <script src="{{ asset('assets/js/demo/chart-pie-demo.js') }}"></script>
-
-    <!-- perlu penambahan cdn -->
-    <!--<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-Fy6S3B9q64WdZWQUiU+q4/2Lc9npb8tCaSX9FK7E8HnRr0Jz8D6OP9dO5Vg3Q9ct" crossorigin="anonymous"></script>
-    end of perlu penambahan cdn -->
 
 </body>
 

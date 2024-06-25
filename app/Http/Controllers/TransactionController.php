@@ -33,7 +33,7 @@ class TransactionController extends Controller
      */
     public function create()
     {
-        $products = Product::all();
+        $products = Product::orderBy('product_name', 'asc')->get();
         return view('transaksi.add_transaction', compact('products'));
     }
 
@@ -123,7 +123,7 @@ class TransactionController extends Controller
      */
     public function edit(Transaction $transaction)
     {
-        $products = Product::all();
+        $products = Product::orderBy('product_name', 'asc')->get();
         $details = $transaction->details;
         //$Transaction = Transaction::with('product')->find($id_transaction);
         return view('transaksi.edit_transaction', compact('transaction', 'products', 'details'));

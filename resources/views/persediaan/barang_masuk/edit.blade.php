@@ -8,23 +8,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
     <meta name="author" content="">
-    <link rel="icon" href="{{ asset('assets/image/logo-hari-hari.png') }}">
-    <title>IMS - Edit Karyawan</title>
+    <link rel="icon" href="{{asset ('assets/image/logo-hari-hari.png') }}">
+    <title>IMS - Edit Barang Masuk</title>
 
     <!-- Custom fonts for this template-->
-    <link href="{{ asset('assets/vendor/fontawesome-free/css/all.min.css') }}" rel="stylesheet" type="text/css">
+    <link href="{{!! asset('assets/vendor/fontawesome-free/css/all.min.css') !!}}" rel="stylesheet" type="text/css">
     <link
         href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
         rel="stylesheet">
     <!-- Custom styles for this template-->
-    <link href="{{ asset('assets/css/app.css') }}" rel="stylesheet" type="text/css">
+    <link href="{!! asset('assets/css/app.css') !!}" rel="stylesheet" type="text/css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"/>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
     <!-- Custom styles for this page-->
-    <link rel="stylesheet" href="https://cdn.datatables.net/2.0.7/css/dataTables.bootstrap4.css"/>
+    <link href="{!! asset('assets/css/dataTables.css') !!}" rel="stylesheet">
 
 </head>
 
@@ -54,7 +54,7 @@
                     <span>Dashboard</span>
                 </a>
             </li>
-            <li class="nav-item active">
+            <li class="nav-item">
                 <a class="nav-link" href="users">
                     <i class="fas fa-fw fa-users"></i>
                     <span>Karyawan</span>
@@ -62,7 +62,7 @@
             </li>
             <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseMasterData" aria-expanded="true" aria-controls="collapseMasterData">
-                    <i class="fas fa-fw fa-archive"></i>
+                    <i class="fas fa-fw fa-folder"></i>
                     <span>Master Data</span>
                 </a>
                 <div id="collapseMasterData" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar" style="">
@@ -73,9 +73,9 @@
                 </div>
             </li>
 
-            <li class="nav-item">
+            <li class="nav-item active">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePersediaan" aria-expanded="true" aria-controls="collapsePersediaan">
-                    <i class="fas fa-fw fa-archive"></i>
+                    <i class="fas fa-fw fa-folder"></i>
                     <span>Persediaan</span>
                 </a>
                 <div id="collapsePersediaan" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar" style="">
@@ -149,7 +149,7 @@
                                     Profile
                                 </a>
                                 <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="{{ route('logout') }}" data-toggle="modal" data-target="#logoutModal">
+                                <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
                                     <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
                                     Logout
                                 </a>
@@ -164,79 +164,87 @@
                 <div class="container-fluid">
 
                     <!-- Page Heading -->
-                    <h7 class="m-0 font-weight-normal ">Karyawan / <a href="{{ route('users.edit', ['user' => $User->id]) }}">Edit Karyawan</a></h7><br><br>
+                    <h7 class="m-0 font-weight-normal">Persediaan / Barang Masuk / <a href="{{ route('incoming_product.edit', $incoming_product->id )}}">Edit Barang Masuk</a></h7><br><br>
 
                     <!-- DataTales Example -->
                     <div class="card shadow mb-4">
                         <div class="card-header py-3 col">
-                            <h5 class="m-0 font-weight-bold text-primary">Form Edit Karyawan</h5>
+                            <h5 class="m-0 font-weight-bold text-primary">Form Edit Barang Masuk</h5>
                         </div>
                         <div class="card-body">
-                            @if ($errors->any())
-                            <div class="alert alert-danger">
-                                <strong>Whoops!</strong> There were some problems with your input. <br><br>
-                                <ul>
-                                    @foreach ($errors->all() as $error)
-                                        <li>{{ $error }}</li>
-                                    @endforeach
-                                </ul>
-                            </div>
-                            @endif
-                            <form method="POST" action="{{ route('users.update', ['user' => $User->id]) }}">
+                            <form method="POST" action="{{ route('incoming_product.update', ['incoming_product' => $incoming_product->id]) }}">
                                 @csrf
                                 @method('PUT')
                                 <div class="row">
                                     <div class="col-sm-12 col-md-6">
                                         <div class="mb-3">
-                                            <label for="name" class="form-label font-weight-bold">Nama</label>
-                                            <input type="name" class="form-control" name="name" value="{{ $User->name }}">
+                                            <label for="incoming_code" class="form-label font-weight-bold">Kode Barang Masuk</label>
+                                            <input type="text" class="form-control" id="incoming_code" name="incoming_code" value="{{ $incoming_product->incoming_code }}">
+                                            @error('incoming_code')
+                                                <div class="text-danger">{{ $message }}</div>
+                                            @enderror
                                         </div>
                                     </div>
                                     <div class="col-sm-12 col-md-6">
                                         <div class="mb-3">
-                                            <label for="nik" class="form-label font-weight-bold">NIK</label>
-                                            <input type="nik" class="form-control" name="nik" value="{{ $User->nik }}">
+                                            <label for="incoming_date" class="form-label font-weight-bold">Tanggal Barang Masuk</label>
+                                            <input type="date" class="form-control" id="incoming_date" name="incoming_date" value="{{ $incoming_product->incoming_date }}">
+                                            @error('incoming_date')
+                                                <div class="text-danger">{{ $message }}</div>
+                                            @enderror
                                         </div>
                                     </div>
-                                    <div class="col-sm-12 col-md-6">
-                                        <div class="mb-3">
-                                            <label for="gender" class="form-label font-weight-bold">Jenis Kelamin</label>
-                                            <select class="form-control" name="gender">
-                                                <option disabled value>Pilih Jenis Kelamin</option>
-                                                <option value="{{ $User->gender }}">{{ $User->gender }}</option>
-                                                <option value="Laki-laki">Laki-laki</option>
-                                                <option value="Perempuan">Perempuan</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-12 col-md-6">
-                                        <div class="mb-3">
-                                            <label for="address" class="form-label font-weight-bold">Alamat</label>
-                                            <input type="address" class="form-control" name="address" value="{{ $User->address }}">
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-12 col-md-6">
-                                        <div class="mb-3">
-                                            <label for="phone" class="form-label font-weight-bold">No. Telepon</label>
-                                            <input type="phone" class="form-control" name="phone" value="{{ $User->phone }}">
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-12 col-md-6">
-                                         <div class="mb-3">
-                                            <label for="email" class="form-label font-weight-bold">Email</label>
-                                            <input type="email" class="form-control" name="email" value="{{ $User->email }}" readonly>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-12 col-md-6">
-                                        <div class="mb-3">
-                                            <label for="password" class="form-label font-weight-bold">Password</label>
-                                            <input type="password" class="form-control" name="password" value="{{ $User->password }}" readonly>
-                                        </div>
-                                    </div>
+                                    
+                                    <h5 class="py-3 col font-weight-bold text-primary">Detail Barang Masuk</h5>
+                                    <table id="product_table">
+                                        <thead>
+                                            <tr>
+                                                <th>Nama Barang</th>
+                                                <th>Jumlah</th>
+                                                <th>Keterangan</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach($incoming_product->details as $index => $detail)
+                                            <tr class="item">
+                                                <td>
+                                                    <input type="hidden" name="details[{{ $index }}][id]" value="{{$detail->id}}">
+
+                                                    <select name="details[{{ $index }}][id_product]" class="form-control js-example-basic-single id_product" required>
+                                                        <option default>Pilih Barang</option>
+                                                        @foreach($products as $Product)
+                                                            <option value="{{ $Product->id_product}}" {{ $detail->product->id_product == $Product->id_product  ? 'selected' : ''}}>{{ $Product->product_name }}</option>
+                                                        @endforeach
+                                                    </select>
+                                                </td>
+                                                <td>
+                                                    <input type="number" name="details[{{ $index }}][quantity]" min="0" class="form-control quantity" value="{{ $detail->quantity }}">
+                                                </td>
+                                                <td>
+                                                    <input type="text" name="details[{{ $index }}][description]" class="form-control description" value="{{ $detail->description }}">
+                                                </td>
+                                                <td>
+                                                    <button class="btn btn-danger remove_item" type="button">Hapus</button>
+                                                </td>
+                                            </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+
+                                    @error('details.*.product_name')
+                                        <div class="text-danger">{{ $message }}</div>
+                                    @enderror
+                                    @error('details.*.quantity')
+                                        <div class="text-danger">{{ $message }}</div>
+                                    @enderror
+                                    @error('details.*.description')
+                                        <div class="text-danger">{{ $message }}</div>
+                                    @enderror
                                 </div>
-                                <div class="row">
+                                <div class="mt-2 row">
                                     <div class="col-sm-12">
                                         <div class="d-grid gap-2 d-md-block">
+                                            <button class="btn btn-warning" type="button" id="add_item">Tambah Barang</button>
                                             <input type="submit" class="btn btn-primary" value="Simpan"></input>
                                             <a class="btn btn-danger" href="javascript:window.history.go(-1);" role="button">Batal</a>
                                         </div>
@@ -244,6 +252,82 @@
                                 </div>
                             </form>
 
+                            <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+                            <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+                            <script>
+                                $(document).ready(function() {
+                                    // Fungsi untuk menambahkan produk
+                                    $('#add_item').click(function() {
+                                        var index = $('#product_table tbody tr').length;
+                                        var row = `
+                                            <tr class="item">
+                                                <td>
+                                                    <select name="details[${index}][id_product]" class="form-control js-example-basic-single id_product" required>
+                                                        <option value="">Pilih Barang</option>
+                                                        @foreach($products as $Product)
+                                                            <option value="{{ $Product->id_product }}">{{ $Product->product_name }}</option>
+                                                        @endforeach
+                                                    </select>
+                                                </td>
+                                                <td>
+                                                    <input type="number" name="details[${index}][quantity]" min="0" class="form-control quantity">
+                                                </td>
+                                                <td>
+                                                    <input type="text" name="details[${index}][description]" class="form-control description">
+                                                </td>
+                                                <td>
+                                                    <button class="btn btn-danger remove_item" type="button">Hapus</button>
+                                                </td>
+                                            </tr>
+                                        `;
+                                        $('#product_table tbody').append(row);
+                                        
+                                        $('.js-example-basic-single').select2({
+                                        ajax: {
+                                            url: '{{ route("product.search") }}',
+                                            dataType: 'json',
+                                            delay: 250,
+                                            processResults: function (data) {
+                                                return {
+                                                    results: $.map(data, function (item) {
+                                                        return {
+                                                            text: item.product_name,
+                                                            id: item.id_product,
+                                                        }
+                                                    })
+                                                };
+                                            },
+                                            cache: true
+                                        },
+                                        minimumInputLength: 3,
+                                        templateResult: formatProduct,
+                                        templateSelection: formatProductSelection
+                                        });
+
+                                        function formatProduct(product) {
+                                            if (product.loading) {
+                                                return product.text;
+                                            }
+                                            var $container = $(
+                                                "<div class='select2-result-product clearfix'>" +
+                                                    "<div class='select2-result-product__title'></div>" +
+                                                "</div>"
+                                            );
+                                            $container.find(".select2-result-product__title").text(product.text);
+                                            return $container;
+                                        }
+
+                                        function formatProductSelection(product) {
+                                            return product.text || product.id;
+                                        }
+                                    });
+
+                                    // Fungsi untuk menghapus produk
+                                    $(document).on('click', '.remove_item', function() {
+                                        $(this).closest('tr').remove();
+                                    });
+                                });
+                            </script>
                         </div>
                     </div>
                 </div>
@@ -313,10 +397,6 @@
     <!-- Page level custom scripts -->
     <script src="{{ asset('assets/js/demo/chart-area-demo.js') }}"></script>
     <script src="{{ asset('assets/js/demo/chart-pie-demo.js') }}"></script>
-
-    <!-- Data Tables -->
-    <script src="https://cdn.datatables.net/2.0.7/js/dataTables.js"></script>
-    <script src="https://cdn.datatables.net/2.0.7/js/dataTables.bootstrap4.js"></script>
 
 </body>
 

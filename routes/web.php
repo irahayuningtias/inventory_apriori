@@ -6,6 +6,8 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\IncomingProductController;
+use App\Http\Controllers\OutcomingProductController;
 use App\Http\Controllers\TransactionController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -21,16 +23,16 @@ use Illuminate\Support\Facades\Auth;
 |
 */
 
+Route::get('/', [LoginController::class, 'showLoginForm'])->name('login');
+
 Auth::routes();
 
 Route::middleware(['auth'])->group(function() {
-    Route::get('/dashboard', [DashboardController::class, 'index'])->name('index');
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
     Route::resource('users', UserController::class);
     Route::get('/users', [UserController::class, 'index'])->name('users');
     Route::get('/profile', [UserController::class, 'profile'])->name('users.profile');
-
-    
 });
 
 
@@ -53,28 +55,16 @@ Route::get('/category/search', [CategoryController::class, 'search'])->name('cat
 Route::resource('product', ProductController::class);
 Route::get('/product', [ProductController::class, 'index'])->name('product');
 Route::get('/product/search', [ProductController::class, 'search'])->name('product.search');
-Route::get('product/select2', [ProductController::class, 'select2'])->name('product.select2');
 
 
-//supply
-Route::get('/supply_in', function () {
-    return view('persediaan/supply_in');
-});
-Route::get('/supply_in/add_supply_in', function () {
-    return view('persediaan/add_supply_in');
-});
-Route::get('/supply_in/edit_supply_in', function () {
-    return view('persediaan/edit_supply_in');
-});
-Route::get('/supply_out', function () {
-    return view('persediaan/supply_out');
-});
-Route::get('/supply_out/add_supply_out', function () {
-    return view('persediaan/add_supply_out');
-});
-Route::get('/supply_out/edit_supply_out', function () {
-    return view('persediaan/edit_supply_out');
-});
+// Barang Masuk
+Route::resource('incoming_product', IncomingProductController::class);
+Route::get('/incoming_product', [IncomingProductController::class, 'index'])->name('incoming_product');
+
+
+// Barang Keluar
+Route::resource('outcoming_product', OutcomingProductController::class);
+Route::get('/outcoming_product', [OutcomingProductController::class, 'index'])->name('outcoming_product');
 
 
 //transaction

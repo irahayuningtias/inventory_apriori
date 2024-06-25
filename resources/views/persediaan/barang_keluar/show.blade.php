@@ -9,7 +9,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
     <link rel="icon" href="{{asset ('assets/image/logo-hari-hari.png') }}">
-    <title>IMS - Detail Barang</title>
+    <title>IMS - Detail Barang Keluar</title>
 
     <!-- Custom fonts for this template-->
     <link href="{{ asset('assets/vendor/fontawesome-free/css/all.min.css') }}" rel="stylesheet" type="text/css">
@@ -60,7 +60,7 @@
                     <span>Karyawan</span>
                 </a>
             </li>
-            <li class="nav-item active">
+            <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseMasterData" aria-expanded="true" aria-controls="collapseMasterData">
                     <i class="fas fa-fw fa-archive"></i>
                     <span>Master Data</span>
@@ -73,7 +73,7 @@
                 </div>
             </li>
 
-            <li class="nav-item">
+            <li class="nav-item active">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePersediaan" aria-expanded="true" aria-controls="collapsePersediaan">
                     <i class="fas fa-fw fa-archive"></i>
                     <span>Persediaan</span>
@@ -164,23 +164,30 @@
                 <div class="container-fluid">
 
                     <!-- Page Heading -->
-                    <h7 class="m-0 font-weight-normal ">Barang / <a href="{{ route('product.show', ['product' => $Product->id_product]) }}">Detail Barang</a></h7><br><br>
+                    <h7 class="m-0 font-weight-normal ">Persediaan / Barang Keluar / <a href="{{ route('outcoming_product.show', ['outcoming_product' => $outcoming_product->id]) }}">Detail Barang Keluar</a></h7><br><br>
 
                     <!-- DataTales Example -->
                     <div class="card shadow mb-4">
                         <div class="card-header py-3 col">
-                            <h5 class="m-0 font-weight-bold text-primary">Detail Barang</h5>
+                            <h5 class="m-0 font-weight-bold text-primary">Detail Barang Keluar</h5>
                         </div>
                         <div class="card-body">
                             <ul class="list-group list-group-flush">
-                                <li class="list-group-item"><b>Kategori: </b>{{ $Product->category->category_name }}</li>
-                                <li class="list-group-item"><b>Kode Barang: </b>{{ $Product->id_product }}</li>
-                                <li class="list-group-item"><b>Nama Barang: </b>{{ $Product->product_name }}</li>
-                                <li class="list-group-item"><b>Jumlah Barang: </b>{{ $Product->quantity }}</li>
-                                <li class="list-group-item"><b>Harga Barang: </b>Rp {{ number_format($Product->price, 2, ',', '.') }}</li>
+                                <li class="list-group-item"><b>Kode Barang Keluar: </b>{{ $outcoming_product->outcoming_code }}</li>
+                                <li class="list-group-item"><b>Tanggal Masuk: </b>{{ $outcoming_product->outcoming_date }}</li>
+                                <li class="list-group-item"><b>Nama Barang: </b><br>
+                                    @foreach($outcoming_product->details as $details)
+                                        - {{ $details->product->product_name }} ({{ $details->quantity }})<br>
+                                    @endforeach
+                                </li>
+                                <li class="list-group-item"><b>Keterangan: </b><br>
+                                    @foreach($outcoming_product->details as $details)
+                                        - {{ $details->description }}<br>
+                                    @endforeach
+                                </li>
                             </ul>
                         </div>
-                        <a class="btn btn-primary mt-12" href="{{ route('product') }}">Kembali</a>
+                        <a class="btn btn-primary mt-12" href="{{ route('outcoming_product') }}">Kembali</a>
                     </div>
                 </div>
                 <!-- /.container-fluid -->

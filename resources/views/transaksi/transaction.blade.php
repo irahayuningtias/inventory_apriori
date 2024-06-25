@@ -80,9 +80,8 @@
                 </a>
                 <div id="collapsePersediaan" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar" style="">
                     <div class="bg-white py-2 collapse-inner rounded">
-                        <h6 class="collapse-header">Arus Persediaan</h6>
-                        <a class="collapse-item" href="supply_in">Barang Masuk</a>
-                        <a class="collapse-item" href="supply_out">Barang Keluar</a>
+                        <a class="collapse-item" href="incoming_product">Barang Masuk</a>
+                        <a class="collapse-item" href="outcoming_product">Barang Keluar</a>
                     </div>
                 </div>
             </li>
@@ -114,18 +113,12 @@
                 <div id="collapseLaporan" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Gudang</h6>
-                        <a class="collapse-item" href="#">Laporan Harian</a>
-                        <a class="collapse-item" href="#">Laporan Bulanan</a>
+                        <a class="collapse-item" href="#">Barang Masuk</a>
+                        <a class="collapse-item" href="#">Barang Keluar</a>
                         <h6 class="collapse-header">Apriori</h6>
                         <a class="collapse-item" href="#">Laporan Analisis Apriori</a>
                     </div>
                 </div>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="account">
-                    <i class="fas fa-fw fa-user"></i>
-                    <span>Akun</span>
-                </a>
             </li>
         </ul>
         <!-- End of Sidebar -->
@@ -150,7 +143,7 @@
                             <!-- Dropdown - User Information -->
                             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
                                 aria-labelledby="userDropdown">
-                                <a class="dropdown-item" href="#">
+                                <a class="dropdown-item" href="profile">
                                     <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
                                     Profile
                                 </a>
@@ -232,8 +225,8 @@
                                                     </a>
                                                     @csrf
                                                     @method('DELETE')
-                                                    <a class="btn btn-danger btn-circle btn-sm" data-toggle="modal" data-target="#deleteModal">
-                                                            <i class="fas fa-trash"></i>
+                                                    <a class="btn btn-danger btn-circle btn-sm" data-toggle="modal" data-target="#deleteModal" data-transaction-id="{{ $tx->id }}">
+                                                        <i class="fas fa-trash"></i>
                                                     </a>
                                                 </form>
 
@@ -317,7 +310,7 @@
                 </div>
                 <div class="modal-footer">
                     <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                    <form id="delete-form" method="POST" action="{{ route('transaction.destroy', $tx->id) }}">
+                    <form id="delete-form" method="POST" action="">
                         @csrf
                         @method('DELETE')
                         <a class="btn btn-danger" onclick="event.preventDefault(); document.getElementById('delete-form').submit();">Hapus</a>
@@ -357,9 +350,15 @@
 
     <!-- Confirm Delete -->
     <script>
-        function confirmDelete() {
-            return confirm('Are you sure you want to delete this item?');
-        }
+        document.addEventListener('DOMContentLoaded', function () {
+            $('#deleteModal').on('show.bs.modal', function (event) {
+                var button = $(event.relatedTarget); // Button that triggered the modal
+                var transactionId = button.data('transaction-id'); // Extract info from data-* attributes
+                var modal = $(this);
+                var action = "{{ route('transaction.destroy', ':id') }}".replace(':id', transactionId);
+                modal.find('#delete-form').attr('action', action);
+            });
+        });
     </script>
 
     <script>

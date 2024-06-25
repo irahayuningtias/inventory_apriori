@@ -38,7 +38,7 @@
         <ul class="navbar-nav sidebar sidebar-dark accordion" id="accordionSidebar">
 
             <!-- Sidebar - Brand -->
-            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
+            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="dashboard">
                 <div class="sidebar-brand-icon">
                     <img class="brand-icon" src="{{ asset('assets/image/logo-hari-hari.png') }}" alt="Hari Hari Store" style="height: 50px; width: 50px;">
                 </div>
@@ -81,9 +81,8 @@
                 </a>
                 <div id="collapsePersediaan" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar" style="">
                     <div class="bg-white py-2 collapse-inner rounded">
-                        <h6 class="collapse-header">Arus Persediaan</h6>
-                        <a class="collapse-item" href="supply_in">Barang Masuk</a>
-                        <a class="collapse-item" href="supply_out">Barang Keluar</a>
+                        <a class="collapse-item" href="incoming_product">Barang Masuk</a>
+                        <a class="collapse-item" href="outcoming_product">Barang Keluar</a>
                     </div>
                 </div>
             </li>
@@ -115,18 +114,12 @@
                 <div id="collapseLaporan" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Gudang</h6>
-                        <a class="collapse-item" href="#">Laporan Harian</a>
-                        <a class="collapse-item" href="#">Laporan Bulanan</a>
+                        <a class="collapse-item" href="#">Barang Masuk</a>
+                        <a class="collapse-item" href="#">Barang Keluar</a>
                         <h6 class="collapse-header">Apriori</h6>
                         <a class="collapse-item" href="#">Laporan Analisis Apriori</a>
                     </div>
                 </div>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="index">
-                    <i class="fas fa-fw fa-user"></i>
-                    <span>Akun</span>
-                </a>
             </li>
         </ul>
         <!-- End of Sidebar -->
@@ -147,14 +140,12 @@
                         <li class="nav-item dropdown no-arrow">
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">Douglas McGee</span>
-                                <img class="img-profile rounded-circle"
-                                    src="img/undraw_profile.svg">
+                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">{{ Auth::user()->name }}</span>
                             </a>
                             <!-- Dropdown - User Information -->
                             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
                                 aria-labelledby="userDropdown">
-                                <a class="dropdown-item" href="#">
+                                <a class="dropdown-item" href="profile">
                                     <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
                                     Profile
                                 </a>
@@ -174,7 +165,7 @@
                 <div class="container-fluid">
 
                     <!-- Page Heading -->
-                    <h7 class="m-0 font-weight-normal">Transaksi / <a href="add_transaction">Tambah Transaksi</a></h7><br><br>
+                    <h7 class="m-0 font-weight-normal">Transaksi / <a href="{{ route('transaction.create') }}">Tambah Transaksi</a></h7><br><br>
 
                     <!-- DataTales Example -->
                     <div class="card shadow mb-4">
@@ -273,7 +264,7 @@
                                         <tr class="item">
                                             <td>
                                                 <select name="details[${index}][id_product]" class="form-control js-example-basic-single id_product" required>
-                                                    <option value="">Select Product</option>
+                                                    <option value="">Pilih Barang</option>
                                                     @foreach($products as $Product)
                                                         <option value="{{ $Product->id_product }}" data-price="{{ $Product->price }}">{{ $Product->product_name }}</option>
                                                     @endforeach
@@ -406,7 +397,10 @@
                 <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
                 <div class="modal-footer">
                     <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                    <a class="btn btn-primary" href="login.html">Logout</a>
+                    <form id="logout-form" method="POST" action="{{ route('logout') }}">
+                        @csrf
+                        <a class="btn btn-primary" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a>
+                    </form>
                 </div>
             </div>
         </div>

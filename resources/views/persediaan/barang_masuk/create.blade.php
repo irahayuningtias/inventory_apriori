@@ -9,7 +9,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
     <link rel="icon" href="{{asset ('assets/image/logo-hari-hari.png') }}">
-    <title>IMS - Dashboard</title>
+    <title>IMS - Tambah Barang Masuk</title>
 
     <!-- Custom fonts for this template-->
     <link href="{{!! asset('assets/vendor/fontawesome-free/css/all.min.css') !!}}" rel="stylesheet" type="text/css">
@@ -25,7 +25,6 @@
 
     <!-- Custom styles for this page-->
     <link rel="stylesheet" href="https://cdn.datatables.net/2.0.7/css/dataTables.bootstrap4.css"/>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 </head>
 
@@ -40,7 +39,7 @@
             <!-- Sidebar - Brand -->
             <a class="sidebar-brand d-flex align-items-center justify-content-center" href="dashboard">
                 <div class="sidebar-brand-icon">
-                    <img class="brand-icon" src="{{ asset('assets/image/logo-hari-hari.png') }}" alt="Hari Hari Store" style="height:50px; width: 50px;">
+                    <img class="brand-icon" src="{{ asset('assets/image/logo-hari-hari.png') }}" alt="Hari Hari Store" style="height: 50px; width: 50px;">
                 </div>
                 <div class="sidebar-brand-text mx-3">Hari Hari Store</div>
             </a>
@@ -49,7 +48,7 @@
             <hr class="sidebar-divider my-0">
 
             <!-- Nav Item -->
-            <li class="nav-item active">
+            <li class="nav-item">
                 <a class="nav-link" href="dashboard">
                     <i class="fas fa-fw fa-tachometer-alt"></i>
                     <span>Dashboard</span>
@@ -74,7 +73,7 @@
                 </div>
             </li>
 
-            <li class="nav-item">
+            <li class="nav-item active">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePersediaan" aria-expanded="true" aria-controls="collapsePersediaan">
                     <i class="fas fa-fw fa-archive"></i>
                     <span>Persediaan</span>
@@ -121,11 +120,6 @@
                     </div>
                 </div>
             </li>
-
-            <!-- Hide Sidebar -->
-            <div id="content">
-                <button id="sidebarCollapse" class="btn btn-primary toggle-btn"></button>
-            </div>
         </ul>
         <!-- End of Sidebar -->
 
@@ -137,15 +131,10 @@
 
                 <!-- Topbar -->
                 <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
-                    <button id="sidebarCollapse" class="btn btn-link d-md-none rounded-circle mr-3">
-                        <i class="fas fa-bars"></i>
-                    </button>
 
                     <!-- Topbar Navbar -->
                     <ul class="navbar-nav ml-auto">
-
                         <div class="topbar-divider d-none d-sm-block"></div>
-
                         <!-- Nav Item - User Information -->
                         <li class="nav-item dropdown no-arrow">
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
@@ -160,7 +149,7 @@
                                     Profile
                                 </a>
                                 <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="{{ route('logout') }}" data-toggle="modal" data-target="#logoutModal">
+                                <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
                                     <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
                                     Logout
                                 </a>
@@ -168,154 +157,179 @@
                         </li>
 
                     </ul>
-                    
+
                 </nav>
                 <!-- End of Topbar -->
 
-                <!-- Begin Page Content -->
                 <div class="container-fluid">
-                    
-                    <h7 class="m-0 font-weight-normal "><a href="dashboard">Dashboard</a></h7><br><br>    
 
                     <!-- Page Heading -->
-                    <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                        <h1 class="h3 mb-0 text-gray-800">Dashboard</h1>
-                        <!--<a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
-                                class="fas fa-download fa-sm text-white-50"></i> Generate Report</a>-->
-                    </div>
+                    <h7 class="m-0 font-weight-normal ">Persediaan / Barang Masuk / <a href="{{ route('incoming_product.create') }}">Tambah Barang Masuk</a></h7><br><br>
 
-                    <!-- Content Row -->
-                    <div class="row">
-
-                        <!-- Users Card -->
-                        <div class="col-xl-3 col-md-6 mb-4">
-                            <div class="card border-left-primary shadow h-100 py-2">
-                                <div class="card-body">
-                                    <div class="row no-gutters align-items-center">
-                                        <div class="col mr-2">
-                                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                               Karyawan</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ $users }}</div>
-                                        </div>
-                                        <div class="col-auto">
-                                            <i class="fas fa-users fa-2x text-gray-300"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                    <!-- DataTales Example -->
+                    <div class="card shadow mb-4">
+                        <div class="card-header py-3 col">
+                            <h5 class="m-0 font-weight-bold text-primary">Form Tambah Barang Masuk</h5>
                         </div>
-
-                        <!-- Category Card -->
-                        <div class="col-xl-3 col-md-6 mb-4">
-                            <div class="card border-left-danger shadow h-100 py-2">
-                                <div class="card-body">
-                                    <div class="row no-gutters align-items-center">
-                                        <div class="col mr-2">
-                                            <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">
-                                               Kategori Barang</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ $categories }}</div>
-                                        </div>
-                                        <div class="col-auto">
-                                            <i class="fas fa-archive fa-2x text-gray-300"></i>
+                        <div class="card-body">
+                            <form method="POST" action="{{ route('incoming_product.store') }}">
+                                @csrf
+                                <div class="row">
+                                    <div class="col-sm-12 col-md-6">
+                                        <div class="mb-3">
+                                            <label for="incoming_code" class="form-label font-weight-bold">Kode Barang Masuk</label>
+                                            <input type="text" class="form-control" id="incoming_code" name="incoming_code" placeholder="Masukkan kode barang masuk">
+                                            @error('incoming_code')
+                                                <div class="text-danger">{{ $message }}</div>
+                                            @enderror
                                         </div>
                                     </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Product Card -->
-                        <div class="col-xl-3 col-md-6 mb-4">
-                            <div class="card border-left-success shadow h-100 py-2">
-                                <div class="card-body">
-                                    <div class="row no-gutters align-items-center">
-                                        <div class="col mr-2">
-                                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
-                                               Barang </div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ $products }}</div>
-                                        </div>
-                                        <div class="col-auto">
-                                            <i class="fas fa-archive fa-2x text-gray-300"></i>
+                                    <div class="col-sm-12 col-md-6">
+                                        <div class="mb-3">
+                                            <label for="incoming_date" class="form-label font-weight-bold">Tanggal Masuk</label>
+                                            <input type="date" class="form-control" id="incoming_date" name="incoming_date">
+                                            @error('incoming_date')
+                                                <div class="text-danger">{{ $message }}</div>
+                                            @enderror
                                         </div>
                                     </div>
-                                </div>
-                            </div>
-                        </div>
+                                    
+                                    <h5 class="py-3 col font-weight-bold text-primary">Detail Barang Masuk</h5>
+                                    <table id="product_table">
+                                        <thead>
+                                            <tr>
+                                                <th>Nama Barang</th>
+                                                <th>Jumlah</th>
+                                                <th>Keterangan</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr class="item">
+                                                <td>
+                                                    <select name="details[0][id_product]" class="form-control js-example-basic-single id_product" required>
+                                                        <option default>Pilih Barang</option>
+                                                        @foreach($products as $Product)
+                                                            <option value="{{ $Product->id_product}}">{{ $Product->product_name }}</option>
+                                                        @endforeach
+                                                    </select>
+                                                </td>
+                                                <td>
+                                                    <input type="number" name="details[0][quantity]" min="0" class="form-control quantity">
+                                                </td>
+                                                <td>
+                                                    <input type="text" name="details[0][description]" class="form-control description">
+                                                </td>
+                                                <td>
+                                                    <button class="btn btn-danger remove_item" type="button">Hapus</button>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
 
-                        <!-- Supply Card
-                        <!<div class="col-xl-3 col-md-6 mb-4">
-                            <div class="card border-left-info shadow h-100 py-2">
-                                <div class="card-body">
-                                    <div class="row no-gutters align-items-center">
-                                        <div class="col mr-2">
-                                            <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
-                                               Persediaan </div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">1000</div>
-                                        </div>
-                                        <div class="col-auto">
-                                            <i class="fas fa-archive fa-2x text-gray-300"></i>
-                                        </div>
-                                    </div>
+                                    @error('details.*.product_name')
+                                        <div class="text-danger">{{ $message }}</div>
+                                    @enderror
+                                    @error('details.*.quantity')
+                                        <div class="text-danger">{{ $message }}</div>
+                                    @enderror
+                                    @error('details.*.description')
+                                        <div class="text-danger">{{ $message }}</div>
+                                    @enderror
                                 </div>
-                            </div>
-                        </div> -->
-
-                        <!-- Transaction Card -->
-                        <div class="col-xl-3 col-md-6 mb-4">
-                            <div class="card border-left-warning shadow h-100 py-2">
-                                <div class="card-body">
-                                    <div class="row no-gutters align-items-center">
-                                        <div class="col mr-2">
-                                            <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
-                                               Transaksi </div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ $transactions }}</div>
+                                <div class="mt-2 row">
+                                    <div class="col-sm-12">
+                                        <div class="d-grid gap-2 d-md-block">
+                                            <button class="btn btn-warning" type="button" id="add_item">Tambah Barang</button>
+                                            <input type="submit" class="btn btn-primary" value="Simpan"></input>
+                                            <a class="btn btn-danger" href="javascript:window.history.go(-1);" role="button">Batal</a>
                                         </div>
-                                        <div class="col-auto">
-                                            <i class="fas fa-wallet fa-2x text-gray-300"></i>
-                                        </div>
-                                    </div>
+                                    </div>    
                                 </div>
-                            </div>
-                        </div>
-
-                        <!-- Transaction Chart -->
-                        <div class="col-xl-12 col-md-12 mb-4">
-                            <form action="{{ route('dashboard') }}" method="GET">
-                                <label for="year">Pilih Tahun: </label>
-                                <select name="year" id="year">
-                                    @foreach ($years as $yr)
-                                        <option value="{{ $yr }}" {{ $yr == $selectedYear ? 'selected' : '' }}>{{ $yr }}</option>
-                                    @endforeach
-                                </select>
-                                <button class="btn btn-primary btn-sm" type="submit">
-                                    <i class="fas fa-filter"></i>
-                                </button>
                             </form>
-                            <canvas id="myChart"></canvas>
-                        </div>
 
-                        <script>
-                            document.addEventListener('DOMContentLoaded', (event) => {
-                                var ctx = document.getElementById('myChart').getContext('2d');
-                                var chartTxData = @json($chartTxData);
+                            <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+                            <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+                            <script>
+                                $(document).ready(function() {
+                                    // Fungsi untuk menambahkan produk
+                                    $('#add_item').click(function() {
+                                        var index = $('#product_table tbody tr').length;
+                                        var row = `
+                                            <tr class="item">
+                                                <td>
+                                                    <select name="details[${index}][id_product]" class="form-control js-example-basic-single id_product" required>
+                                                        <option value="">Pilih Barang</option>
+                                                        @foreach($products as $Product)
+                                                            <option value="{{ $Product->id_product }}">{{ $Product->product_name }}</option>
+                                                        @endforeach
+                                                    </select>
+                                                </td>
+                                                <td>
+                                                    <input type="number" name="details[${index}][quantity]" min="1" class="form-control quantity">
+                                                </td>
+                                                <td>
+                                                    <input type="text" name="details[${index}][description]" class="form-control description">
+                                                </td>
+                                                <td>
+                                                    <button class="btn btn-danger remove_item" type="button">Hapus</button>
+                                                </td>
+                                            </tr>
+                                        `;
+                                        $('#product_table tbody').append(row);
 
-                                var myChart = new Chart(ctx, {
-                                    type: 'line',
-                                    data: chartTxData,
-                                    options: {
-                                        scales: {
-                                            y: {
-                                                beginAtZero: true
+                                        $('.js-example-basic-single').select2({
+                                            ajax: {
+                                                url: '{{ route("product.search") }}',
+                                                dataType: 'json',
+                                                delay: 250,
+                                                processResults: function (data) {
+                                                    return {
+                                                        results: $.map(data, function (item) {
+                                                            return {
+                                                                text: item.product_name,
+                                                                id: item.id_product,
+                                                            }
+                                                        })
+                                                    };
+                                                },
+                                                cache: true
+                                            },
+                                            minimumInputLength: 3,
+                                            templateResult: formatProduct,
+                                            templateSelection: formatProductSelection
+                                        });
+
+                                        function formatProduct(product) {
+                                            if (product.loading) {
+                                                return product.text;
                                             }
+                                            var $container = $(
+                                                "<div class='select2-result-product clearfix'>" +
+                                                    "<div class='select2-result-product__title'></div>" +
+                                                "</div>"
+                                            );
+                                            $container.find(".select2-result-product__title").text(product.text);
+                                            return $container;
                                         }
-                                    }
-                                });
-                            });
-                        </script>
-                        <!-- End of Transaction Chart -->
-                    </div>
-                    <!-- Content Row -->
 
-                    
+                                        function formatProductSelection(product) {
+                                            return product.text || product.id;
+                                        }
+                                    });
+
+                                    // Fungsi untuk menghapus produk
+                                    $(document).on('click', '.remove_item', function() {
+                                        $(this).closest('tr').remove();
+                                    });
+                                });
+                            </script>
+
+                        </div>
+                    </div>
+                </div>
+                <!-- /.container-fluid -->
+
+            </div>
             <!-- End of Main Content -->
 
             <!-- Footer -->
@@ -374,14 +388,15 @@
 
     <!-- Page level plugins -->
     <script src="{{ asset('assets/vendor/chart.js/Chart.min.js') }}"></script>
+    <script src="{{ asset('assets/js/dataTables.bootstrap4.min.js') }}"></script>
 
     <!-- Page level custom scripts -->
     <script src="{{ asset('assets/js/demo/chart-area-demo.js') }}"></script>
     <script src="{{ asset('assets/js/demo/chart-pie-demo.js') }}"></script>
 
-    <!-- Data Tables -->
-    <script src="https://cdn.datatables.net/2.0.7/js/dataTables.js"></script>
-    <script src="https://cdn.datatables.net/2.0.7/js/dataTables.bootstrap4.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 
     <!-- perlu penambahan cdn -->
     <!--<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>

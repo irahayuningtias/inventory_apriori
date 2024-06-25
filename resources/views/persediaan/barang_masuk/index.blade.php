@@ -9,15 +9,15 @@
     <meta name="description" content="">
     <meta name="author" content="">
     <link rel="icon" href="{{asset ('assets/image/logo-hari-hari.png') }}">
-    <title>IMS - Detail Barang</title>
+    <title>IMS - Barang Masuk</title>
 
     <!-- Custom fonts for this template-->
-    <link href="{{ asset('assets/vendor/fontawesome-free/css/all.min.css') }}" rel="stylesheet" type="text/css">
+    <link href="{{!! asset('assets/vendor/fontawesome-free/css/all.min.css') !!}}" rel="stylesheet" type="text/css">
     <link
         href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
         rel="stylesheet">
     <!-- Custom styles for this template-->
-    <link href="{{ asset('assets/css/app.css') }}" rel="stylesheet" type="text/css">
+    <link href="{!! asset('assets/css/app.css') !!}" rel="stylesheet" type="text/css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"/>
@@ -60,7 +60,7 @@
                     <span>Karyawan</span>
                 </a>
             </li>
-            <li class="nav-item active">
+            <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseMasterData" aria-expanded="true" aria-controls="collapseMasterData">
                     <i class="fas fa-fw fa-archive"></i>
                     <span>Master Data</span>
@@ -73,7 +73,7 @@
                 </div>
             </li>
 
-            <li class="nav-item">
+            <li class="nav-item active">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePersediaan" aria-expanded="true" aria-controls="collapsePersediaan">
                     <i class="fas fa-fw fa-archive"></i>
                     <span>Persediaan</span>
@@ -131,7 +131,6 @@
 
                 <!-- Topbar -->
                 <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
-
                     <!-- Topbar Navbar -->
                     <ul class="navbar-nav ml-auto">
                         <div class="topbar-divider d-none d-sm-block"></div>
@@ -163,25 +162,82 @@
 
                 <div class="container-fluid">
 
+                    <h7 class="m-0 font-weight-normal ">Persediaan / <a href="incoming_product">Barang Masuk</a></h7><br><br>
+
                     <!-- Page Heading -->
-                    <h7 class="m-0 font-weight-normal ">Barang / <a href="{{ route('product.show', ['product' => $Product->id_product]) }}">Detail Barang</a></h7><br><br>
+                    <h1 class="h3 mb-2 text-gray-800">Barang Masuk</h1>
+                        <p class="mb-3">Fitur ini berisikan data barang yang masuk ke gudang</p><br>
 
                     <!-- DataTales Example -->
                     <div class="card shadow mb-4">
                         <div class="card-header py-3 col">
-                            <h5 class="m-0 font-weight-bold text-primary">Detail Barang</h5>
+                            <div class="d-flex justify-content-between align-item-center">
+                                <h5 class="m-0 font-weight-bold text-primary text-center">Data Barang Masuk</h5>
+                                <a href="{{ route('incoming_product.create') }}" class="btn btn-primary btn-icon-split ">
+                                    <span class="icon text-white-50">
+                                        <i class="fas fa-add"></i>
+                                    </span>
+                                    <span class="text">Tambah Data</span>
+                                </a>
+                            </div>        
                         </div>
                         <div class="card-body">
-                            <ul class="list-group list-group-flush">
-                                <li class="list-group-item"><b>Kategori: </b>{{ $Product->category->category_name }}</li>
-                                <li class="list-group-item"><b>Kode Barang: </b>{{ $Product->id_product }}</li>
-                                <li class="list-group-item"><b>Nama Barang: </b>{{ $Product->product_name }}</li>
-                                <li class="list-group-item"><b>Jumlah Barang: </b>{{ $Product->quantity }}</li>
-                                <li class="list-group-item"><b>Harga Barang: </b>Rp {{ number_format($Product->price, 2, ',', '.') }}</li>
-                            </ul>
+                            <div class="table-responsive">
+
+                                @if ($message = Session::get('success'))
+                                    <div class="alert alert-success">
+                                        <p>{{ $message}}</p>
+                                    </div>
+                                @endif
+
+                                <table class="table table-striped table-bordered mt-3 mb-3" id="dataTable" style="width: 100%">
+                                    <thead>
+                                        <tr>
+                                            <th>Kode Masuk</th>
+                                            <th>Tanggal Masuk</th>
+                                            <th>Nama Barang</th>
+                                            <th>Keterangan</th>
+                                            <th>Aksi</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach($incoming_products as $ip)
+                                        <tr>
+                                            <td>{{ $ip->incoming_code }}</td>
+                                            <td>{{ $ip->incoming_date }}</td>
+                                                <td>
+                                                    @foreach($ip->details as $details)
+                                                    - {{ $details->product->product_name }} ({{ $details->quantity }})<br>
+                                                    @endforeach
+                                                </td>
+                                                <td>
+                                                    @foreach($ip->details as $details)
+                                                    - {{ $details->description }}<br>
+                                                    @endforeach
+                                                </td>
+                                            <td>
+                                                <form action="{{ route('incoming_product.destroy', $ip->id) }}" method="POST">
+                                                    <a href="{{ route('incoming_product.show', $ip->id) }}" class="btn btn-info btn-circle btn-sm">
+                                                            <i class="fas fa-info-circle"></i>
+                                                    </a>
+                                                    <a href="{{ route('incoming_product.edit', $ip->id) }}" class="btn btn-warning btn-circle btn-sm">
+                                                        <i class="fas fa-edit"></i>
+                                                    </a>
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <a class="btn btn-danger btn-circle btn-sm" data-toggle="modal" data-target="#deleteModal" data-incoming-id="{{ $ip->id }}">
+                                                        <i class="fas fa-trash"></i>
+                                                    </a>
+                                                </form>
+                                            </td>
+                                        </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
-                        <a class="btn btn-primary mt-12" href="{{ route('product') }}">Kembali</a>
                     </div>
+
                 </div>
                 <!-- /.container-fluid -->
 
@@ -232,6 +288,31 @@
         </div>
     </div>
 
+    <!-- Delete Modal-->
+    <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Hapus Data</h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    Are you sure you want to delete this item?
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                    <form id="delete-form" method="POST" action="">
+                        @csrf
+                        @method('DELETE')
+                        <a class="btn btn-danger" onclick="event.preventDefault(); document.getElementById('delete-form').submit();">Hapus</a>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Bootstrap core JavaScript-->
     <script src="{{ asset('assets/vendor/jquery/jquery.min.js') }}"></script>
     <script src="{{ asset('assets/vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
@@ -253,6 +334,24 @@
     <!-- Data Tables -->
     <script src="https://cdn.datatables.net/2.0.7/js/dataTables.js"></script>
     <script src="https://cdn.datatables.net/2.0.7/js/dataTables.bootstrap4.js"></script>
+    <script>
+        $(document).ready(function () {
+           $("#dataTable").DataTable();
+        });
+    </script>
+    
+    <!-- Confirm Delete -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            $('#deleteModal').on('show.bs.modal', function (event) {
+                var button = $(event.relatedTarget); // Button that triggered the modal
+                var incomingId = button.data('incoming-id'); // Extract info from data-* attributes
+                var modal = $(this);
+                var action = "{{ route('incoming_product.destroy', ':id') }}".replace(':id', incomingId);
+                modal.find('#delete-form').attr('action', action);
+            });
+        });
+    </script>
 
 </body>
 

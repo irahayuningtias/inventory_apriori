@@ -209,7 +209,7 @@
                                                         </a>
                                                         @csrf
                                                         @method('DELETE')
-                                                        <a class="btn btn-danger btn-circle btn-sm" data-toggle="modal" data-target="#deleteModal">
+                                                        <a class="btn btn-danger btn-circle btn-sm" data-toggle="modal" data-target="#deleteModal" data-product-id="{{ $Product->id_product }}">
                                                             <i class="fas fa-trash"></i>
                                                         </a>
                                                     </form>
@@ -286,7 +286,7 @@
                     </div>
                     <div class="modal-footer">
                         <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                        <form id="delete-form" method="POST" action="{{ route('product.destroy', $Product->id_product) }}">
+                        <form id="delete-form" method="POST" action="">
                             @csrf
                             @method('DELETE')
                             <a class="btn btn-danger" onclick="event.preventDefault(); document.getElementById('delete-form').submit();">Hapus</a>
@@ -320,22 +320,22 @@
         <!-- Data Tables -->
         <script src="https://cdn.datatables.net/2.0.7/js/dataTables.js"></script>
         <script src="https://cdn.datatables.net/2.0.7/js/dataTables.bootstrap4.js"></script>
-
-        <!-- perlu penambahan cdn -->
-        <!--<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-Fy6S3B9q64WdZWQUiU+q4/2Lc9npb8tCaSX9FK7E8HnRr0Jz8D6OP9dO5Vg3Q9ct" crossorigin="anonymous"></script>
-        end of perlu penambahan cdn -->
-
-        <!-- Confirm Delete -->
-        <script>
-            function confirmDelete() {
-                return confirm("Are you sure you want to delete this item?");
-            }
-        </script>
-
         <script>
             $(document).ready(function () {
                 $("#dataTable").DataTable();
+            });
+        </script>
+
+        <!-- Confirm Delete -->
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                $('#deleteModal').on('show.bs.modal', function (event) {
+                    var button = $(event.relatedTarget); // Button that triggered the modal
+                    var productId = button.data('product-id'); // Extract info from data-* attributes
+                    var modal = $(this);
+                    var action = "{{ route('product.destroy', ':id') }}".replace(':id', productId);
+                    modal.find('#delete-form').attr('action', action);
+                });
             });
         </script>
     </body>
