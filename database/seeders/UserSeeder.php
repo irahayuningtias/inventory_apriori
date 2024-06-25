@@ -23,6 +23,7 @@ class UserSeeder extends Seeder
             'address' => "Blitar",
             'email'=>"admin@gmail.com",  
             'password'=> Hash::make('123456'),
+            'role_id' => '1'
         ]);
     }
 }
