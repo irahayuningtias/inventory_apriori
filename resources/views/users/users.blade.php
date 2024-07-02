@@ -84,32 +84,11 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseApriori" aria-expanded="true" aria-controls="collapseApriori">
-                        <i class="fas fa-fw fa-sync"></i>
-                        <span>Apriori</span>
-                    </a>
-                    <div id="collapseApriori" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
-                        <div class="bg-white py-2 collapse-inner rounded">
-                            <a class="collapse-item" href="apriori/apriori_process">Proses Apriori</a>
-                            <a class="collapse-item" href="apriori/apriori_result">Hasil Apriori</a>
-                        </div>
-                    </div>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseLaporan" aria-expanded="true" aria-controls="collapseLaporan">
-                        <i class="fas fa-fw fa-file-alt"></i>
-                        <span>Laporan</span>
-                    </a>
-                    <div id="collapseLaporan" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
-                        <div class="bg-white py-2 collapse-inner rounded">
-                            <h6 class="collapse-header">Gudang</h6>
-                            <a class="collapse-item" href="#">Barang Masuk</a>
-                            <a class="collapse-item" href="#">Barang Keluar</a>
-                            <h6 class="collapse-header">Apriori</h6>
-                            <a class="collapse-item" href="#">Laporan Analisis Apriori</a>
-                        </div>
-                    </div>
-                </li>
+                <a class="nav-link" href="apriori">
+                    <i class="fas fa-fw fa-sync"></i>
+                    <span>Apriori</span>
+                </a>
+            </li>
             </ul>
             <!-- End of Sidebar -->
 
@@ -159,12 +138,20 @@
                             <div class="card-header py-3 col">
                                 <div class="d-flex justify-content-between align-item-center">
                                     <h5 class="m-0 font-weight-bold text-primary text-center">Data Karyawan</h5>
-                                    <a href="{{ route('users.create') }}" class="btn btn-primary btn-icon-split">
-                                        <span class="icon text-white-50">
-                                            <i class="fas fa-add"></i>
-                                        </span>
-                                        <span class="text">Tambah Data</span>
-                                    </a>
+                                    <div class="d-flex">
+                                        <a href="{{ route('users.create') }}" class="btn btn-primary btn-icon-split mr-2">
+                                            <span class="icon text-white-50">
+                                                <i class="fas fa-add"></i>
+                                            </span>
+                                            <span class="text">Tambah Data</span>
+                                        </a>
+                                        <a href="{{ route('pdf.export') }}" class="btn btn-info btn-icon-split">
+                                            <span class="icon text-white-50">
+                                                <i class="fas fa-print"></i>
+                                            </span>
+                                            <span class="text">PDF</span>
+                                        </a>
+                                    </div>
                                 </div>
                             </div>
                             <div class="card-body">

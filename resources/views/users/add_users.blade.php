@@ -92,33 +92,10 @@
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseApriori"
-                    aria-expanded="true" aria-controls="collapseApriori">
+                <a class="nav-link" href="apriori">
                     <i class="fas fa-fw fa-sync"></i>
                     <span>Apriori</span>
                 </a>
-                <div id="collapseApriori" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
-                    <div class="bg-white py-2 collapse-inner rounded">
-                        <a class="collapse-item" href="apriori/apriori_process">Proses Apriori</a>
-                        <a class="collapse-item" href="apriori/apriori_result">Hasil Apriori</a>
-                    </div>
-                </div>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseLaporan"
-                    aria-expanded="true" aria-controls="collapseLaporan">
-                    <i class="fas fa-fw fa-file-alt"></i>
-                    <span>Laporan</span>
-                </a>
-                <div id="collapseLaporan" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
-                    <div class="bg-white py-2 collapse-inner rounded">
-                        <h6 class="collapse-header">Gudang</h6>
-                        <a class="collapse-item" href="#">Barang Masuk</a>
-                        <a class="collapse-item" href="#">Barang Keluar</a>
-                        <h6 class="collapse-header">Apriori</h6>
-                        <a class="collapse-item" href="#">Laporan Analisis Apriori</a>
-                    </div>
-                </div>
             </li>
         </ul>
         <!-- End of Sidebar -->

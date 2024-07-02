@@ -55,7 +55,7 @@
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="users">
+                <a class="nav-link" href="#" data-toggle="modal" data-target="#passwordModal">
                     <i class="fas fa-fw fa-users"></i>
                     <span>Karyawan</span>
                 </a>
@@ -92,33 +92,10 @@
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseApriori"
-                    aria-expanded="true" aria-controls="collapseApriori">
+                <a class="nav-link" href="apriori">
                     <i class="fas fa-fw fa-sync"></i>
                     <span>Apriori</span>
                 </a>
-                <div id="collapseApriori" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
-                    <div class="bg-white py-2 collapse-inner rounded">
-                        <a class="collapse-item" href="apriori/apriori_process">Proses Apriori</a>
-                        <a class="collapse-item" href="apriori/apriori_result">Hasil Apriori</a>
-                    </div>
-                </div>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseLaporan"
-                    aria-expanded="true" aria-controls="collapseLaporan">
-                    <i class="fas fa-fw fa-file-alt"></i>
-                    <span>Laporan</span>
-                </a>
-                <div id="collapseLaporan" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
-                    <div class="bg-white py-2 collapse-inner rounded">
-                        <h6 class="collapse-header">Gudang</h6>
-                        <a class="collapse-item" href="#">Barang Masuk</a>
-                        <a class="collapse-item" href="#">Barang Keluar</a>
-                        <h6 class="collapse-header">Apriori</h6>
-                        <a class="collapse-item" href="#">Laporan Analisis Apriori</a>
-                    </div>
-                </div>
             </li>
         </ul>
         <!-- End of Sidebar -->
@@ -297,6 +274,36 @@
                         @csrf
                         <a class="btn btn-primary" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a>
                     </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Password -->
+    <div class="modal fade" id="passwordModal" tabindex="-1" role="dialog" aria-labelledby="passwordModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="passwordModalLabel">Enter Password</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="passwordForm" action="{{ route('users.password.validate') }}" method="POST">
+                        @csrf
+                        <div class="form-group">
+                            <label for="password">Password</label>
+                            <input type="password" class="form-control" id="password" name="password" required>
+                            @error('password')
+                                <div class="alert alert-danger">{{ $message }}</div>
+                            @enderror
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" onclick="document.getElementById('passwordForm').submit()">Submit</button>
                 </div>
             </div>
         </div>

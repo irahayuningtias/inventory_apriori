@@ -9,15 +9,15 @@
     <meta name="description" content="">
     <meta name="author" content="">
     <link rel="icon" href="{{asset ('assets/image/logo-hari-hari.png') }}">
-    <title>IMS - Edit Barang</title>
+    <title>IMS - Apriori</title>
 
     <!-- Custom fonts for this template-->
-    <link href="{{ asset('assets/vendor/fontawesome-free/css/all.min.css') }}" rel="stylesheet" type="text/css">
+    <link href="{{!! asset('assets/vendor/fontawesome-free/css/all.min.css') !!}}" rel="stylesheet" type="text/css">
     <link
         href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
         rel="stylesheet">
     <!-- Custom styles for this template-->
-    <link href="{{ asset('assets/css/app.css') }}" rel="stylesheet" type="text/css">
+    <link href="{!! asset('assets/css/app.css') !!}" rel="stylesheet" type="text/css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"/>
@@ -60,7 +60,7 @@
                     <span>Karyawan</span>
                 </a>
             </li>
-            <li class="nav-item active">
+            <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseMasterData" aria-expanded="true" aria-controls="collapseMasterData">
                     <i class="fas fa-fw fa-archive"></i>
                     <span>Master Data</span>
@@ -91,7 +91,7 @@
                     <span>Transaksi</span>
                 </a>
             </li>
-            <li class="nav-item">
+            <li class="nav-item active">
                 <a class="nav-link" href="apriori">
                     <i class="fas fa-fw fa-sync"></i>
                     <span>Apriori</span>
@@ -126,7 +126,7 @@
                                     Profile
                                 </a>
                                 <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
+                                <a class="dropdown-item" href="{{ route('logout') }}" data-toggle="modal" data-target="#logoutModal">
                                     <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
                                     Logout
                                 </a>
@@ -141,17 +141,16 @@
                 <div class="container-fluid">
 
                     <!-- Page Heading -->
-                    <h7 class="m-0 font-weight-normal">Master Data / Barang / <a href="{{ route('product.edit', ['product' => $Product->id_product]) }}">Edit Barang</a></h7><br><br>
+                    <h7 class="m-0 font-weight-normal ">Apriori / <a href="{{ route('apriori') }}">Proses Apriori</a></h7><br><br>
+                    <h1 class="h3 mb-2 text-gray-800">Apriori</h1>
+                        <p class="mb-3">Pada fitur ini Anda dapat melakukan analisis pola data transaksi</p><br>
 
                     <!-- DataTales Example -->
                     <div class="card shadow mb-4">
-                        <div class="card-header py-3 col">
-                            <h5 class="m-0 font-weight-bold text-primary">Form Edit Barang</h5>
-                        </div>
                         <div class="card-body">
                             @if ($errors->any())
                             <div class="alert alert-danger">
-                                <strong>Whoops!</strong> There were some problems with your input. <br><br>
+                                <strong>Whoops!</strong> There were some problems with your input.<br><br>
                                 <ul>
                                     @foreach ($errors->all() as $error)
                                         <li>{{ $error }}</li>
@@ -159,56 +158,50 @@
                                 </ul>
                             </div>
                             @endif
-                            <form method="POST" action="{{ route('product.update', ['product' => $Product->id_product]) }}">
+
+                            @if ($message = Session::get('success'))
+                                <div class="alert alert-success">
+                                    <p>{{ $message }}</p>
+                                </div>
+                            @endif
+                            
+                            <form method="POST" action="{{ route('apriori.process') }}">
                                 @csrf
-                                @method('PUT')
                                 <div class="row">
                                     <div class="col-sm-12 col-md-6">
                                         <div class="mb-3">
-                                            <label for="id_category" class="form-label font-weight-bold">Kategori</label>
-                                            <select class="form-control" name="id_category">
-                                                <option disabled value>Pilih Kategori</option>
-                                                <option value="{{ $Product->id_category }}">{{ $Product->category->category_name }}</option>
-                                                @foreach ($categories as $Category)
-                                                    <option value="{{ $Category->id_category }}">{{ $Category->category_name }}</option>
-                                                @endforeach
-                                            </select>
+                                            <label for="start_date" class="form-label font-weight-bold">Tanggal Awal</label>
+                                            <input type="date" class="form-control" name="start_date">
                                         </div>
                                     </div>
                                     <div class="col-sm-12 col-md-6">
                                         <div class="mb-3">
-                                            <label for="id_product" class="form-label font-weight-bold">Kode Barang</label>
-                                            <input type="id_product" class="form-control" name="id_product" value="{{ $Product->id_product }}">
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-12 col-md-6">
-                                         <div class="mb-3">
-                                            <label for="product_name" class="form-label font-weight-bold">Nama Barang</label>
-                                            <input type="product_name" class="form-control" name="product_name" value="{{ $Product->product_name }}">
+                                            <label for="end_date" class="form-label font-weight-bold">Tanggal Akhir</label>
+                                            <input type="date" class="form-control" name="end_date">
                                         </div>
                                     </div>
                                     <div class="col-sm-12 col-md-6">
                                         <div class="mb-3">
-                                            <label for="quantity" class="form-label font-weight-bold">Jumlah</label>
-                                            <input type="quantity" class="form-control" name="quantity" value="{{ $Product->quantity }}">
+                                            <label for="support" class="form-label font-weight-bold">Min. Support</label>
+                                            <input type="number" class="form-control" name="support" min="0" max="1" step=".01" placeholder="Masukkan antara 0.0 s/d 1.0">
                                         </div>
                                     </div>
                                     <div class="col-sm-12 col-md-6">
                                         <div class="mb-3">
-                                            <label for="price" class="form-label font-weight-bold">Harga</label>
-                                            <input type="price" class="form-control" name="price" value="{{ $Product->price }}">
+                                            <label for="confidence" class="form-label font-weight-bold">Min. Confidence</label>
+                                            <input type="number" class="form-control" name="confidence" min="0" max="1" step=".01" placeholder="Masukkan antara 0.0 s/d 1.0">
                                         </div>
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="col-sm-12">
                                         <div class="d-grid gap-2 d-md-block">
-                                            <input type="submit" class="btn btn-primary" value="Simpan"></input>
-                                            <a class="btn btn-danger" href="javascript:window.history.go(-1);" role="button">Batal</a>
+                                            <input type="submit" class="btn btn-primary" value="Analisis"></input>
                                         </div>
                                     </div>    
                                 </div>
                             </form>
+
                         </div>
                     </div>
                 </div>
@@ -303,7 +296,6 @@
 
     <!-- Page level plugins -->
     <script src="{{ asset('assets/vendor/chart.js/Chart.min.js') }}"></script>
-    <script src="{{ asset('assets/js/dataTables.bootstrap4.min.js') }}"></script>
 
     <!-- Page level custom scripts -->
     <script src="{{ asset('assets/js/demo/chart-area-demo.js') }}"></script>

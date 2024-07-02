@@ -153,4 +153,23 @@ class UserController extends Controller
         $users = Auth::user();
         return view('users.account', compact('users'));
     }
+
+    public function showPasswordForm()
+    {
+        return view('users.password_form');
+    }
+
+    public function validatePassword(Request $request)
+    {
+        $request->validate([
+            'password' => 'required',
+        ]);
+
+        if ($request->password === 'harihari2022') {
+            $request->session()->put('users_password', true);
+            return redirect()->route('users');
+        }
+
+        return redirect()->route('users.password.form')->withErrors(['password' => 'Password salah']);
+    }
 }

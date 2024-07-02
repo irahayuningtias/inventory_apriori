@@ -47,7 +47,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="users">
+                    <a class="nav-link" href="#" data-toggle="modal" data-target="#passwordModal">
                         <i class="fas fa-fw fa-users"></i>
                         <span>Karyawan</span>
                     </a>
@@ -72,9 +72,8 @@
                     </a>
                     <div id="collapsePersediaan" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar" style="">
                         <div class="bg-white py-2 collapse-inner rounded">
-                            <h6 class="collapse-header">Arus Persediaan</h6>
-                            <a class="collapse-item" href="supply_in">Barang Masuk</a>
-                            <a class="collapse-item" href="supply_out">Barang Keluar</a>
+                            <a class="collapse-item" href="incoming_product">Barang Masuk</a>
+                            <a class="collapse-item" href="outcoming_product">Barang Keluar</a>
                         </div>
                     </div>
                 </li>
@@ -85,31 +84,10 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseApriori" aria-expanded="true" aria-controls="collapseApriori">
+                    <a class="nav-link" href="apriori">
                         <i class="fas fa-fw fa-sync"></i>
                         <span>Apriori</span>
                     </a>
-                    <div id="collapseApriori" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
-                        <div class="bg-white py-2 collapse-inner rounded">
-                            <a class="collapse-item" href="apriori/apriori_process">Proses Apriori</a>
-                            <a class="collapse-item" href="apriori/apriori_result">Hasil Apriori</a>
-                        </div>
-                    </div>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseLaporan" aria-expanded="true" aria-controls="collapseLaporan">
-                        <i class="fas fa-fw fa-file-alt"></i>
-                        <span>Laporan</span>
-                    </a>
-                    <div id="collapseLaporan" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
-                        <div class="bg-white py-2 collapse-inner rounded">
-                            <h6 class="collapse-header">Gudang</h6>
-                            <a class="collapse-item" href="#">Laporan Harian</a>
-                            <a class="collapse-item" href="#">Laporan Bulanan</a>
-                            <h6 class="collapse-header">Apriori</h6>
-                            <a class="collapse-item" href="#">Laporan Analisis Apriori</a>
-                        </div>
-                    </div>
                 </li>
             </ul>
             <!-- End of Sidebar -->
@@ -130,7 +108,7 @@
                                 </a>
                                 <!-- Dropdown - User Information -->
                                 <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
-                                    <a class="dropdown-item" href="account">
+                                    <a class="dropdown-item" href="profile">
                                         <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
                                         Profile
                                     </a>
@@ -146,9 +124,7 @@
                     <!-- End of Topbar -->
 
                     <div class="container-fluid">
-                        <h7 class="m-0 font-weight-normal">
-                            <a href="product">Barang</a>
-                        </h7><br /><br />
+                        <h7 class="m-0 font-weight-normal">Master Data / <a href="product">Barang</a></h7><br /><br />
 
                         <!-- Page Heading -->
                         <h1 class="h3 mb-2 text-gray-800">Barang</h1>
@@ -160,16 +136,29 @@
                             <div class="card-header py-3 col">
                                 <div class="d-flex justify-content-between align-item-center">
                                     <h5 class="m-0 font-weight-bold text-primary text-center">Data Barang</h5>
-                                    <a href="{{ route('product.create') }}" class="btn btn-primary btn-icon-split">
-                                        <span class="icon text-white-50">
-                                            <i class="fas fa-add"></i>
-                                        </span>
-                                        <span class="text">Tambah Data</span>
-                                    </a>
+                                    <div class="d-flex">
+                                        <a href="{{ route('product.create') }}" class="btn btn-primary btn-icon-split mr-2">
+                                            <span class="icon text-white-50">
+                                                <i class="fas fa-add"></i>
+                                            </span>
+                                            <span class="text">Tambah Data</span>
+                                        </a>
+                                        <a href="{{ route('pdf.export') }}" class="btn btn-info btn-icon-split">
+                                            <span class="icon text-white-50">
+                                                <i class="fas fa-print"></i>
+                                            </span>
+                                            <span class="text">PDF</span>
+                                        </a>
+                                    </div>
                                 </div>
                             </div>
                             <div class="card-body">
                                 <div class="table-responsive">
+                                    @if ($message = Session::get('success'))
+                                    <div class="alert alert-success">
+                                        <p>{{ $message }}</p>
+                                    </div>
+                                    @endif
                                     <table class="table table-striped table-bordered mt-3 mb-3" id="dataTable" style="width: 100%">
                                         <thead>
                                             <tr>
@@ -184,21 +173,11 @@
                                         <tbody>
                                             @foreach ($products as $Product)
                                             <tr>
-                                                <td>
-                                                    {{ $Product->category->category_name }}
-                                                </td>
-                                                <td>
-                                                    {{ $Product->id_product }}
-                                                </td>
-                                                <td>
-                                                    {{ $Product->product_name }}
-                                                </td>
-                                                <td>
-                                                    {{ $Product->quantity }}
-                                                </td>
-                                                <td>
-                                                    {{ number_format($Product->price, 2, ',', '.') }}
-                                                </td>
+                                                <td>{{ $Product->category->category_name }}</td>
+                                                <td>{{ $Product->id_product }}</td>
+                                                <td>{{ $Product->product_name }}</td>
+                                                <td>{{ $Product->quantity }}</td>
+                                                <td>{{ number_format($Product->price, 2, ',', '.') }}</td>
                                                 <td>
                                                     <form action="{{ route('product.destroy', $Product->id_product) }}" method="POST">
                                                         <a href="{{ route('product.show', $Product->id_product) }}" class="btn btn-info btn-circle btn-sm">
@@ -291,6 +270,36 @@
                             @method('DELETE')
                             <a class="btn btn-danger" onclick="event.preventDefault(); document.getElementById('delete-form').submit();">Hapus</a>
                         </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal Password -->
+        <div class="modal fade" id="passwordModal" tabindex="-1" role="dialog" aria-labelledby="passwordModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="passwordModalLabel">Enter Password</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="passwordForm" action="{{ route('users.password.validate') }}" method="POST">
+                            @csrf
+                            <div class="form-group">
+                                <label for="password">Password</label>
+                                <input type="password" class="form-control" id="password" name="password" required>
+                                @error('password')
+                                    <div class="alert alert-danger">{{ $message }}</div>
+                                @enderror
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary" onclick="document.getElementById('passwordForm').submit()">Submit</button>
                     </div>
                 </div>
             </div>

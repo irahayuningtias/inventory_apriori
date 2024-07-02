@@ -22,8 +22,7 @@ class UserSeeder extends Seeder
             'phone' => "081123456789",
             'address' => "Blitar",
             'email'=>"admin@gmail.com",  
-            'password'=> Hash::make('123456'),
-            'role_id' => '1'
+            'password'=> Hash::make('123456')
         ]);
     }
 }
