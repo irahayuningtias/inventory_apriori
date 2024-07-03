@@ -192,6 +192,12 @@
                                             <input type="number" class="form-control" name="confidence" min="0" max="1" step=".01" placeholder="Masukkan antara 0.0 s/d 1.0">
                                         </div>
                                     </div>
+                                    <div class="col-sm-12 col-md-12">
+                                        <div class="mb-3">
+                                            <label for="k" class="form-label font-weight-bold">Jumlah Itemset (k)</label>
+                                            <input type="number" class="form-control" name="k" min="1" placeholder="Masukkan nilai k min. 1">
+                                        </div>
+                                    </div>
                                 </div>
                                 <div class="row">
                                     <div class="col-sm-12">
@@ -201,7 +207,6 @@
                                     </div>    
                                 </div>
                             </form>
-
                         </div>
                     </div>
                 </div>

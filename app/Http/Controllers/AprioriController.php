@@ -4,9 +4,6 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Transaction;
-use Dompdf\Dompdf;
-use Dompdf\Options;
-use PDF;
 
 class AprioriController extends Controller
 {
@@ -22,13 +19,15 @@ class AprioriController extends Controller
             'start_date' => 'required|date',
             'end_date' => 'required|date|after_or_equal:start_date',
             'support' => 'required|numeric|min:0|max:1',
-            'confidence' => 'required|numeric|min:0|max:1'
+            'confidence' => 'required|numeric|min:0|max:1',
+            'k' => 'required|integer|min:1'
         ]);
 
         $startDate = $request->input('start_date');
         $endDate = $request->input('end_date');
         $support = $request->input('support');
         $confidence = $request->input('confidence');
+        $maxK = $request->input('k');
 
         // Ambil data transaksi sesuai rentang tanggal
         $transactions = Transaction::with('details')
@@ -36,14 +35,14 @@ class AprioriController extends Controller
             ->get();
 
         // Proses Apriori dan dapatkan langkah-langkahnya
-        $steps = $this->apriori($transactions, $support, $confidence);
+        $steps = $this->apriori($transactions, $support, $confidence, $maxK);
 
         // Return hasil atau tampilkan di view
         return view('apriori.apriori_result', ['steps' => $steps]);
     }
 
 
-    private function apriori($transactions, $support, $confidence)
+    private function apriori($transactions, $support, $confidence, $maxK)
     {
         $steps = [];
         $transactionCount = count($transactions);
@@ -53,24 +52,27 @@ class AprioriController extends Controller
         $itemset = [];
         foreach ($transactions as $transaction) {
             foreach ($transaction->details as $detail) {
-                if (!isset($itemset[$detail->id_product])) {
-                    $itemset[$detail->id_product] = 1;
+                $productId = $detail->id_product;
+                $productName = $detail->product->product_name;
+                if (!isset($itemset[$productId])) {
+                    $itemset[$productId] = ['count' => 1, 'product_name' => $productName];
                 } else {
-                    $itemset[$detail->id_product]++;
+                    $itemset[$productId]['count']++;
                 }
             }
         }
 
         // Menghitung support untuk 1-itemset
         $itemsetWithSupport = [];
-        foreach ($itemset as $item => $count) {
+        foreach ($itemset as $item => $data) {
             $itemsetWithSupport[$item] = [
-                'count' => $count,
-                'support' => $count / $transactionCount,
-                'product_name' => $products[$item]['product_name'] ?? 'Unknown'
+                'count' => $data['count'],
+                'support' => $data['count'] / $transactionCount,
+                'product_name' => $data['product_name']
             ];
         }
         $steps[] = ['description' => 'Frekuensi 1-itemset', 'data' => $itemsetWithSupport];
+
 
         $frequentItemsets = array_filter($itemsetWithSupport, function($item) use ($minSupportCount) {
             return $item['count'] >= $minSupportCount;
@@ -79,7 +81,7 @@ class AprioriController extends Controller
         $allFrequentItemsets = [$frequentItemsets];
 
         $k = 2;
-        while (!empty($frequentItemsets)) {
+        while (!empty($frequentItemsets) && $k <= $maxK ) {
             // Generate candidate k-itemsets from frequent (k-1)-itemsets
             $candidateItemsets = $this->generateCandidates(array_keys($frequentItemsets), $k);
 
@@ -102,13 +104,19 @@ class AprioriController extends Controller
             // Menghitung support untuk k-itemsets
             $candidateItemsetsWithSupport = [];
             foreach ($candidateItemsetsCount as $candidate => $count) {
+                $candidateNames = array_map(function($id) use ($itemsetWithSupport) {
+                    return $itemsetWithSupport[$id]['product_name'];
+                }, explode(', ', $candidate));
+                
                 $candidateItemsetsWithSupport[$candidate] = [
                     'count' => $count,
-                    'support' => $count / $transactionCount
+                    'support' => $count / $transactionCount,
+                    'product_name' => implode(', ', $candidateNames)
                 ];
             }
             $steps[] = ['description' => "Frekuensi $k-itemset", 'data' => $candidateItemsetsWithSupport];
 
+            
             // Filter candidate k-itemsets by support
             $frequentItemsets = array_filter($candidateItemsetsWithSupport, function($item) use ($minSupportCount) {
                 return $item['count'] >= $minSupportCount;
@@ -134,8 +142,12 @@ class AprioriController extends Controller
                             $remainingCount = $allFrequentItemsets[count($remainingItems) - 1][$remainingKey]['count'];
                             $confidenceValue = $item['count'] / $remainingCount;
                             if ($confidenceValue >= $confidence) {
+                                $remainingNames = array_map(function($id) use ($itemsetWithSupport) {
+                                    return $itemsetWithSupport[$id]['product_name'];
+                                }, $remainingItems);
+
                                 $rules[] = [
-                                    'rule' => "$remainingKey -> $itemPart",
+                                    'rule' =>  "Jika pelanggan membeli " . implode(' dan ', $remainingNames) . ", maka mereka juga cenderung membeli  " . $itemsetWithSupport[$itemPart]['product_name'],
                                     'confidence' => $confidenceValue,
                                     'support' => $item['support']
                                 ];

@@ -152,7 +152,7 @@
                                     @foreach ($steps as $step)
                                         <h3 class="mt-4">{{ $step['description'] }}</h3>
                                         @if ($step['description'] === 'Aturan asosiasi' && !empty($step['data']))
-                                            <table class="table table-striped table-bordered mt-3 mb-3" id="dataTable" style="width: 100%">
+                                            <table class="table table-striped table-bordered mt-3 mb-3" id="dataTable">
                                                 <thead>
                                                     <tr>
                                                         <th>Aturan Asosiasi</th>
@@ -175,6 +175,7 @@
                                                 <thead>
                                                     <tr>
                                                         <th>Itemset</th>
+                                                        <th>Nama Barang</th>
                                                         <th>Frekuensi</th>
                                                         <th>Support</th>
                                                     </tr>
@@ -183,6 +184,7 @@
                                                     @foreach ($step['data'] as $key => $item)
                                                         <tr>
                                                             <td>{{ $key }}</td>
+                                                            <td>{{ $item['product_name'] }}</td>
                                                             <td>{{ $item['count'] }}</td>
                                                             <td>{{ number_format($item['support'] , 2) }}</td>
                                                         </tr>
