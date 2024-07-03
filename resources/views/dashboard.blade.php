@@ -255,7 +255,7 @@
                         </div>
 
                         <!-- Transaction Chart -->
-                        <div class="col-xl-12 col-md-12 mb-4">
+                        <div class="col-xl-6 col-md-12 mb-4">
                             <form action="{{ route('dashboard') }}" method="GET">
                                 <label for="year">Pilih Tahun: </label>
                                 <select name="year" id="year">
@@ -355,9 +355,7 @@
                         <div class="form-group">
                             <label for="password">Password</label>
                             <input type="password" class="form-control" id="password" name="password" required>
-                            @error('password')
-                                <div class="alert alert-danger">{{ $message }}</div>
-                            @enderror
+                            <div id="passwordError" class="alert alert-danger" style="display: none;"></div>
                         </div>
                     </form>
                 </div>

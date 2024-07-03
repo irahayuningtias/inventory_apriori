@@ -176,25 +176,25 @@
                                     <div class="col-sm-12 col-md-6">
                                         <div class="mb-3">
                                             <label for="id_product" class="form-label font-weight-bold">Kode Barang</label>
-                                            <input type="id_product" class="form-control" name="id_product" placeholder="Masukkan ID Barang">
+                                            <input type="text" class="form-control" name="id_product" placeholder="Masukkan kode barang">
                                         </div>
                                     </div>
                                     <div class="col-sm-12 col-md-6">
                                          <div class="mb-3">
                                             <label for="product_name" class="form-label font-weight-bold">Nama Barang</label>
-                                            <input type="product_name" class="form-control" name="product_name" placeholder="Masukkan nama barang">
+                                            <input type="text" class="form-control" name="product_name" placeholder="Masukkan nama barang">
                                         </div>
                                     </div>
                                     <div class="col-sm-12 col-md-6">
                                         <div class="mb-3">
                                             <label for="quantity" class="form-label font-weight-bold">Jumlah</label>
-                                            <input type="quantity" class="form-control" name="quantity" placeholder="Masukkan jumlah barang">
+                                            <input type="number" class="form-control" name="quantity" placeholder="Masukkan jumlah barang">
                                         </div>
                                     </div>
                                     <div class="col-sm-12 col-md-6">
                                         <div class="mb-3">
                                             <label for="price" class="form-label font-weight-bold">Harga</label>
-                                            <input type="price" class="form-control" name="price" placeholder="Masukkan harga barang">
+                                            <input type="number" class="form-control" name="price" placeholder="Masukkan harga barang">
                                         </div>
                                     </div>
                                 </div>

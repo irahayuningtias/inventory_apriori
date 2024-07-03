@@ -202,9 +202,9 @@
                                                     </a>
                                                     @csrf
                                                     @method('DELETE')
-                                                    <a class="btn btn-danger btn-circle btn-sm" data-toggle="modal" data-target="#deleteModal" data-incoming-id="{{ $ip->id }}">
+                                                    <button class="btn btn-danger btn-circle btn-sm" onclick="return confirmDelete()">
                                                         <i class="fas fa-trash"></i>
-                                                    </a>
+                                                    </button>
                                                 </form>
                                             </td>
                                         </tr>
@@ -358,6 +358,13 @@
                 modal.find('#delete-form').attr('action', action);
             });
         });
+    </script>
+
+    <!-- Confirm Delete -->
+    <script>
+        function confirmDelete() {
+            return confirm('Are you sure you want to delete this item?');
+        }
     </script>
 
 </body>

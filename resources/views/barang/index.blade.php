@@ -143,12 +143,6 @@
                                             </span>
                                             <span class="text">Tambah Data</span>
                                         </a>
-                                        <a href="{{ route('pdf.export') }}" class="btn btn-info btn-icon-split">
-                                            <span class="icon text-white-50">
-                                                <i class="fas fa-print"></i>
-                                            </span>
-                                            <span class="text">PDF</span>
-                                        </a>
                                     </div>
                                 </div>
                             </div>
@@ -188,9 +182,9 @@
                                                         </a>
                                                         @csrf
                                                         @method('DELETE')
-                                                        <a class="btn btn-danger btn-circle btn-sm" data-toggle="modal" data-target="#deleteModal" data-product-id="{{ $Product->id_product }}">
+                                                        <button class="btn btn-danger btn-circle btn-sm" onclick="return confirmDelete()">
                                                             <i class="fas fa-trash"></i>
-                                                        </a>
+                                                        </button>
                                                     </form>
                                                 </td>
                                             </tr>
@@ -268,7 +262,7 @@
                         <form id="delete-form" method="POST" action="">
                             @csrf
                             @method('DELETE')
-                            <a class="btn btn-danger" onclick="event.preventDefault(); document.getElementById('delete-form').submit();">Hapus</a>
+                            <button class="btn btn-danger" onclick="event.preventDefault(); document.getElementById('delete-form').submit();">Hapus</button>
                         </form>
                     </div>
                 </div>
@@ -335,7 +329,7 @@
             });
         </script>
 
-        <!-- Confirm Delete -->
+        <!-- Confirm Delete Modal -->
         <script>
             document.addEventListener('DOMContentLoaded', function () {
                 $('#deleteModal').on('show.bs.modal', function (event) {
@@ -346,6 +340,13 @@
                     modal.find('#delete-form').attr('action', action);
                 });
             });
+        </script>
+
+        <!-- Confirm Delete -->
+        <script>
+            function confirmDelete() {
+                return confirm('Are you sure you want to delete this item?');
+            }
         </script>
     </body>
 </html>

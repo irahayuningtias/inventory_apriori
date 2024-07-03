@@ -164,8 +164,8 @@
                                 <div class="row">
                                     <div class="col-sm-12 col-md-12">
                                         <div class="mb-3">
-                                            <label for="id_category" class="form-label font-weight-bold">ID Kategori</label>
-                                            <input type="id_category" class="form-control" name="id_category" placeholder="Masukkan ID Kategori">
+                                            <label for="id_category" class="form-label font-weight-bold">Kode Kategori</label>
+                                            <input type="id_category" class="form-control" name="id_category" placeholder="Masukkan kode kategori">
                                         </div>
                                     </div>
                                     <div class="col-sm-12 col-md-12">

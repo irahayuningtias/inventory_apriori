@@ -150,6 +150,8 @@ class TransactionController extends Controller
             'details.*.quantity' => 'required|integer|min:1',
             'details.*.price' => 'required|numeric|min:0',
             'details.*.id' => 'nullable|numeric',
+            'deleted_details' => 'nullable|array',
+            'deleted_details.*' => 'nullable|numeric|exists:transaction_details,id',
         ]);
 
         try {
@@ -159,6 +161,11 @@ class TransactionController extends Controller
                 'transaction_date' => $request->input('transaction_date'),
                 'total_amount' => 0,
             ]);
+
+            // Delete removed details
+            if ($request->has('deleted_details')) {
+                TransactionDetail::whereIn('id', $request->input('deleted_details'))->delete();
+            }
 
             $total_amount = 0;
             $detailTransctions = [];

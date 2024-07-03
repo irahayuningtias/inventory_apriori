@@ -145,12 +145,6 @@
                                             </span>
                                             <span class="text">Tambah Data</span>
                                         </a>
-                                        <a href="{{ route('pdf.export') }}" class="btn btn-info btn-icon-split">
-                                            <span class="icon text-white-50">
-                                                <i class="fas fa-print"></i>
-                                            </span>
-                                            <span class="text">PDF</span>
-                                        </a>
                                     </div>
                                 </div>
                             </div>
@@ -185,14 +179,14 @@
                                                         <a href="{{ route('users.show', $User->id) }}" class="btn btn-info btn-circle btn-sm">
                                                             <i class="fas fa-info-circle"></i>
                                                         </a>
-                                                        <!--<a href="{{ route('users.edit', $User->id) }}" class="btn btn-warning btn-circle btn-sm">
-                                                            <i class="fas fa-edit"></i>
-                                                        </a>-->
                                                         @csrf
                                                         @method('DELETE')
-                                                        <a class="btn btn-danger btn-circle btn-sm" data-toggle="modal" data-target="#deleteModal">
+                                                        <button class="btn btn-danger btn-circle btn-sm" onclick="return confirmDelete()">
                                                             <i class="fas fa-trash"></i>
-                                                        </a>
+                                                        </button>
+                                                        <!--<a class="btn btn-danger btn-circle btn-sm" data-toggle="modal" data-target="#deleteModal">
+                                                            <i class="fas fa-trash"></i>
+                                                        </a> -->
                                                     </form>
                                                 </td>
                                             </tr>
@@ -264,7 +258,7 @@
                         Are you sure you want to delete this item?
                     </div>
                     <div class="modal-footer">
-                        <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                        <button class="btn btn-secondary" type="button" data-dismiss="modal">Batal</button>
                         <form id="delete-form" method="POST" action="{{ route('users.destroy', $User->id) }}">
                             @csrf
                             @method('DELETE')
@@ -297,15 +291,17 @@
         <script src="https://cdn.datatables.net/2.0.7/js/dataTables.js"></script>
         <script src="https://cdn.datatables.net/2.0.7/js/dataTables.bootstrap4.js"></script>
 
-        <!-- perlu penambahan cdn -->
-        <!--<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-Fy6S3B9q64WdZWQUiU+q4/2Lc9npb8tCaSX9FK7E8HnRr0Jz8D6OP9dO5Vg3Q9ct" crossorigin="anonymous"></script>
-    end of perlu penambahan cdn -->
-
         <script>
             $(document).ready(function () {
                 $("#dataTable").DataTable();
             });
+        </script>
+
+        <!-- Confirm Delete -->
+        <script>
+            function confirmDelete() {
+                return confirm('Are you sure you want to delete this item?');
+            }
         </script>
     </body>
 </html>

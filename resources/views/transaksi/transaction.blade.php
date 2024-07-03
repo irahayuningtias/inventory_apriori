@@ -170,12 +170,10 @@
                                 <table class="table table-striped table-bordered mt-3 mb-3" id="dataTable" style="width:100%">
                                     <thead>
                                         <tr>
-                                            <th>ID Transaksi</th>
+                                            <th>Kode Transaksi</th>
                                             <th>Tanggal</th>
                                             <th>Nama Barang</th>
-                                            <th>Total Bayar
-                                                (Rp)
-                                            </th>
+                                            <th>Total Bayar (Rp)</th>
                                             <th>Aksi</th>
                                         </tr>
                                     </thead>
@@ -202,18 +200,13 @@
                                                     </a>
                                                     @csrf
                                                     @method('DELETE')
-                                                    <a class="btn btn-danger btn-circle btn-sm" data-toggle="modal" data-target="#deleteModal" data-transaction-id="{{ $tx->id }}">
+                                                    <button class="btn btn-danger btn-circle btn-sm" onclick="return confirmDelete()">
                                                         <i class="fas fa-trash"></i>
-                                                    </a>
+                                                    </button>
+                                                    <!--<a class="btn btn-danger btn-circle btn-sm" data-toggle="modal" data-target="#deleteModal" data-transaction-id="{{ $tx->id }}">
+                                                        <i class="fas fa-trash"></i>
+                                                    </a>-->
                                                 </form>
-
-                                                <!-- Code Edit -->
-                                                <!-- <a href="{{ route('transaction.edit', $tx->id) }}" class="btn btn-primary btn-icon-split">
-                                                    <span class="icon text-white-50">
-                                                        <i class="fas fa-edit"></i>
-                                                    </span>
-                                                    <span class="text">Edit</span>
-                                                </a> -->
                                             </td>
                                         @endforeach
                                     </tbody>
@@ -349,11 +342,6 @@
     <script src="https://cdn.datatables.net/2.0.7/js/dataTables.js"></script>
     <script src="https://cdn.datatables.net/2.0.7/js/dataTables.bootstrap4.js"></script>
 
-    <!-- perlu penambahan cdn -->
-    <!--<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-Fy6S3B9q64WdZWQUiU+q4/2Lc9npb8tCaSX9FK7E8HnRr0Jz8D6OP9dO5Vg3Q9ct" crossorigin="anonymous"></script>
-    end of perlu penambahan cdn -->
-
     <!-- Confirm Delete -->
     <script>
         document.addEventListener('DOMContentLoaded', function () {
@@ -371,6 +359,13 @@
         $(document).ready(function () {
            $("#dataTable").DataTable();
         });
+    </script>
+
+    <!-- Confirm Delete -->
+    <script>
+        function confirmDelete() {
+            return confirm('Are you sure you want to delete this item?');
+        }
     </script>
 
 </body>

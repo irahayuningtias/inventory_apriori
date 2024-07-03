@@ -148,12 +148,6 @@
                                             </span>
                                             <span class="text">Tambah Data</span>
                                         </a>
-                                        <a href="{{ route('pdf.export') }}" class="btn btn-info btn-icon-split">
-                                            <span class="icon text-white-50">
-                                                <i class="fas fa-print"></i>
-                                            </span>
-                                            <span class="text">PDF</span>
-                                        </a>
                                     </div>
                                 </div>
                             </div>
@@ -168,7 +162,7 @@
                                     <table class="table table-striped table-bordered mt-3 mb-3" id="dataTable" style="width: 100%">
                                         <thead>
                                             <tr>
-                                                <th>ID Kategori</th>
+                                                <th>Kode Kategori</th>
                                                 <th>Kategori</th>
                                                 <th>Aksi</th>
                                             </tr>
@@ -192,9 +186,9 @@
                                                         </a>
                                                         @csrf
                                                         @method('DELETE')
-                                                        <a class="btn btn-danger btn-circle btn-sm" data-toggle="modal" data-target="#deleteModal">
+                                                        <button class="btn btn-danger btn-circle btn-sm" onclick="return confirmDelete()">
                                                             <i class="fas fa-trash"></i>
-                                                        </a>
+                                                        </button>
                                                     </form>
                                                 </td>
                                             </tr>
@@ -337,7 +331,7 @@
         <!-- Confirm Delete -->
         <script>
             function confirmDelete() {
-                return confirm("Are you sure you want to delete this item?");
+                return confirm('Are you sure you want to delete this item?');
             }
         </script>
 

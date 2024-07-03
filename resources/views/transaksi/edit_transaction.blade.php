@@ -205,7 +205,7 @@
                                                     <input type="text" name="details[{{ $index }}][subtotal]" class="form-control subtotal" value="{{ $detail->subtotal }}" readonly>
                                                 </td>
                                                 <td>
-                                                    <button class="btn btn-danger remove_item" type="button">Hapus</button>
+                                                    <button class="btn btn-danger remove_item" type="button" data-id="{{ $detail->id }}">Hapus</button>
                                                 </td>
                                             </tr> 
                                             @endforeach
@@ -261,7 +261,7 @@
                                                     <input type="text" name="details[${index}][subtotal]" readonly class="form-control subtotal">
                                                 </td>
                                                 <td>
-                                                    <button class="btn btn-danger remove_item" type="button">Hapus</button>
+                                                    <button class="btn btn-danger remove_item" type="button" data-id="{{ $detail->id }}">Hapus</button>
                                                 </td>
                                             </tr>
                                         `;
@@ -290,6 +290,10 @@
 
                                     // Fungsi untuk menghapus produk
                                     $(document).on('click', '.remove_item', function() {
+                                        var detailId = $(this).data('id');
+                                        if (detailId) {
+                                            $('#product_table').append('<input type="hidden" name="deleted_details[]" value="' + detailId + '">');
+                                        }
                                         $(this).closest('tr').remove();
                                     });
 

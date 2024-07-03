@@ -129,6 +129,8 @@ class OutcomingProductController extends Controller
             'details.*.quantity' => 'required|integer|min:0',
             'details.*.description' => 'required',
             'details.*.id' => 'nullable|numeric',
+            'deleted_details' => 'nullable|array',
+            'deleted_details.*' => 'nullable|numeric|exists:incoming_product_details,id',
         ]);
 
         try {
@@ -138,7 +140,10 @@ class OutcomingProductController extends Controller
                 'outcoming_date' => $request->input('outcoming_date'),
             ]);
 
-            $detailOutcoming = [];
+            // Delete removed details
+            if ($request->has('deleted_details')) {
+                OutcomingProductDetail::whereIn('id', $request->input('deleted_details'))->delete();
+            }
 
             foreach ($request->input('details') as $detail) {
                 $products = Product::find($detail['id_product']);

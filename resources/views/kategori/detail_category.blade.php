@@ -150,7 +150,7 @@
                         </div>
                         <div class="card-body">
                             <ul class="list-group list-group-flush">
-                                <li class="list-group-item"><b>ID Kategori: </b>{{ $Category->id_category }}</li>
+                                <li class="list-group-item"><b>Kode Kategori: </b>{{ $Category->id_category }}</li>
                                 <li class="list-group-item"><b>Kategori: </b>{{ $Category->category_name }}</li>
                             </ul>
                         </div>

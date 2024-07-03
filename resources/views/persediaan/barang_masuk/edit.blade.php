@@ -201,7 +201,7 @@
                                                     <input type="text" name="details[{{ $index }}][description]" class="form-control description" value="{{ $detail->description }}">
                                                 </td>
                                                 <td>
-                                                    <button class="btn btn-danger remove_item" type="button">Hapus</button>
+                                                    <button class="btn btn-danger remove_item" type="button" data-id="{{ $detail->id }}">Hapus</button>
                                                 </td>
                                             </tr>
                                             @endforeach
@@ -253,7 +253,7 @@
                                                     <input type="text" name="details[${index}][description]" class="form-control description">
                                                 </td>
                                                 <td>
-                                                    <button class="btn btn-danger remove_item" type="button">Hapus</button>
+                                                    <button class="btn btn-danger remove_item" type="button" data-id="{{ $detail->id }}">Hapus</button>
                                                 </td>
                                             </tr>
                                         `;
@@ -301,6 +301,10 @@
 
                                     // Fungsi untuk menghapus produk
                                     $(document).on('click', '.remove_item', function() {
+                                        var detailId = $(this).data('id');
+                                        if (detailId) {
+                                            $('#product_table').append('<input type="hidden" name="deleted_details[]" value="' + detailId + '">');
+                                        }
                                         $(this).closest('tr').remove();
                                     });
                                 });

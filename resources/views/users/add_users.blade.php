@@ -165,13 +165,13 @@
                                     <div class="col-sm-12 col-md-6">
                                         <div class="mb-3">
                                             <label for="name" class="form-label font-weight-bold">Nama</label>
-                                            <input type="name" class="form-control" name="name" placeholder="Masukkan nama Anda">
+                                            <input type="name" class="form-control" name="name" placeholder="Masukkan nama">
                                         </div>
                                     </div>
                                     <div class="col-sm-12 col-md-6">
                                         <div class="mb-3">
                                             <label for="nik" class="form-label font-weight-bold">NIK</label>
-                                            <input type="nik" class="form-control" name="nik" placeholder="Masukkan NIK Anda">
+                                            <input type="nik" class="form-control" name="nik" placeholder="Masukkan NIK">
                                         </div>
                                     </div>
                                     <div class="col-sm-12 col-md-6">
@@ -187,13 +187,13 @@
                                     <div class="col-sm-12 col-md-6">
                                         <div class="mb-3">
                                             <label for="address" class="form-label font-weight-bold">Alamat</label>
-                                            <input type="address" class="form-control" name="address" placeholder="Masukkan Alamat Anda">
+                                            <input type="address" class="form-control" name="address" placeholder="Masukkan alamat">
                                         </div>
                                     </div>
                                     <div class="col-sm-12 col-md-6">
                                         <div class="mb-3">
                                             <label for="phone" class="form-label font-weight-bold">No. Telepon</label>
-                                            <input type="phone" class="form-control" name="phone" placeholder="Masukkan No. Telepon Anda">
+                                            <input type="phone" class="form-control" name="phone" placeholder="Masukkan no. telepon">
                                         </div>
                                     </div>
                                     <div class="col-sm-12 col-md-6">
@@ -205,7 +205,7 @@
                                     <div class="col-sm-12 col-md-6">
                                         <div class="mb-3">
                                             <label for="password" class="form-label font-weight-bold">Password</label>
-                                            <input type="password" class="form-control" name="password" placeholder="Masukkan password Anda">
+                                            <input type="password" class="form-control" name="password" placeholder="Masukkan password">
                                         </div>
                                     </div>
                                 </div>
