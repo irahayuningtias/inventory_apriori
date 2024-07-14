@@ -255,7 +255,7 @@
                         </div>
 
                         <!-- Transaction Chart -->
-                        <div class="col-xl-6 col-md-12 mb-4">
+                        <div class="col-xl-6 col-md-6 mb-4">
                             <form action="{{ route('dashboard') }}" method="GET">
                                 <label for="year">Pilih Tahun: </label>
                                 <select name="year" id="year">
@@ -268,6 +268,12 @@
                                 </button>
                             </form>
                             <canvas id="myChart"></canvas>
+                        </div>
+
+                        <!-- Income Chart -->
+                        <div class="col-xl-6 col-md-6 mt-2">
+                            <br>
+                            <canvas id="myChart2"></canvas>
                         </div>
 
                         <script>
@@ -289,6 +295,25 @@
                             });
                         </script>
                         <!-- End of Transaction Chart -->
+
+                        <script>
+                            document.addEventListener('DOMContentLoaded', (event) => {
+                                var ctx = document.getElementById('myChart2').getContext('2d');
+                                var chartIncomeData = @json($chartIncomeData);
+
+                                var myChart = new Chart(ctx, {
+                                    type: 'bar',
+                                    data: chartIncomeData,
+                                    options: {
+                                        scales: {
+                                            y: {
+                                                beginAtZero: true
+                                            }
+                                        }
+                                    }
+                                });
+                            });
+                        </script>
                     </div>
                     <!-- Content Row -->
 
@@ -388,10 +413,11 @@
     <script src="https://cdn.datatables.net/2.0.7/js/dataTables.js"></script>
     <script src="https://cdn.datatables.net/2.0.7/js/dataTables.bootstrap4.js"></script>
 
-    <!-- perlu penambahan cdn -->
-    <!--<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-Fy6S3B9q64WdZWQUiU+q4/2Lc9npb8tCaSX9FK7E8HnRr0Jz8D6OP9dO5Vg3Q9ct" crossorigin="anonymous"></script>
-    end of perlu penambahan cdn -->
+    <script>
+        $(document).ready(function () {
+            $("#dataTable").DataTable();
+        });
+    </script>
 
 </body>
 

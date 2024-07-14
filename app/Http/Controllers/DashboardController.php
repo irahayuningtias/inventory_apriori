@@ -9,6 +9,7 @@ use App\Models\Transaction;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 
 class DashboardController extends Controller
 {
@@ -27,17 +28,19 @@ class DashboardController extends Controller
                         ->orderBy('year', 'desc')
                         ->pluck('year');
         
-        $txChart = Transaction::selectRaw('MONTH(transaction_date) as month, COUNT(*) as count')
+        $txChart = Transaction::selectRaw('MONTH(transaction_date) as month, COUNT(*) as count, SUM(total_amount) as total_income')
                         ->whereYear('transaction_date', $selectedYear)
                         ->groupBy('month')
                         ->orderBy('month')
                         ->get();
         $labels = [];
         $data = [];
+        $income = [];
 
         foreach ($txChart as $tx) {
             $labels[] = Carbon::create()->month($tx->month)->format('F');
             $data[] = $tx->count;
+            $income[] = $tx->total_income;
         }
 
         $chartTxData = [
@@ -53,9 +56,25 @@ class DashboardController extends Controller
                 ],
             ],
         ];
+
+        $chartIncomeData = [
+            'labels' => $labels,
+            'datasets' => [
+                [
+                    'label' => 'Income per Month',
+                    'backgroundColor' => 'rgba(75, 192, 192, 0.2)',
+                    'borderColor' => 'rgba(75, 192, 192, 1)',
+                    'borderWidth' => 1,
+                    'data' => $income,
+                    'fill' => false,
+                ],
+            ],
+        ];
         // end of transaction chart
 
-        return view('dashboard', compact('users', 'categories', 'products','transactions', 'years', 'selectedYear', 'chartTxData'));
+        
+
+        return view('dashboard', compact('users', 'categories', 'products','transactions', 'years', 'selectedYear', 'chartTxData', 'chartIncomeData'));
     }
 
 }

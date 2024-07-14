@@ -171,7 +171,7 @@
                                                 </tbody>
                                             </table>
                                         @elseif (is_array($step['data']) && !empty($step['data']))
-                                            <table class="table table-striped table-bordered mt-3 mb-3" id="dataTable" style="width: 100%">
+                                            <table class="table table-striped table-bordered mt-3 mb-3" id="dataTable">
                                                 <thead>
                                                     <tr>
                                                         <th>Itemset</th>
