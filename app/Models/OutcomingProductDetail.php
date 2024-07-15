@@ -16,6 +16,7 @@ class OutcomingProductDetail extends Model
         'id_product',
         'quantity',
         'description',
+        'current_qty'
     ];
 
     public function outcomingProduct()

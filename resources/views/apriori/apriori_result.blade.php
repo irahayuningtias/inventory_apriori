@@ -147,6 +147,25 @@
 
                     <!-- DataTales Example -->
                     <div class="card shadow mb-4">
+                        <div class="card-header py-3 col">
+                            <div class="d-flex justify-content-between align-item-center">
+                                <h5 class="m-0 font-weight-bold text-primary text-center">Hasil Apriori</h5>
+                                <form action="{{ route('apriori.export') }}" method="POST">
+                                    @csrf
+                                    <input type="hidden" name="start_date" value="{{ request('start_date') }}">
+                                    <input type="hidden" name="end_date" value="{{ request('end_date') }}">
+                                    <input type="hidden" name="support" value="{{ request('support') }}">
+                                    <input type="hidden" name="confidence" value="{{ request('confidence') }}">
+                                    <input type="hidden" name="k" value="{{ request('k') }}">
+                                    <button type="submit" class="btn btn-info btn-icon-split">
+                                        <span class="icon text-white-50">
+                                            <i class="fas fa-print"></i>
+                                        </span>
+                                        <span class="text">Export</span>
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
                         <div class="card-body">
                             <div class="table-responsive">
                                     @foreach ($steps as $step)

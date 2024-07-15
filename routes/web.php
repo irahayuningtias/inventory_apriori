@@ -34,44 +34,51 @@ Route::middleware(['auth'])->group(function() {
 
     Route::get('/users/password', [UserController::class, 'showPasswordForm'])->name('users.password.form');
     Route::post('/users/password', [UserController::class, 'validatePassword'])->name('users.password.validate');
-
     Route::resource('users', UserController::class);
     Route::get('/users', [UserController::class, 'index'])->name('users');
-    Route::get('/pdf', [UserController::class, 'exportPdf'])->name('pdf.export');
     Route::get('/profile', [UserController::class, 'profile'])->name('users.profile');
 
     //category
     Route::resource('category', CategoryController::class);
     Route::get('/category', [CategoryController::class, 'index'])->name('category');
-    Route::get('/pdf', [CategoryController::class, 'exportPdf'])->name('pdf.export');
-    Route::get('/category/search', [CategoryController::class, 'search'])->name('category.search');
+    Route::get('/category_export', [CategoryController::class, 'export'])->name('category.export');
+    Route::post('/category_import', [CategoryController::class, 'import'])->name('category.import');
+    Route::post('/category_search', [CategoryController::class, 'search'])->name('category.search');
 
 
     //product
     Route::resource('product', ProductController::class);
     Route::get('/product', [ProductController::class, 'index'])->name('product');
-    Route::get('/pdf', [ProductController::class, 'exportPdf'])->name('pdf.export');
+    Route::get('/product_export', [ProductController::class, 'export'])->name('product.export');
+    Route::post('/product_import', [ProductController::class, 'import'])->name('product.import');
     Route::get('/product/search', [ProductController::class, 'search'])->name('product.search');
 
 
     // Barang Masuk
     Route::resource('incoming_product', IncomingProductController::class);
     Route::get('/incoming_product', [IncomingProductController::class, 'index'])->name('incoming_product');
+    Route::get('/incoming_product_export', [IncomingProductController::class, 'export'])->name('incoming_product.export');
+    Route::post('/incoming_product_import', [IncomingProductController::class, 'import'])->name('incoming_product.import');
 
 
     // Barang Keluar
     Route::resource('outcoming_product', OutcomingProductController::class);
     Route::get('/outcoming_product', [OutcomingProductController::class, 'index'])->name('outcoming_product');
+    Route::get('/outcoming_product_export', [OutcomingProductController::class, 'export'])->name('outcoming_product.export');
+    Route::post('/outcoming_product_import', [OUtcomingProductController::class, 'import'])->name('outcoming_product.import');
 
 
     //transaction
     Route::resource('transaction', TransactionController::class);
     Route::get('/transaction', [TransactionController::class, 'index'])->name('transaction');
+    Route::get('/transaction_export', [TransactionController::class, 'export'])->name('transaction.export');
+    Route::post('/transaction_import', [TransactionController::class, 'import'])->name('transaction.import');
     Route::get('/search_transaction', [TransactionController::class, 'search'])->name('search');
 
     // Apriori
     Route::get('apriori', [AprioriController::class, 'index'])->name('apriori');
     Route::post('/apriori/result', [AprioriController::class, 'process'])->name('apriori.process');
+    Route::post('/apriori_export', [AprioriController::class, 'export'])->name('apriori.export');
 });
 
 

@@ -253,7 +253,7 @@
                                                     <input type="text" name="details[${index}][description]" class="form-control description">
                                                 </td>
                                                 <td>
-                                                    <button class="btn btn-danger remove_item" type="button" data-id="{{ $detail->id }}">Hapus</button>
+                                                    <button class="btn btn-danger remove_item" type="button">Hapus</button>
                                                 </td>
                                             </tr>
                                         `;

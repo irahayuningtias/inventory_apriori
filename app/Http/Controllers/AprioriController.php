@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Transaction;
+use App\Exports\AprioriStepsExport;
+use Maatwebsite\Excel\Facades\Excel;
 
 class AprioriController extends Controller
 {
@@ -11,7 +13,7 @@ class AprioriController extends Controller
     {
         return view('apriori.apriori');
     }
-    
+
     public function process(Request $request)
     {
         // Validasi input user
@@ -36,9 +38,39 @@ class AprioriController extends Controller
 
         // Proses Apriori dan dapatkan langkah-langkahnya
         $steps = $this->apriori($transactions, $support, $confidence, $maxK);
+        // dd($steps);
 
         // Return hasil atau tampilkan di view
         return view('apriori.apriori_result', ['steps' => $steps]);
+    }
+
+    public function export(Request $request)
+    {
+        // Validasi input user
+        $request->validate([
+            'start_date' => 'required|date',
+            'end_date' => 'required|date|after_or_equal:start_date',
+            'support' => 'required|numeric|min:0|max:1',
+            'confidence' => 'required|numeric|min:0|max:1',
+            'k' => 'required|integer|min:1'
+        ]);
+
+        $startDate = $request->input('start_date');
+        $endDate = $request->input('end_date');
+        $support = $request->input('support');
+        $confidence = $request->input('confidence');
+        $maxK = $request->input('k');
+
+        // Ambil data transaksi sesuai rentang tanggal
+        $transactions = Transaction::with('details')
+        ->whereBetween('transaction_date', [$startDate, $endDate])
+            ->get();
+
+        // Proses Apriori dan dapatkan langkah-langkahnya
+        $steps = $this->apriori($transactions, $support, $confidence, $maxK);
+
+        // Ekspor ke Excel
+        return Excel::download(new AprioriStepsExport($steps), 'apriori_steps.xlsx');
     }
 
 
@@ -74,14 +106,14 @@ class AprioriController extends Controller
         $steps[] = ['description' => 'Frekuensi 1-itemset', 'data' => $itemsetWithSupport];
 
 
-        $frequentItemsets = array_filter($itemsetWithSupport, function($item) use ($minSupportCount) {
+        $frequentItemsets = array_filter($itemsetWithSupport, function ($item) use ($minSupportCount) {
             return $item['count'] >= $minSupportCount;
         });
 
         $allFrequentItemsets = [$frequentItemsets];
 
         $k = 2;
-        while (!empty($frequentItemsets) && $k <= $maxK ) {
+        while (!empty($frequentItemsets) && $k <= $maxK) {
             // Generate candidate k-itemsets from frequent (k-1)-itemsets
             $candidateItemsets = $this->generateCandidates(array_keys($frequentItemsets), $k);
 
@@ -104,10 +136,10 @@ class AprioriController extends Controller
             // Menghitung support untuk k-itemsets
             $candidateItemsetsWithSupport = [];
             foreach ($candidateItemsetsCount as $candidate => $count) {
-                $candidateNames = array_map(function($id) use ($itemsetWithSupport) {
+                $candidateNames = array_map(function ($id) use ($itemsetWithSupport) {
                     return $itemsetWithSupport[$id]['product_name'];
                 }, explode(', ', $candidate));
-                
+
                 $candidateItemsetsWithSupport[$candidate] = [
                     'count' => $count,
                     'support' => $count / $transactionCount,
@@ -116,9 +148,9 @@ class AprioriController extends Controller
             }
             $steps[] = ['description' => "Frekuensi $k-itemset", 'data' => $candidateItemsetsWithSupport];
 
-            
+
             // Filter candidate k-itemsets by support
-            $frequentItemsets = array_filter($candidateItemsetsWithSupport, function($item) use ($minSupportCount) {
+            $frequentItemsets = array_filter($candidateItemsetsWithSupport, function ($item) use ($minSupportCount) {
                 return $item['count'] >= $minSupportCount;
             });
 
@@ -142,7 +174,7 @@ class AprioriController extends Controller
                             $remainingCount = $allFrequentItemsets[count($remainingItems) - 1][$remainingKey]['count'];
                             $confidenceValue = $item['count'] / $remainingCount;
                             if ($confidenceValue >= $confidence) {
-                                $remainingNames = array_map(function($id) use ($itemsetWithSupport) {
+                                $remainingNames = array_map(function ($id) use ($itemsetWithSupport) {
                                     return $itemsetWithSupport[$id]['product_name'];
                                 }, $remainingItems);
 

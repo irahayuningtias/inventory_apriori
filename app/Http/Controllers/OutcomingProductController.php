@@ -7,6 +7,9 @@ use App\Models\OutcomingProductDetail;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Imports\OutcomingProductsImport;
+use App\Exports\OutcomingProductsExport;
 
 class OutcomingProductController extends Controller
 {
@@ -18,6 +21,11 @@ class OutcomingProductController extends Controller
     public function index()
     {
         $outcoming_products = OutcomingProduct::with('details')->get();
+
+        // Format the incoming_date
+        foreach ($outcoming_products as $op) {
+            $op->formatted_date = \Carbon\Carbon::parse($op->outcoming_date)->format('d M Y');
+        }
        
         return view('persediaan.barang_keluar.index', compact('outcoming_products'));
     }
@@ -64,13 +72,18 @@ class OutcomingProductController extends Controller
         foreach ($request->input('details') as $detail) {
             $products = Product::find($detail['id_product']);
 
+            // Update product quantity
+            $product = Product::find($detail['id_product']);
+            $product->quantity -= $detail['quantity'];
+            $product->save();
+
             $detailOutcoming[] = $outcomings->details()->create([
                 'id_incoming' => $outcomings->id,
                 'id_product' => $detail['id_product'],
                 'quantity' => $detail['quantity'],
                 'description' => $detail['description'],
+                'current_qty' => $product->quantity,
             ]);
-
         }
 
         DB::commit();
@@ -151,18 +164,31 @@ class OutcomingProductController extends Controller
                 if (isset($detail['id']) && !empty($detail['id'])) {
                     $outDetailModel = OutcomingProductDetail::find($detail['id']);
                     if ($outDetailModel) {
+                        // Rollback old quantity
+                        $products->quantity += $outDetailModel->quantity;
+
+                        // Update product quantity
+                        $products->quantity -= $detail['quantity'];
+                        $products->save();
+
                         $outDetailModel->update([
                             'id_outcoming' => $outcoming_product->id,
                             'id_product' => $detail['id_product'],
                             'quantity' => $detail['quantity'],
                             'description' => $detail['description'],
+                            'current_qty' => $products->quantity,
                         ]);
                     }
                 } else {
+                    // If detail doesn't exist, create new detail
+                    $products->quantity -= $detail['quantity'];
+                    $products->save();
+
                     $createdOutDetail = OutcomingProductDetail::create([
                         'id_product' => $detail['id_product'],
                         'quantity' => $detail['quantity'],
                         'description' => $detail['description'],
+                        'current_qty' => $products->quantity,
                         'id_outcoming' => $outcoming_product->id,
                     ]);
                 }
@@ -192,5 +218,22 @@ class OutcomingProductController extends Controller
         OutcomingProduct::find($id)->delete();
         return redirect()->route('outcoming_product')
             ->with('success', 'Barang Keluar Berhasil Dihapus');
+    }
+
+    public function import(Request $request)
+    {
+        $request->validate([
+            'file' => 'required|mimes:xls,xlsx,csv'
+        ]);
+
+        Excel::import(new OutcomingProductsImport, $request->file('file'));
+
+        return redirect()->route('outcoming_product')
+            ->with('success', 'Barang Keluar Berhasil Diimport');
+    }
+
+    public function export()
+    {
+        return Excel::download(new OutcomingProductsExport, 'outcoming_products.xlsx');
     }
 }

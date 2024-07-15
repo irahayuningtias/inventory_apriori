@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\Product;
 use App\Models\Category;
 use Illuminate\Http\Request;
+use App\Imports\ProductsImport;
+use App\Exports\ProductsExport;
+use Maatwebsite\Excel\Facades\Excel;
 
 
 class ProductController extends Controller
@@ -127,5 +130,21 @@ class ProductController extends Controller
         $search = $request->input('q');
         $products = Product::where('product_name', 'LIKE', "%$search%")->get();
         return response()->json($products);
+    }
+
+    public function import(Request $request)
+    {
+        $request->validate([
+            'file' => 'required|mimes:xls,xlsx,csv'
+        ]);
+
+        Excel::import(new ProductsImport, $request->file('file')->store('temp'));
+
+        return redirect()->route('product')->with('success', 'Barang Berhasil Diimpor');
+    }
+
+    public function export()
+    {
+        return Excel::download(new ProductsExport, 'products.xlsx');
     }
 }

@@ -7,6 +7,10 @@ use App\Models\IncomingProductDetail;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Imports\IncomingProductsImport;
+use App\Exports\IncomingProductsExport;
+
 
 class IncomingProductController extends Controller
 {
@@ -18,6 +22,11 @@ class IncomingProductController extends Controller
     public function index()
     {
         $incoming_products = IncomingProduct::with('details')->get();
+
+        // Format the incoming_date
+        foreach ($incoming_products as $ip) {
+            $ip->formatted_date = \Carbon\Carbon::parse($ip->incoming_date)->format('d M Y');
+        }
        
         return view('persediaan.barang_masuk.index', compact('incoming_products'));
     }
@@ -52,6 +61,7 @@ class IncomingProductController extends Controller
             'incoming_date' => 'required|date',
             'details.*.id_product' => 'required|exists:product,id_product',
             'details.*.quantity' => 'required|integer|min:0',
+            'details.*.qurrent_qty',
             'details.*.description' => 'required',
         ]);
 
@@ -64,13 +74,18 @@ class IncomingProductController extends Controller
         foreach ($request->input('details') as $detail) {
             $products = Product::find($detail['id_product']);
 
+            // Update product quantity
+            $product = Product::find($detail['id_product']);
+            $product->quantity += $detail['quantity'];
+            $product->save();
+
             $detailIncoming[] = $incomings->details()->create([
                 'id_incoming' => $incomings->id,
                 'id_product' => $detail['id_product'],
                 'quantity' => $detail['quantity'],
                 'description' => $detail['description'],
+                'current_qty' => $products->quantity,
             ]);
-
         }
 
         DB::commit();
@@ -115,7 +130,7 @@ class IncomingProductController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-   public function update(Request $request, IncomingProduct $incoming_product)
+    public function update(Request $request, IncomingProduct $incoming_product)
     {
         DB::beginTransaction();
 
@@ -151,18 +166,31 @@ class IncomingProductController extends Controller
                 if (isset($detail['id']) && !empty($detail['id'])) {
                     $inDetailModel = IncomingProductDetail::find($detail['id']);
                     if ($inDetailModel) {
+                        // Rollback old quantity
+                        $products->quantity -= $inDetailModel->quantity;
+
+                        // Update product quantity
+                        $products->quantity += $detail['quantity'];
+                        $products->save();
+
                         $inDetailModel->update([
                             'id_incoming' => $incoming_product->id,
                             'id_product' => $detail['id_product'],
                             'quantity' => $detail['quantity'],
                             'description' => $detail['description'],
+                            'current_qty' => $products->quantity,
                         ]);
                     }
                 } else {
+                    // If detail doesn't exist, create new detail
+                    $products->quantity += $detail['quantity'];
+                    $products->save();
+
                     $createdInDetail = IncomingProductDetail::create([
                         'id_product' => $detail['id_product'],
                         'quantity' => $detail['quantity'],
                         'description' => $detail['description'],
+                        'current_qty' => $products->quantity,
                         'id_incoming' => $incoming_product->id,
                     ]);
                 }
@@ -189,8 +217,46 @@ class IncomingProductController extends Controller
     public function destroy($id)
     {
         //fungsi eloquent untuk menghapus data
-        IncomingProduct::find($id)->delete();
+        $incoming_product = IncomingProduct::find($id);
+        if ($incoming_product) {
+            DB::beginTransaction();
+
+            try {
+                foreach ($incoming_product->details as $detail) {
+                    $product = Product::find($detail->id_product);
+                    $product->decrement('quantity', $detail->quantity);
+                }
+
+                $incoming_product->delete();
+
+                DB::commit();
+
+                return redirect()->route('incoming_product.index')
+                    ->with('success', 'Barang Masuk Berhasil Dihapus');
+            } catch (\Exception $e) {
+                DB::rollback();
+                return redirect()->back()->with('error', 'Barang Masuk Gagal Dihapus: ' . $e->getMessage());
+            }
+        }
         return redirect()->route('incoming_product')
             ->with('success', 'Barang Masuk Berhasil Dihapus');
     }
+
+    public function import(Request $request)
+    {
+        $request->validate([
+            'file' => 'required|mimes:xls,xlsx,csv'
+        ]);
+
+        Excel::import(new IncomingProductsImport, $request->file('file'));
+
+        return redirect()->route('incoming_product')
+            ->with('success', 'Barang Masuk Berhasil Diimport');
+    }
+
+    public function export()
+    {
+        return Excel::download(new IncomingProductsExport, 'incoming_products.xlsx');
+    }
+
 }

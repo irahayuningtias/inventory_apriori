@@ -154,7 +154,12 @@
                                 <li class="list-group-item"><b>Tanggal Masuk: </b>{{ $outcoming_product->outcoming_date }}</li>
                                 <li class="list-group-item"><b>Nama Barang: </b><br>
                                     @foreach($outcoming_product->details as $details)
-                                        - {{ $details->product->product_name }} ({{ $details->quantity }})<br>
+                                        - {{ $details->product->product_name }} ({{ $details->quantity }} pcs)<br>
+                                    @endforeach
+                                </li>
+                                <li class="list-group-item"><b>Jumlah Sekarang: </b><br>
+                                    @foreach($outcoming_product->details as $details)
+                                        - {{ $details->current_qty }} pcs<br>
                                     @endforeach
                                 </li>
                                 <li class="list-group-item"><b>Keterangan: </b><br>

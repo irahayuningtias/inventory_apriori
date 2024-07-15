@@ -7,6 +7,9 @@ use App\Models\Transaction;
 use Illuminate\Http\Request;
 use App\Models\TransactionDetail;
 use Illuminate\Support\Facades\DB;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Imports\TransactionsImport;
+use App\Exports\TransactionsExport;
 
 class TransactionController extends Controller
 {
@@ -17,12 +20,11 @@ class TransactionController extends Controller
      */
     public function index()
     {
-        //fungsi eloquent menampilkan data menggunakan pagination
-        // $transactions = Transaction::with('details')->orderBy('transaction_date', 'asc')->paginate(10);
-        // $transactionDetails = TransactionDetail::with('product')->get();
         $transactions = Transaction::with('details')->get();
-       
-        // return view('transaksi.transaction', compact('transactionDetails'));
+        // Format the incoming_date
+        foreach ($transactions as $t) {
+            $t->formatted_date = \Carbon\Carbon::parse($t->transaction_date)->format('d M Y');
+        }
         return view('transaksi.transaction', compact('transactions'));
     }
 
@@ -54,7 +56,6 @@ class TransactionController extends Controller
         $data = $request->validate([
             'transaction_code' => 'required|unique:transaction,transaction_code',
             'transaction_date' => 'required|date',
-            // 'details.*.id_transaction' => 'required|exists:product,id_product',
             'details.*.id_product' => 'required|exists:product,id_product',
             'details.*.quantity' => 'required|integer|min:1',
             'details.*.price' => 'required|integer|min:0',
@@ -65,7 +66,7 @@ class TransactionController extends Controller
             'transaction_date' => $request->input('transaction_date'),
             'total_amount' => 0,
         ]);
-        
+
         $total_amount = 0;
         $detailTransctions = [];
         foreach ($request->input('details') as $detail) {
@@ -81,7 +82,6 @@ class TransactionController extends Controller
                 'price' => $products['price'],
                 'subtotal' => $subtotal,
             ]);
-
         }
 
         $transactions->update(['total_amount' => $total_amount]);
@@ -105,7 +105,7 @@ class TransactionController extends Controller
     public function show(Transaction $transaction)
     {
         $transaction->load('details');
-        $transaction->details->each(function($detail) {
+        $transaction->details->each(function ($detail) {
             $detail->load('product');
         });
 
@@ -136,7 +136,7 @@ class TransactionController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-   public function update(Request $request, Transaction $transaction)
+    public function update(Request $request, Transaction $transaction)
     {
         DB::beginTransaction();
 
@@ -224,5 +224,22 @@ class TransactionController extends Controller
         Transaction::find($id)->delete();
         return redirect()->route('transaction')
             ->with('success', 'Transaksi Berhasil Dihapus');
+    }
+
+    public function import(Request $request)
+    {
+        $request->validate([
+            'file' => 'required|mimes:xls,xlsx,csv'
+        ]);
+
+        Excel::import(new TransactionsImport, $request->file('file'));
+
+        return redirect()->route('transaction')
+            ->with('success', 'Transaksi Berhasil Diimport');
+    }
+
+    public function export()
+    {
+        return Excel::download(new TransactionsExport, 'transaction_products.xlsx');
     }
 }

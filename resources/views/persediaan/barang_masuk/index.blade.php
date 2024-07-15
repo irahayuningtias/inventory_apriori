@@ -150,12 +150,26 @@
                         <div class="card-header py-3 col">
                             <div class="d-flex justify-content-between align-item-center">
                                 <h5 class="m-0 font-weight-bold text-primary text-center">Data Barang Masuk</h5>
-                                <a href="{{ route('incoming_product.create') }}" class="btn btn-primary btn-icon-split ">
-                                    <span class="icon text-white-50">
-                                        <i class="fas fa-add"></i>
-                                    </span>
-                                    <span class="text">Tambah Data</span>
-                                </a>
+                                <div class="d-flex">
+                                    <a href="{{ route('incoming_product.create') }}" class="btn btn-primary btn-icon-split mr-2">
+                                        <span class="icon text-white-50">
+                                            <i class="fas fa-add"></i>
+                                        </span>
+                                        <span class="text">Tambah Data</span>
+                                    </a>
+                                    <a href="#" class="btn btn-success btn-icon-split mr-2" data-toggle="modal" data-target="#importModal">
+                                        <span class="icon text-white-50">
+                                            <i class="fas fa-file-excel"></i>
+                                        </span>
+                                        <span class="text">Import</span>
+                                    </a>
+                                    <a href="{{ route('incoming_product.export') }}" class="btn btn-info btn-icon-split">
+                                        <span class="icon text-white-50">
+                                            <i class="fas fa-print"></i>
+                                        </span>
+                                        <span class="text">Export</span>
+                                    </a>
+                                </div>
                             </div>        
                         </div>
                         <div class="card-body">
@@ -173,6 +187,7 @@
                                             <th>Kode Masuk</th>
                                             <th>Tanggal Masuk</th>
                                             <th>Nama Barang</th>
+                                            <th>Jumlah Sekarang</th>
                                             <th>Keterangan</th>
                                             <th>Aksi</th>
                                         </tr>
@@ -181,10 +196,15 @@
                                         @foreach($incoming_products as $ip)
                                         <tr>
                                             <td>{{ $ip->incoming_code }}</td>
-                                            <td>{{ $ip->incoming_date }}</td>
+                                            <td>{{ $ip->formatted_date }}</td>
                                                 <td>
                                                     @foreach($ip->details as $details)
-                                                    - {{ $details->product->product_name }} ({{ $details->quantity }})<br>
+                                                    - {{ $details->product->product_name }} ({{ $details->quantity }} pcs)<br>
+                                                    @endforeach
+                                                </td>
+                                                <td>
+                                                    @foreach($ip->details as $details)
+                                                    - {{ $details->current_qty }} pcs<br>
                                                     @endforeach
                                                 </td>
                                                 <td>
@@ -319,6 +339,33 @@
             </div>
         </div>
     </div>
+
+    <!-- Import Modal-->
+        <div class="modal fade" id="importModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Import Data</h5>
+                        <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="import-form" method="POST" enctype="multipart/form-data" action="{{ route('incoming_product.import') }}">
+                            @csrf
+                            <div class="form-group">
+                                <label for="file">Upload File</label>
+                                <input type="file" name="file" class="form-control" required>
+                            </div>
+                            <div class="modal-footer">
+                                <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                                <button type="submit" class="btn btn-success">Import</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
 
     <!-- Bootstrap core JavaScript-->
     <script src="{{ asset('assets/vendor/jquery/jquery.min.js') }}"></script>

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateTransactionTable extends Migration
+class AddCurrentQtyToIncomingProductDetailsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,8 @@ class CreateTransactionTable extends Migration
      */
     public function up()
     {
-        Schema::create('transaction', function (Blueprint $table) {
-            $table->id();
-            $table->string('transaction_code');
-            $table->date('transaction_date');
-            $table->decimal('total_amount', 20, 2);
+        Schema::table('incoming_product_details', function (Blueprint $table) {
+            $table->integer('current_qty')->after('quantity');
         });
     }
 
@@ -28,6 +25,8 @@ class CreateTransactionTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('transaction');
+        Schema::table('incoming_product_details', function (Blueprint $table) {
+            $table->dropColumn('current_qty');
+        });
     }
 }

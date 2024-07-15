@@ -143,6 +143,18 @@
                                             </span>
                                             <span class="text">Tambah Data</span>
                                         </a>
+                                        <a href="#" class="btn btn-success btn-icon-split mr-2" data-toggle="modal" data-target="#importModal">
+                                            <span class="icon text-white-50">
+                                                <i class="fas fa-file-excel"></i>
+                                            </span>
+                                            <span class="text">Import</span>
+                                        </a>
+                                        <a href="{{ route('product.export') }}" class="btn btn-info btn-icon-split">
+                                            <span class="icon text-white-50">
+                                                <i class="fas fa-print"></i>
+                                            </span>
+                                            <span class="text">Export</span>
+                                        </a>
                                     </div>
                                 </div>
                             </div>
@@ -294,6 +306,34 @@
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                         <button type="button" class="btn btn-primary" onclick="document.getElementById('passwordForm').submit()">Submit</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- Import Modal-->
+        <div class="modal fade" id="importModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Import Data</h5>
+                        <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="import-form" method="POST" enctype="multipart/form-data" action="{{ route('product.import') }}">
+                            @csrf
+                            <div class="form-group">
+                                <label for="file">Upload File</label>
+                                <input type="file" name="file" class="form-control" required>
+                            </div>
+                            <div class="modal-footer">
+                                <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                                <button type="submit" class="btn btn-success">Import</button>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>

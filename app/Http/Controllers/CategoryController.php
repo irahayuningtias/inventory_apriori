@@ -4,9 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\Category;
 use Illuminate\Http\Request;
-use Illuminate\Routing\Redirector;
 use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Support\Facades\DB;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Imports\CategoriesImport;
+use App\Exports\CategoriesExport;
 
 class CategoryController extends Controller
 {
@@ -113,5 +114,21 @@ class CategoryController extends Controller
         Category::find($id_category)->delete();
         return redirect()->route('category')
             ->with('success', 'Kategori Berhasil Dihapus');
+    }
+
+    public function export()
+    {
+        return Excel::download(new CategoriesExport, 'category.xlsx');
+    }
+
+    public function import(Request $request)
+    {
+        $request->validate([
+            'file' => 'required|mimes:xls,xlsx,csv'
+        ]);
+
+        Excel::import(new CategoriesImport, $request->file('file')->store('temp'));
+
+        return redirect()->route('category')->with('success', 'Kategori Berhasil Diimpor');
     }
 }
