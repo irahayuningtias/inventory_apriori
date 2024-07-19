@@ -353,7 +353,7 @@
                             </div>
                             <div class="modal-footer">
                                 <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                                <button type="submit" class="btn btn-primary">Import</button>
+                                <button type="submit" class="btn btn-success">Import</button>
                             </div>
                         </form>
                     </div>

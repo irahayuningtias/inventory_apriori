@@ -177,7 +177,6 @@
                                             <tr>
                                                 <th>Nama Barang</th>
                                                 <th>Jumlah</th>
-                                                <th>Jumlah Sekarang</th>
                                                 <th>Keterangan</th>
                                             </tr>
                                         </thead>
@@ -194,9 +193,6 @@
                                                 <td>
                                                     <input type="number" name="details[0][quantity]" min="0" class="form-control quantity">
                                                 </td>
-                                                    <td>
-                                                        <input type="number" name="details[0][qurrent_qty]" class="form-control qurrent_qty" readonly>
-                                                    </td>
                                                 <td>
                                                     <input type="text" name="details[0][description]" class="form-control description">
                                                 </td>
