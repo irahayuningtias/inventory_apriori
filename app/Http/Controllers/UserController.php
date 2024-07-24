@@ -5,8 +5,13 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Database\QueryException;
+use Illuminate\Validation\ValidationException;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+
 
 
 class UserController extends Controller
@@ -18,9 +23,30 @@ class UserController extends Controller
      */
     public function index()
     {
-        //fungsi eloquent menampilkan data menggunakan pagination
-        $users = User::orderBy('id', 'asc')->get();
-        return view('users.users', compact('users'));
+        try {
+            //fungsi eloquent menampilkan data menggunakan pagination
+            $users = User::orderBy('id', 'asc')->get();
+            return view('users.users', compact('users'));
+        } catch (QueryException $e) {
+            // Menangani kesalahan duplikasi entri
+            if ($e->errorInfo[1] == 1062) {
+                return redirect()->route('users')->withErrors('Duplicate entry detected. Please use a unique identifier.');
+            }
+
+            // Menangani kesalahan referensi foreign key
+            if ($e->errorInfo[1] == 1452) {
+                return redirect()->route('users')->withErrors('Invalid category reference. Please select a valid category.');
+            }
+
+            // Menangani kesalahan lainnya
+            return redirect()->route('users')->withErrors('An error occurred: ' . $e->getMessage());
+        } catch (ValidationException $e) {
+            // Menangani kesalahan validasi
+            return redirect()->route('users')->withErrors($e->errors());
+        } catch (\Exception $e) {
+            // Menangani kesalahan umum
+            return redirect()->route('users')->withErrors('An error occurred: ' . $e->getMessage());
+        }
     }
 
     /**
@@ -41,34 +67,55 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        //melakukan validasi data
-        $request->validate([
-            'name' => 'required',
-            'nik' => 'required',
-            'gender' => 'required',
-            'phone' => 'required',
-            'address' => 'required',
-            'email' => 'required',
-            'password' => 'required',
-        ]);
+        try {
+            //melakukan validasi data
+            $request->validate([
+                'name' => 'required',
+                'nik' => 'required',
+                'gender' => 'required',
+                'phone' => 'required',
+                'address' => 'required',
+                'email' => 'required',
+                'password' => 'required',
+            ]);
 
-        // Enkripsi password sebelum menyimpan ke database
-        $password = Hash::make($request->password);
+            // Enkripsi password sebelum menyimpan ke database
+            $password = Hash::make($request->password);
 
-        //fungsi eloquent untuk menambah data
-        User::create([
-            'name' => $request->name,
-            'nik' => $request->nik,
-            'gender' => $request->gender,
-            'phone' => $request->phone,
-            'address' => $request->address,
-            'email' => $request->email,
-            'password' => $password,
-        ]);
+            //fungsi eloquent untuk menambah data
+            User::create([
+                'name' => $request->name,
+                'nik' => $request->nik,
+                'gender' => $request->gender,
+                'phone' => $request->phone,
+                'address' => $request->address,
+                'email' => $request->email,
+                'password' => $password,
+            ]);
 
-        //jika data berhasil ditambahkan, akan kembali ke halaman utama
-        return redirect()->route('users')
-            ->with('success', 'Karyawan Berhasil Ditambahkan');
+            //jika data berhasil ditambahkan, akan kembali ke halaman utama
+            return redirect()->route('users')
+                ->with('success', 'Karyawan Berhasil Ditambahkan');
+        } catch (QueryException $e) {
+            // Menangani kesalahan duplikasi entri
+            if ($e->errorInfo[1] == 1062) {
+                return redirect()->route('users.create')->withErrors('Duplicate entry detected. Please use a unique identifier.');
+            }
+
+            // Menangani kesalahan referensi foreign key
+            if ($e->errorInfo[1] == 1452) {
+                return redirect()->route('users.create')->withErrors('Invalid category reference. Please select a valid category.');
+            }
+
+            // Menangani kesalahan lainnya
+            return redirect()->route('users.create')->withErrors('An error occurred: ' . $e->getMessage());
+        } catch (ValidationException $e) {
+            // Menangani kesalahan validasi
+            return redirect()->route('users.create')->withErrors($e->errors());
+        } catch (\Exception $e) {
+            // Menangani kesalahan umum
+            return redirect()->route('users.create')->withErrors('An error occurred: ' . $e->getMessage());
+        }
     }
 
     /**

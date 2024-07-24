@@ -373,7 +373,7 @@ class CategorySeeder extends Seeder
             ],
             [
                 'id_category' => 'C0090',
-                'category_name' => 'SKINTIFIC'
+                'category_name' => 'SOME BY MI'
             ],
             [
                 'id_category' => 'C0091',
@@ -414,7 +414,7 @@ class CategorySeeder extends Seeder
             [
                 'id_category' => 'C0100',
                 'category_name' => 'SWITZAL'
-            ]
+            ],
         ];
 
         foreach ($categories as $key => $value) {

@@ -166,9 +166,17 @@
                             <div class="card-body">
                                 <div class="table-responsive">
                                     @if ($message = Session::get('success'))
-                                    <div class="alert alert-success">
-                                        <p>{{ $message }}</p>
-                                    </div>
+                                        <div class="alert alert-success">
+                                            <button type="button" class="close" data-dismiss="alert">×</button>
+                                            <p>{{ $message }}</p>
+                                        </div>
+                                    @endif
+
+                                    @if ($message = Session::get('error'))
+                                        <div class="alert alert-danger alert-block">
+                                            <button type="button" class="close" data-dismiss="alert">×</button>	
+                                            <strong>{{ $message }}</strong>
+                                        </div>
                                     @endif
 
                                     <table class="table table-striped table-bordered mt-3 mb-3" id="dataTable" style="width: 100%">

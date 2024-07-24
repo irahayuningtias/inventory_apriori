@@ -151,6 +151,7 @@
                         <div class="card-body">
                             @if ($errors->any())
                             <div class="alert alert-danger">
+                                <button type="button" class="close" data-dismiss="alert">×</button>	
                                 <strong>Whoops!</strong> There were some problems with your input. <br><br>
                                 <ul>
                                     @foreach ($errors->all() as $error)
@@ -159,6 +160,14 @@
                                 </ul>
                             </div>
                             @endif
+
+                            @if ($message = Session::get('error'))
+                                <div class="alert alert-danger alert-block">
+                                    <button type="button" class="close" data-dismiss="alert">×</button>	
+                                    <strong>{{ $message }}</strong>
+                                </div>
+                            @endif
+
                             <form method="POST" action="{{ route('category.update', ['category' => $Category->id_category]) }}">
                                 @csrf
                                 @method('PUT')

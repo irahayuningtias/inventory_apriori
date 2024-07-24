@@ -168,10 +168,10 @@
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">
-                                    @foreach ($steps as $step)
+                                    @foreach ($steps as $index => $step)
                                         <h3 class="mt-4">{{ $step['description'] }}</h3>
                                         @if ($step['description'] === 'Aturan asosiasi' && !empty($step['data']))
-                                            <table class="table table-striped table-bordered mt-3 mb-3" id="dataTable">
+                                            <table class="table table-striped table-bordered mt-3 mb-3 dataTable" id="dataTable{{ $index }}">
                                                 <thead>
                                                     <tr>
                                                         <th>Aturan Asosiasi</th>
@@ -190,7 +190,7 @@
                                                 </tbody>
                                             </table>
                                         @elseif (is_array($step['data']) && !empty($step['data']))
-                                            <table class="table table-striped table-bordered mt-3 mb-3" id="dataTable">
+                                            <table class="table table-striped table-bordered mt-3 mb-3 dataTable" id="dataTable{{ $index }}">
                                                 <thead>
                                                     <tr>
                                                         <th>Itemset</th>
@@ -345,8 +345,11 @@
         <script src="https://cdn.datatables.net/2.0.7/js/dataTables.js"></script>
         <script src="https://cdn.datatables.net/2.0.7/js/dataTables.bootstrap4.js"></script>
         <script>
-            $(document).ready(function () {
-                $("#dataTable").DataTable();
+            $(document).ready(function() {
+                // Initialize DataTables for each table with class 'dataTable'
+                $('.dataTable').each(function() {
+                    $(this).DataTable();
+                });
             });
         </script>
 
